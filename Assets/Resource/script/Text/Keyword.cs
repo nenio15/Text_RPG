@@ -8,9 +8,10 @@ public class Keyword : MonoBehaviour, IPointerClickHandler
     [SerializeField] public string keyword; //임시 public
     [SerializeField] private string color;
 
-    private GameObject SelectPaper;
-    private GameObject InfoBook;
-    private GameObject Text;
+    [SerializeField] private GameObject SelectPaper;
+    [SerializeField] private GameObject InfoBook;
+    [SerializeField] private GameObject Text;
+    [SerializeField] private GameObject Button;
 
     private Vector3 destination = new Vector3(0.0f, -500.0f, -4.0f);
     private Vector2 speed = Vector2.zero;
@@ -18,11 +19,12 @@ public class Keyword : MonoBehaviour, IPointerClickHandler
 
     void Start()
     {
-        string root = Application.dataPath + @"\Resource\Text\main.txt";        
+        string root = Application.dataPath + @"\Resource\Text\main.txt";
+        /*
         SelectPaper = GameObject.FindWithTag("select");     //good way?
         InfoBook = GameObject.FindWithTag("info");
         Text = GameObject.FindWithTag("Text");
-        
+        */
 
         //GetKeyword();
         //System.IO.File.r
@@ -56,13 +58,15 @@ public class Keyword : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        //클릭하고 다시 클릭하는 알고리즘은 어떻게 짤까..
         if (color == "blue") //blue
         {
             destination = new Vector3(0.0f, -500.0f, -4.0f);
             time = 0.2f;
             StartCoroutine(Moving(SelectPaper));
-            //Debug.Log("blue");
-            
+            Button.SetActive(true);
+            //Invoke("ButtonSet", 2f);
+
             /*
             if(selection 
                 시나리오json에 있는 선택지 리스트 나열 및 반영
@@ -74,7 +78,6 @@ public class Keyword : MonoBehaviour, IPointerClickHandler
         }
         else if (color == "red")    //red
         {
-            //Debug.Log("red");
             //monster
         }
         else if(color == "yellow")    //yellow
@@ -82,7 +85,6 @@ public class Keyword : MonoBehaviour, IPointerClickHandler
             destination = new Vector3(0.0f, 0.0f, -4.0f);
             time = 0.1f;
             StartCoroutine(Moving(InfoBook));
-            //Debug.Log("yellow");
             //get keyword(이거는 구현을...?)
         }
         else if(color == "secret")    //none, secret
@@ -106,8 +108,8 @@ public class Keyword : MonoBehaviour, IPointerClickHandler
     
     IEnumerator Moving(GameObject obj)
     {
-        Debug.Log("moving");
-        while(obj.transform.position != destination)
+        //Debug.Log("moving");
+        while (obj.transform.position != destination)
             yield return obj.transform.position = Vector2.SmoothDamp(obj.transform.position, destination, ref speed, time);
     }
 

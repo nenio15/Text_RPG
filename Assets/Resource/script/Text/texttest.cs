@@ -21,6 +21,7 @@ public class texttest : MonoBehaviour, IPointerClickHandler
 
     [Header("C_KEYWORD")]
     public string keywords;   //초기화
+    [SerializeField] private int robj_i = 0;
     public GameObject[] robj;
 
     private string avoid;
@@ -31,7 +32,7 @@ public class texttest : MonoBehaviour, IPointerClickHandler
     float typing_speed = 0.2f;
     bool reading = false;
     string[] contents;
-    [SerializeField] private int robj_i = 0;
+    
 
     void Start()
     {
@@ -44,9 +45,12 @@ public class texttest : MonoBehaviour, IPointerClickHandler
         once.Organize();    //json
         contents = System.IO.File.ReadAllLines(avoid);
 
+        /*
         for(int i = 0; i < 5; i++)
             Instantiate(clickobj, GameObject.FindWithTag("InScroll").transform);   //키워드 클릭 오브제 생성(+위치)
-        robj = GameObject.FindGameObjectsWithTag("click");
+        */
+        //robj = GameObject.FindGameObjectsWithTag("click");
+        
 
         /*
         foreach(string line in contents)
