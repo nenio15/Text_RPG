@@ -1,0 +1,14 @@
+#player는 정처없이 #space을 떠돌아 다니고 있었습니다.
+어떠한 |<color=blue>사연</color>|으로 여정을 가는 길입니다.
+그를 위해서는 |<color=yellow>모험가 길드</color>|가 있는 |<color=yellow>마을</color>|로 향해야하지요.
+지나가던 |<color=yellow>상인</color>|의 이야기에 따르면 이 #space를 가로지르면 마을에 도달할 수 있다고 합니다.
+@Region,forest,001,01
+@Battlefield
+#player의 미숙한 실력으로 인해 |<color=red>#monster</color>|는 아직 숨이 붙어있습니다.
+@Selection
+@Region,forest,001,03
+#player는 다행히도 숲을 넘어왔습니다.
+지평선 너머에는 아침해가 떠오르고 주위에는 꽃들이 #player를 환영하듯 활짝 피었습니다.
+저 물가너머 마을이 보이기 시작했습니다.
+#player의 여정은 이제부터 시작됩니다.
+@Town

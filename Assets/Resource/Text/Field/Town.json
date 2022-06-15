@@ -1,0 +1,23 @@
+﻿{
+  "Region": {
+    "Region": "Plain",
+    "Number": 1,
+    "Develop": 1,
+    "Property": "Windmill",
+    "Town": {
+      "description": [ [ "평야에 있는 마을의 광장이다." ] ],
+      "selection": [ [ "선택지1" ] ]
+    },
+    "Guild": {
+      "description": [ [ "외진 길드. 사람이 방문하는 지도 의문이다." ] ],
+      "selection": [ [ "선택지1" ] ]
+    },
+    "Windmill": {
+      "description": [ [ "풍차다." ] ],
+      "selection": [ [ "선택지1" ] ]
+    }
+  },
+  "Forest": { //이렇게 멤버 이름을 초기에 둬야하나..?
+    "Number": 1
+  }
+}

@@ -1,0 +1,72 @@
+﻿{
+  "Tutorial": {
+    "name": "Tutorial",
+
+    "condition": {
+      "region": "null",
+      "keyword": "null",
+      "quest": "null"
+    },
+
+    "scenario": [
+      {
+        "state": 0,
+        "move": 1,
+        "selection": [
+          [ [ "모험가 길드", "거의 모든 마을에 존재하는 길드라고 할 수 있다. 대체로 주변 마물 퇴치에 대한 퀘스트(의뢰)를 받는다" ] ],
+          [ [ "마을", "사람들이 집단을 구성해 만든 거주지." ] ],
+          [ [ "상인", "떠돌아 다니며 상품을 파는 행인" ] ],
+          [
+            [ "부귀영화", "#player는 돈, 지위, 명예따위를 위해 이 험난한 땅에 모험을 시작한 것이다." ],
+            [ "원한, 복수", "#player는 과거 자신의 부모를 살해한 자를 찾기위해 여정을 떠났다." ]
+          ]
+
+        ],
+        "description": [
+          [ "#player는 정처없이 #space을 떠돌아 다니고 있었습니다." ],
+          [ "그를 위해서는 |<color=yellow>모험가 길드</color>|가 있는 |<color=yellow>마을</color>|로 향해야하지요." ],
+          [ "지나가던 |<color=blue>상인</color>|의 이야기에 따르면 이 #space를 가로지르면 마을에 도달할 수 있다고 합니다." ]
+        ],
+        "call": [ "Region", "Forest", 1, 1 ]
+      },
+      {
+        "state": 1,
+        "move": 2,
+        "call": [ "Battle", "goblin", 1 ]
+      },
+      {
+        "state": 2,
+        "move": 3,
+        "call":[ "Region", "Forest", 2, 1 ],
+        "selection": [
+          [
+            "마무리",
+            [ "#player는 #monster에게 자비없는 공격으로 마무리를 지었다." ]//,
+            //[ "Region", "Forest", 2, 1 ]
+          ],
+          [
+            "협박",
+            [ "#player는 #moster를 협박하였다.", "알았어... 알았다구!! 알려주면 될거아냐!" ],
+            [ "Region", "Forest", 2, 9 ]
+          ]
+        ],
+        "description": [
+          [ "#player의 미숙한 실력으로 인해 |<color=red>#monster</color>|는 아직 숨이 붙어있습니다." ]
+        ]
+
+      },
+      {
+        "state": 3,
+        "move": -1,
+        "description": [
+          [ "#player는 다행히도 숲을 넘어왔습니다." ],
+          [ "지평선 너머에는 아침해가 떠오르고 주위에는 꽃들이 #player를 환영하듯 활짝 피었습니다." ],
+          [ "저 물가너머 마을이 보이기 시작했습니다." ],
+          [ "#player의 여정은 이제부터 시작됩니다." ]
+        ],
+        "call": [ "Town", "Plain", 1]  //call은 override식으로 쓰기(뒤 변수 없으면 <랜덤>)
+      }
+
+    ]
+  }
+}
