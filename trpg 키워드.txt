@@ -1,0 +1,56 @@
+아무래도 힘든 이유는, 많은 리스트 중에 하나를 쓰는 방식이 아니라 많은 리스트를 내가 
+직접 써내려야해서 라고 본다. 따라서 계속 하나씩 써내려가야한다.
+
+list : 지역, 마을, 몬스터, 직업, npc, 종족, 스킬, 행동 키워드, 수색 키워드, 선택지, 분기점, 
+
+자 모든 키워드를 분류해서 나열한다. 그래서, 상세내용을 적는다. 
+그리고 그 내용을 json 방식으로 써넣는다.
+
+
+Class : 지역
+Material : 돌, 모래, 흙, 물, 나무, 숲, 높이
+
+List : 평원, 숲, 모래사장, 절벽, 폭포, 산, 동굴, 던전, 사막, 우림, 섬, 
+
+Form : Tera | name, num, feature, 
+	| enter : num, 
+		num1 : situ(feature), des
+	| middle : ''
+	| exit : ''
+
+
+Class : 마을
+Material : 지역에 적응한 마을의 형태, 개발도, 특이점
+
+List : 풍차마을, 농사마을, 사냥마을, 나무꾼마을, 
+Sub-List : 마을회관, 길드, 잡화점, 상점(무기, 소비, 장신구), 주민집,
+
+Form : name, region, number, dev, size, list
+	| spot : list1 : des, (Class)npc, 
+
+
+Class : npc
+Material : 신분, 나이, 성별, 스탯, 직업, 특별퀘스트, 전용시나리오
+
+List : 평민, 농부, 나무꾼, 잡화점주인, 왕, 신하, 기사, 가신,
+
+Form : num, region, sex, age, feature, des 
+	| dia : num, 1, 2...(num), 
+		| key : list, keyword1[stat,dice, succ, fail], keyword2...
+		| effect : order(0/1), get[type, ...]
+
+
+Class : 몬스터	(지역과 스토리에 따라 추가할 필요 O)
+Material : 종족, 스탯, 무기, 스킬, 지역
+
+List : 고블린, 오크, 자이언트웜, 웨어울프, 수인, 어인, 드레이크, 와이번, 드래곤, 두더지
+
+
+effect : get : 
+리스트 
+ info - 아이템이름 - 부가
+ up - 스탯 하나 - 상승치/다이스/확률
+ condition - 효과이름 - 정도 - 지속성
+ item - 아이템이름 - 양
+ 
+
