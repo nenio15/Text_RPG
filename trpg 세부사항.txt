@@ -275,7 +275,7 @@ scenario :
 		keyword : #no
 	npc : 여관주인
 	des :
-	여관주인 : des : "글쎄, |<color=yellow>드래곤이 나타났다는 소문</color>|이 있더라구 오호호"
+	여관주인 : dia : "글쎄, |<color=yellow>드래곤이 나타났다는 소문</color>|이 있더라구 오호호"
 	effect :
 		get : [keyword, 드래곤 소문]
 	
@@ -284,5 +284,14 @@ scenario :
 	progress : plot
 	condition : 
 
-
+	2 :
+	stat : 2
+	progress : quest
+	condition :...
+	npc : 길드마스터
+	길드마스터 : dia : "아무래도 |<color=yellow>죽음의땅</color>|에 무언가 있다고 하더라고. 그곳에 마침 일이 있는데..."
+	effect :
+		quest : [.....]
+	
+	
 
