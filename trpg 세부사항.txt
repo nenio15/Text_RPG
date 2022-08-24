@@ -75,46 +75,51 @@ spot :
 			des : 
 			dialog : 
 				num : 10
-				1 : 
-					dia : "어디서 온 거에요?"
-						"요 근처에서 본 적 없는 복장인데,"
-					key : 
-						list : [둘러댄다, 이야기한다]
-						둘러댄다 : [int, 6, 2, 4]	(능력치, 다이스보정, 성공시, 실패시move)
-						이야기한다 : [kra(카리스마), 7, 3, 5]	
-				2 : 
-					dia : "그렇구나아~"
-						"소녀는 #player의 능숙한 거짓말에 넘어갔다."
-						"그러면 내가 도와줄 수 있을 거 같은데, 어때요?"
-					key :
-						list : [따라간다, 거절한다]
+				1 :
+				stat : 1
+				dia : "어디서 온 거에요?"
+					"요 근처에서 본 적 없는 복장인데,"
+				key : 
+					list : [둘러댄다, 이야기한다]
+					둘러댄다 : [int, 6, 2, 4]	(능력치, 다이스보정, 성공시, 실패시move)
+					이야기한다 : [kra(카리스마), 7, 3, 5]	
+				2 :
+				stat : 2 
+				dia : "그렇구나아~"
+					"소녀는 #player의 능숙한 거짓말에 넘어갔다."
+					"그러면 내가 도와줄 수 있을 거 같은데, 어때요?"
+				key :
+					list : [따라간다, 거절한다]
 						
 
 				3 :
-					dia : "소녀는 #player를 !측은한! 눈빛으로 바라본다."
-						"잠시만 여기서 기다려봐요!"
-						"잠시 고민을 하는 모습을 보이고선 저멀리 어른이 있는 곳으로 달려갔다."
-						"약간의 이야기를 나누더니, 그세 건물 안으로 들어가 무언가를 가지고 돌아왔다."
-						"여기, 이거라도 먹어요. 그러면 기분이 나아질 거에요!"
-					key : 
-						list : [받아간다, 먹는다]
-						받아간다 :
-						먹는다 : 
+				stat : 3
+				dia : "소녀는 #player를 !측은한! 눈빛으로 바라본다."
+					"잠시만 여기서 기다려봐요!"
+					"잠시 고민을 하는 모습을 보이고선 저멀리 어른이 있는 곳으로 달려갔다."
+					"약간의 이야기를 나누더니, 그세 건물 안으로 들어가 무언가를 가지고 돌아왔다."
+					"여기, 이거라도 먹어요. 그러면 기분이 나아질 거에요!"
+				key : 
+					list : [받아간다, 먹는다]
+					받아간다 :
+					먹는다 : 
 				4 :
-					dia : "눈을 게슴츠레 띄며 #player를 노려보았다."
-						"그런 뻔한 거짓말은 말아요."
-						"아아, 이번에는 재밌는 이야기 들을 수 있을 줄 알았는데"
-						"소녀는 자리에서 벗어났다."
+				stat : 4
+				dia : "눈을 게슴츠레 띄며 #player를 노려보았다."
+					"그런 뻔한 거짓말은 말아요."
+					"아아, 이번에는 재밌는 이야기 들을 수 있을 줄 알았는데"
+					"소녀는 자리에서 벗어났다."
 				5 :
-					dia : "헤에~"
-						"그러면은 길드로 가야하는 거죠?"
-						"저어기 언덕너머에 길드가 있어요."
-					key : 
-						list : [#no]
+				stat : 5
+				dia : "헤에~"
+					"그러면은 길드로 가야하는 거죠?"
+					"저어기 언덕너머에 길드가 있어요."
+				key : 
+					list : [#no]
 						
-					effect : 
-						order : 1 (0 - dia전에 출력(get), 1 - dia후에 출력)
-						get : [info, map, guild]	(1에 get종류, 그리고 그에대한 부가설명)
+				effect : 
+					order : 1 (0 - dia전에 출력(get), 1 - dia후에 출력)
+					get : [info, map, guild]	(1에 get종류, 그리고 그에대한 부가설명)
 
 	여관 : 
 		des : "아담한 크기의 2층짜리 여관이다."
@@ -138,6 +143,146 @@ spot :
 		
 
 
+
+
+
+Class : Scenario
+
+name : 고블린 조우
+term : 0
+level : 1
+condition :			(아직 미정 수치)
+	region : 숲
+	mood : 2		(region의 mood -> danger..?)
+	keyword : null
+	monster : goblin
+	stat : null		(ex | [str, 9])
+scenario : 
+	0 : 
+	stat : 0
+	move : 1
+	progress : event					(progress는 event, quest, remember...?)
+	des : "노랗게 빛나는 눈빛들 중  하나가 가까이 다가온다."
+		"사악한 어린아이의 실소같은 소리가 다가온다."
+		"시야에 잡힌 그 잔상은 |<color=red>고블린</color>|이었다."
+	key : list : [#no]
+	sc_key : 
+		list : [고블린]
+		고블린 : [diction, monster, 고블린, 1]			(키워드 사전 - 카테고리 - 이름 - 페이지(진척도)
+								(sc_key는 여러 상호작용이 가능하게 할까?)
+	effect : 
+		order : 1
+		call : ["Battle", "goblin", 1 ]			(effect까지 끝나고서 move가 된다.
+
+	1 :
+	stat : 1
+	move : 3
+	progress : event
+	des : "눈 앞의 |<color=red>고블린</color>|은 죽기 직전이 되자 필사적으로 |<color=blue>무언가</color>|를 소리쳤다."
+		"아무래도 목숨구걸이 아닐까 싶다."
+	key : list : [#no]
+	sc_key : 
+		list : [고블린, 무언가]
+		고블린 : [diction, monster, 고블린, 1]			(키워드 사전 - 카테고리 - 이름 - 페이지(진척도)
+		무언가 : [dice, int, 2, 2, 3]				(다이스 - 스탯 - 난도 - 성공 - 실패)
+	
+	2 : 
+	stat : 2
+	move : 4
+	progress : event
+	des : "#player는 고블린의 말을 주의깊게 들었다."
+		"자세한 내용은 알아들을 수 없었지만, 살려준다면 자신의 보물을 주겠다는 듯하다."
+	key : 
+		list : [살려준다, 물리친다]
+		살려준다 : [none, 4]
+		물리친다 : [none, 3]
+
+	3 : 
+	stat : 3
+	move : 5
+	progress : event
+	des : "#player는 자비없이 고블린을 쓰러뜨렸다."
+		"고블린의 피 냄새를 맡은 짐승들이 몰려올 것 같다."
+	key : list : [#no]
+	
+	4 :
+	stat : 4
+	move : 5
+	progress : event
+	des : "#player는 무기를 거두고 고블린의 뒤를 따라갔다."
+		"고블린은 약간 비좁아보이는 동굴의 입구로 안내하였다."
+		"아무런 의심없이 동굴로 들어간 #player는 |<color=red>스파이더</color>|의 |<color=blue>거미줄</color>|에 걸렸다!"
+	key : 
+		list : [저항한다, 가만히 있는다]
+		저항한다 : [str, 1, 5, 6, "완력은 거미줄의 탄성을 이겨냈다.", "아무래도 힘이 부족한 것 같다. 거미줄이 약해졌다."]	#(성공, 실패의 대사 추가??)
+		가만히 있는다 : [none, 6]
+	sc_key : 
+		list : [스파이더, 거미줄]
+	
+
+	5 :
+	stat : 5
+	move : -1
+	progress : event
+	des : "#player는 자리를 떠났다."
+	key : list : [#no]
+
+	6 :
+	stat : 6
+	move : 5
+	progress : event
+	des : "#player는 |<color=blue>거미줄</color>|에서 탈출하지 못 하였다."
+		"스파이더가 다가오는 소리가 들려온다."
+	
+	7 : ...		
+
+
+name : 우편 배달
+term : 2
+level : 2
+condition :
+	region : none
+	mood : 마을
+	npc : 노인
+	stat : [dex, 5]
+scenario :
+	0 :
+	stat : 0
+	move : 1
+	progress : quest
+	npc : 노인
+	des : 
+	노인 : des : "저기 우편좀 보내줄 수 있겠나"
+	
+	effect : 
+		quest : [del, 자녀]
+
+
+name : 드래곤
+term : 3
+level : 40
+condition :
+	stat : [level, 30]
+	...? (plot쪽의 기본 조건은 어찌넣어야 하나,..)
+scenario :
+	0 : 
+	stat : 0
+	progress : plot
+	condition : 
+		region : 평원
+		mood : 마을
+		npc : 여관주인
+		keyword : #no
+	npc : 여관주인
+	des :
+	여관주인 : des : "글쎄, |<color=yellow>드래곤이 나타났다는 소문</color>|이 있더라구 오호호"
+	effect :
+		get : [keyword, 드래곤 소문]
+	
+	1 :		(plot은 단편적인 정보라서, 시간순이라는 거시기가 없어. condition마다 발생이라는 것이지.)
+	stat : 1
+	progress : plot
+	condition : 
 
 
 
