@@ -6,6 +6,15 @@ list : 지역, 마을, 몬스터, 직업, npc, 종족, 스킬, 행동 키워드,
 자 모든 키워드를 분류해서 나열한다. 그래서, 상세내용을 적는다. 
 그리고 그 내용을 json 방식으로 써넣는다.
 
+[기본 양식] | 이름 : 상세설정. 
+		드러난 선택지(key), 
+		dia+des, 
+		숨겨진 선택지(|<c>|) -> (그에 대한 추가 key)
+
+key, sc_key. sc_key는 기본 선택지 옵션을 어디다 만드는게 편할듯. effect종류가 다양한 것처럼.(근데 선택지는 없었지)
+
+
+
 
 Class : 지역
 Material : 돌, 모래, 흙, 물, 나무, 숲, 높이
@@ -26,10 +35,30 @@ List : 풍차마을, 농사마을, 사냥마을, 나무꾼마을,
 Sub-List : 마을회관, 길드, 잡화점, 상점(무기, 소비, 장신구), 주민집,
 
 Form : name, region, number, dev, size, list
-	| spot : list1 : des, (Class)npc, 
+	| spot : list1 : des, (Class)npc, itemlist, item, 
 
+6d0001 : { (음... 그냥 리스트? 정렬 방식을...
+	name : 풍차마을
+	region : 평원
+	number : 1
+	dev : 1
+	size : 1	(1~3)
 
-Class : npc
+	list : [광장, 여관, 잡화점, ...]
+	spot : {
+		광장 : {
+			des1 : " ", " "	일단 바리에이션.(없어도 될듯?)
+			des2 : "...", "..."
+			sc_key : {
+				list : [<1>,<2>]
+				<1> : ... -> 대부분 move.
+			npc_list : 주민_남성, 주민_소녀	(영문..?)
+			주민_남성 : {
+				[Class : npc]
+			주민...
+		
+
+Class : NPC
 Material : 신분, 나이, 성별, 스탯, 직업, 특별퀘스트, 전용시나리오
 
 List : 평민, 농부, 나무꾼, 잡화점주인, 왕, 신하, 기사, 가신,
@@ -39,11 +68,42 @@ Form : num, region, sex, age, feature, des
 		| key : list, keyword1[stat,dice, succ, fail], keyword2...
 		| effect : order(0/1), get[type, ...]
 
+ex)
+주민_소녀 : {
+	number : 1
+	region : [평원, 숲]
+	sex : 0		0 : 여성, 1 : 남성 2 : 무성
+`	age : 7
+	featuer : "발랄함"
+	stat : [3, 5, 2, 2, 1]		(상세 미정)
+	des : "양갈래 머리를 하고있는 자그만 소녀다."
+	dialog : {
+		num : 4
+		1 : {
+			dia : { "어디서 온 거에요?"
+				"음...?"
+			key : {
+				list : [둘러댄다, 무시한다, 이야기한다]
+				둘러댄다 : [int, 6, 2, 4]	(능력치, 다이스, 성공/실패 move dia)
+				...
+			effect : {
+				order : 1 (0 - before_dia, 1 - after_dia
+				get : [info, map, guild]
+			sc_key : {
+				list : [<1>, <2>]
+				<1> : [get, ...?]		(추가 설정 필요)
+
+
 
 Class : 몬스터	(지역과 스토리에 따라 추가할 필요 O)
 Material : 종족, 스탯, 무기, 스킬, 지역
 
 List : 고블린, 오크, 자이언트웜, 웨어울프, 수인, 어인, 드레이크, 와이번, 드래곤, 두더지
+
+
+
+Class : effect
+-> 선택지로 인한 효과얻. 상태이상.
 
 
 effect : get : 
@@ -53,4 +113,39 @@ effect : get :
  condition - 효과이름 - 정도 - 지속성
  item - 아이템이름 - 양
  
+
+
+Class : item
+-> 아이템리스트 및 테이블 상세
+Material : 부위별 파츠, 재료, 역사, 사이즈, 색상, 추가칭호
+
+List : 
+
+Form : itemname : 내구성, class, part, need, gold, regold, des, get_title
+	option : sell: steel:
+
+ex )
+철제 갑옷 : {
+	stat : [방어력, 3]		(상세 미정)
+	durability : 8
+	class : warrior
+	part : top(upper body)
+	need : {[str, 8], [dex, 2]}
+	gold : 100
+	regold : 20
+	des : "어떤 마을의 대장장이가 제련한 철제 갑옷이다. 겉모습은 투박하지만 좋은 내구성을 지니고 있다."
+	title : ""
+	option : {
+		sell : 2
+		steal : 6
+
+[option]
+sell - 난이도..?
+get - 
+steal - 
+
+
+
+Class : title
+
 
