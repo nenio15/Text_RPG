@@ -18,6 +18,24 @@ list : 지역, 마을, 몬스터, 직업, npc, 종족, 스킬, 행동 키워드,
 
 key, sc_key. sc_key는 기본 선택지 옵션을 어디다 만드는게 편할듯. effect종류가 다양한 것처럼.(근데 선택지는 없었지)
 
+체력, 정신력, 힘, 민첩, 지능, 행운, 카리스마, 센스(추가 보정/정보수집)
+6개정도?
+
+스탯, 스킬, 다이스
+stat : [hp, mp, str, dex, int, luc, cha, sen]	
+ + 경험치, 골드
+
+balance : 수치는 0~6에서 시작한다. trpg란 자고로 그런거니깐. 다만, 레벨에 따라 수치가 상승조정된다.
+	여기서 또 문제는 npc는 그러면 어느정도로 쎄야하는가?다. 플레이어나 몬스터만큼 세면 또 애매하지않나
+
+skilllist : [.....]
+skill1 : [ name
+	need_mp
+	dice
+	effect
+
+
+dice : stat에 따라서. 6d2가 기본. 20d1, 12d1, 4d1, 6d1 ...
 
 
 
@@ -72,6 +90,7 @@ Form : num, region, sex, age, feature, des
 	| dia : num, 1, 2...(num), 
 		| key : list, keyword1[stat,dice, succ, fail], keyword2...
 		| effect : order(0/1), get[type, ...]
+		(근데 dia는 ' "그러니까.." ' 이 식으로 세팅을 해야하는 것 아님?)
 
 ex)
 주민_소녀 : {
@@ -159,12 +178,15 @@ Class : scenario
 	(대신 player에다가 history? : [name, progress, stat], 으로 적어서 표시. +1 무브
 Form : term (0~3) 0 - 단발성, 1~3 길이.(플레이시간)
 
+필드에 시나리오를 '덧씌운다'라는 개념이 가까울듯. 그리고서, 시나리오의 각본대로 흘러가게하고
+
+
 0 :: 지나가던 사람이 시비를 건다. 싸운다. 보상.
 1 :: 간단한 동굴 탐험/길드의뢰
 2 :: 왕국 서신 전달 등의 긴 여정. 연계 퀘스트
 3 :: 플레이어 서사시/마왕같은 세계급 퀘스트
 
-cate : 
+case : 
   event : 현재 상황에서 일어나는 시츄에이션
   quest : 퀘스트 부여 시나리오. 연계 가능
   plot   : 하나의 시나리오의 줄거리. 굳이 읽어도 되고, 스킵해도 상관없다

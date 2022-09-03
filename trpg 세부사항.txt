@@ -45,6 +45,41 @@ situ : 3 (출구)
 		"환하게 밝혀오는 태양이 #player를 반겨준다."
 		"
 
+Class : NPC
+
+little_f : {
+	number : 1
+	//name : 주민_소녀		//그냥 적당한 이름..?? 아니 필요없을듯)
+	sex : 0			//여성
+	age : 7
+	feature : "발랄"
+	level : 1
+	stat : [3, 1, 1, 3, 2, 5, 3, 1]
+	des : "땋은머리를 하고있는 꼬마숙녀다."
+	dia : {
+		num : 4
+		1 : {
+		2 : {
+		3 : {
+		4 : {
+
+
+edward : {
+	number : 1
+	name : 에드워드
+	sex : 1
+	age : 17
+	feature : "겁쟁이"
+	level : 4
+	stat : [5, 2, 3, 5, 7, 9, 4, 5]
+	des : "두려움에 떨고있는 청년이다."
+	dia : {
+		num : 10
+		1 : {
+		stat : 1
+		dia : "어어어!!! 잡아먹지 말아줘!!!!"
+			"눈 앞의 청년은 몹시 두려워하고 있는 모습이다."
+			
 
 
 Class : 마을
@@ -294,4 +329,43 @@ scenario :
 		quest : [.....]
 	
 	
+name : 식인거미 숲
+level : 1
+condition :
+	region : 숲
+	mood : 2
+	keyword : 
+	town : [pick]	(숲 근처 마을 지정
+scenario :
+	{ chapter : "조우"
+	synopciys : "#player는 edward과 깊은 숲에서 만났다.."	//기존 요약용으로 사용?(사용처 몰두)
+	script : 	//해당 챕터의 진행방식. (어떻게 짜는게 좋을까...)
+		@move : [forest, 1, 1, 1]
+		@npc interect
+		@.....
+	patch : 
+		list : [town, npc, ...]
+		town : 
+			replace : 
+				{ stat : [type, number]
+				dia : "....."
+				{ stat : 
+			new : 
+				{ stat : [type]
+				dia : "....."
+		npc :
+			o_npc : 	(?)
+				little_f : replace : ...
+			n_npc : edward
 
+/*
+//add : 
+	o_npc :
+		little_f : new : dia : 	1. 사전 분류(new/rep)
+			rep : dia : 	2. 덮어쓰기(num : 10, 1 : ... / 11 : ...)
+	n_npc : 
+		edward
+	town : 
+		des : "마을에 우중충한 느낌이 더해졌다.."
+
+*/
