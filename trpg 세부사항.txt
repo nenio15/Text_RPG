@@ -63,24 +63,43 @@ little_f : {
 		3 : {
 		4 : {
 
+Class : 몬스터
 
-edward : {
+young_giant_spider : {
 	number : 1
-	name : 에드워드
-	sex : 1
-	age : 17
-	feature : "겁쟁이"
+	sex : 0
+	age : 1
 	level : 4
-	stat : [5, 2, 3, 5, 7, 9, 4, 5]
-	des : "두려움에 떨고있는 청년이다."
-	dia : {
-		num : 10
-		1 : {
-		stat : 1
-		dia : "어어어!!! 잡아먹지 말아줘!!!!"
-			"눈 앞의 청년은 몹시 두려워하고 있는 모습이다."
-			
+	feature : "aggressive" 스킬빈도의 '성격' (일단은)	(근접/원딜 / 평타/스킬 ....etc)
+	stat : [7, 1, 2, 4, 1, 0, 2]	(동일. 다이스시 비교가능)
+	des : "몸집이 어린아이만큼 큰 거미다."
+	drop :
+		item : [독주머니, 실]
+		gold : [1, 20]
+		exp : [1, 10]	(level의 비율 / +-정도)
+	
+	act :	/skill
+		list : [물기, 실뿜기, ㅣ러ㅣㅓㅣ]
+		물기 :
+			part : [목, 다리, 몸통, 어깨, 팔]
+			목 : 	(dice를 dex도 따져? 말어?)
+				dice : [str, 3]	(스탯, 난이도 그리고 뭐 더 필요함?) / [스탯, 난도, suc가짓수, fail, b_suc가짓수, b_fail]
+				suc : "물었다."
+				fail : "빗나갔다."
+				b_suc : "급소를
+				b_fail : "한순간 헛점을 보였다
+			....
+		회피 : (dice계수로 이겨서 회피할 경우의 케이스
+			... : "거미는 민첩한 몸놀림으로 피했다."... 같은거
+		
 
+giant_spider : {
+	number : 1
+	sex : 1
+	age : 5
+	feature : 
+	
+		
 
 Class : 마을
 
@@ -328,6 +347,38 @@ scenario :
 	effect :
 		quest : [.....]
 	
+
+
+
+Scenario : 거미의숲
+
+npc : edward : {
+	number : 1
+	name : 에드워드
+	sex : 1
+	age : 17
+	feature : "겁쟁이"
+	level : 4
+	stat : [5, 2, 3, 5, 7, 9, 4, 5]
+	des : "두려움에 떨고있는 청년이다."
+	dia : {
+		num : 10
+		0 : {
+		stat : 0
+		dia : "어어어!!! 잡아먹지 말아줘!!!!"
+			"눈 앞의 청년은 몹시 두려워하고 있는 모습이다."
+		1 : {
+		stat : 1
+		dia : "어휴.... 죽다 살았네 정말",
+			"정말로 고마워. 하마터면 저 |<color=yellow>새끼 자이언트거미</color>|에게 당할 뻔했어.."
+		key : 
+			list : [숲에대해, 방금상황에대해]
+			숲에대해 : [mov, 2] 
+			방금상황에대해 : [mov, 3]
+		2 : {
+		stat : 2
+		dia : "아무래도 여기는 |<color=yellow>거미의숲</color>|이라고 봐야겠지."		
+		mov : 3
 	
 name : 식인거미 숲
 level : 1
@@ -343,6 +394,17 @@ scenario :
 		@move : [forest, 1, 1, 1]
 		@npc interect
 		@.....
+		{ move : [region, 1, 2]		//종류/위치/위험
+		{ dia : "왠지 모르게 |<color=yellow>거미줄</color>|의 수가 늘어난 것만 같다..", "저 멀리서 |<color=blue>비명소리</color>|가 들려온다.."
+		sc_key : list : ['비명소리']
+			비명소리 : [sen, 1, 1, 2]	//스탯 sense 마지막꺼. 근데... 스킬은 따로 필요?
+			1 : dia : "이 |<color=yellow>소리</color>|는 아무래도 인간(종족..) 남성의 목소리같다. 저쪽이다."
+			2 : dia : "누구의 소리인지는 모르겠지만, 위급해보인다."
+		{ dia : "비명소리쪽으로 가보니, |<color=red>거대한 거미</color>|가 비명을 지르는 남성에게 다가가고 있었다.", '"저, 저기 살려줘!!"
+		{ battle : [monster, young_giant_spider, 1, 1]
+		{ npc : edward_1 (npc텍스트랑 연동...)
+		{ 
+
 	patch : 
 		list : [town, npc, ...]
 		town : 
@@ -358,14 +420,5 @@ scenario :
 				little_f : replace : ...
 			n_npc : edward
 
-/*
-//add : 
-	o_npc :
-		little_f : new : dia : 	1. 사전 분류(new/rep)
-			rep : dia : 	2. 덮어쓰기(num : 10, 1 : ... / 11 : ...)
-	n_npc : 
-		edward
-	town : 
-		des : "마을에 우중충한 느낌이 더해졌다.."
 
-*/
+
