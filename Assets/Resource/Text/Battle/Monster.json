@@ -1,13 +1,12 @@
 ﻿{
   "Goblin": {
+    {
       "HP": 3,
       "MP": 0,
       "STR": 2,
       "INT": 0,
       "DEX": 3,
       "LUC": 1,
-
-      "description" : [ [ "멍청한 #monster는 #weapon을 들고 #player앞에 서 있다."] ],
       "equip": {
         "head": "낡아빠진 나무투구",
         "weapon": "몽둥이"
@@ -16,5 +15,6 @@
         "List": [ [ "휘두르기" ] ],
         "휘두르기": ["#monster는 #weapon으로 엉성한 휘두름을 펼쳤다."]
       }
+    }
   }
 }
