@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Class : 지역
 
 T 1 : 평원
@@ -141,3 +142,429 @@ spot :
 
 
 
+=======
+Class : 지역
+
+T 1 : 평원
+
+name : 밀밭평원
+feature : 밀(wheat)
+
+situ : 1 (초입)
+des : "광활한 평원에 산산한 바람이 분다."
+	"주변을 둘러보면 밀들이 노란빛을 띄우고는 황홀히 서있다."
+	"저 밀밭에 들어가면 주위가 제대로 보이지 않을것만 같다."
+
+situ : 2 (중반)
+des : "잘 익은 이삭이 바람에 흔들린다."
+	"마치 늑대가 달리는 것만 같다."
+
+situ : 3 (출구)
+des : "밀밭이 이별을 청한다."
+	"샛노랗던 시야가 환히 하늘을 비쳐준다."
+	
+
+
+T 2 : 숲
+
+name : 깊은숲
+feature : 어둠(dark)
+
+situ : 1 (초입)
+des : "푸른잎들이 무성한 숲의 경계면이다."
+	"사아아 나뭇잎이 부딪치는 소리가 귓가에 맴돈다."
+	"수북한 나무들로 조성된 |<color=yellow>어둠</color>|이 #player를 매혹한다."
+
+situ : 2 (중반) 
+	feature : danger
+	des : "정체모를 울음소리가 울려퍼진다."
+		"메아리치는 소리가 몸을 긴장시킨다."
+		"노란 빛이 드문드문 떠다닌다. 짐승의 눈빛같다."
+
+	des : "반딧불이들이 푸른 빛을 은은하게 내고있다."
+		"서늘한 바람이 긴장한 몸을 식혀준다."
+		"곤충들의 지저귐이 숲의 상황을 알려준다."
+
+situ : 3 (출구)
+	des : "습하고 축축한 공기에 선선함이 더해진다."
+		"환하게 밝혀오는 태양이 #player를 반겨준다."
+		"
+
+Class : NPC
+
+little_f : {
+	number : 1
+	//name : 주민_소녀		//그냥 적당한 이름..?? 아니 필요없을듯)
+	sex : 0			//여성
+	age : 7
+	feature : "발랄"
+	level : 1
+	stat : [3, 1, 1, 3, 2, 5, 3, 1]
+	des : "땋은머리를 하고있는 꼬마숙녀다."
+	dia : {
+		num : 4
+		1 : {
+		2 : {
+		3 : {
+		4 : {
+
+Class : 몬스터
+
+young_giant_spider : {
+	number : 1
+	sex : 0
+	age : 1
+	level : 4
+	feature : "aggressive" 스킬빈도의 '성격' (일단은)	(근접/원딜 / 평타/스킬 ....etc)
+	stat : [7, 1, 2, 4, 1, 0, 2]	(동일. 다이스시 비교가능)
+	des : "몸집이 어린아이만큼 큰 거미다."
+	drop :
+		item : [독주머니, 실]
+		gold : [1, 20]
+		exp : [1, 10]	(level의 비율 / +-정도)
+	
+	act :	/skill
+		list : [물기, 실뿜기, ㅣ러ㅣㅓㅣ]
+		물기 :
+			part : [목, 다리, 몸통, 어깨, 팔]
+			목 : 	(dice를 dex도 따져? 말어?)
+				dice : [str, 3]	(스탯, 난이도 그리고 뭐 더 필요함?) / [스탯, 난도, suc가짓수, fail, b_suc가짓수, b_fail]
+				suc : "물었다."
+				fail : "빗나갔다."
+				b_suc : "급소를
+				b_fail : "한순간 헛점을 보였다
+			....
+		회피 : (dice계수로 이겨서 회피할 경우의 케이스
+			... : "거미는 민첩한 몸놀림으로 피했다."... 같은거
+		
+
+giant_spider : {
+	number : 1
+	sex : 1
+	age : 5
+	feature : 
+	
+		
+
+Class : 마을
+
+name : 풍차마을
+region : 평원
+number : 1
+dev : 1
+size : 1  	(1~3)
+
+list : 광장, 여관, 잡화점, 길드, 풍차
+
+spot : 
+	광장 : 
+		des : "드넓은 대지에 자리잡은 자그마한 마을이다."
+			"마을을 가르는 강가에 밭이 늘여져있다."
+			"주변에는 할일로 바쁜 마을주민들과 신나게 노는 아이들이 돌아다니고 있다."
+			"바로 옆에는 |<color=blue>여관</color>|이 자리잡고 있으며,"
+			"그 주위를 |<color=blue>잡화점</color>|이 둘러싸고 있다."
+			"저 멀리 |<color=blue>풍차</color>|가 돌아가고 있다."
+		npc_list : 주민_남성, 주민_소녀, 노인(!)		(npc종류에서 하나 가져오는것)
+		주민_남성 : 
+			 feature : "경박함"
+			...
+		주민_소녀 : 
+			feature : "발랄함"	(랜덤 중, 성격 고정)
+			stat : [3, 5, 1, 1, 1]	(대화시, 다이스관련 스탯(주민용 요약본)) (가져온 npc의 스탯 수정)
+			des : 
+			dialog : 
+				num : 10
+				1 :
+				stat : 1
+				dia : "어디서 온 거에요?"
+					"요 근처에서 본 적 없는 복장인데,"
+				key : 
+					list : [둘러댄다, 이야기한다]
+					둘러댄다 : [int, 6, 2, 4]	(능력치, 다이스보정, 성공시, 실패시move)
+					이야기한다 : [kra(카리스마), 7, 3, 5]	
+				2 :
+				stat : 2 
+				dia : "그렇구나아~"
+					"소녀는 #player의 능숙한 거짓말에 넘어갔다."
+					"그러면 내가 도와줄 수 있을 거 같은데, 어때요?"
+				key :
+					list : [따라간다, 거절한다]
+						
+
+				3 :
+				stat : 3
+				dia : "소녀는 #player를 !측은한! 눈빛으로 바라본다."
+					"잠시만 여기서 기다려봐요!"
+					"잠시 고민을 하는 모습을 보이고선 저멀리 어른이 있는 곳으로 달려갔다."
+					"약간의 이야기를 나누더니, 그세 건물 안으로 들어가 무언가를 가지고 돌아왔다."
+					"여기, 이거라도 먹어요. 그러면 기분이 나아질 거에요!"
+				key : 
+					list : [받아간다, 먹는다]
+					받아간다 :
+					먹는다 : 
+				4 :
+				stat : 4
+				dia : "눈을 게슴츠레 띄며 #player를 노려보았다."
+					"그런 뻔한 거짓말은 말아요."
+					"아아, 이번에는 재밌는 이야기 들을 수 있을 줄 알았는데"
+					"소녀는 자리에서 벗어났다."
+				5 :
+				stat : 5
+				dia : "헤에~"
+					"그러면은 길드로 가야하는 거죠?"
+					"저어기 언덕너머에 길드가 있어요."
+				key : 
+					list : [#no]
+						
+				effect : 
+					order : 1 (0 - dia전에 출력(get), 1 - dia후에 출력)
+					get : [info, map, guild]	(1에 get종류, 그리고 그에대한 부가설명)
+
+	여관 : 
+		des : "아담한 크기의 2층짜리 여관이다."
+			"안으로 들어서자 끼익거리는 나무판자가 손님을 반긴다."
+			"주점도 겸하는지 계산대 너머에 술병이 보인다."
+		npc_list : 여주인
+		여주인 : 
+			feature : 대장부
+			stat : 
+			des : 
+			dia : 
+				num : 3
+				1 : 
+				2 : 	
+				3 : 
+
+	잡화점 : 
+		des : "낡은 간판이 달려있는 허름한 상점이다."
+			"주기적으로 이용하는 고객이 있는지, 앞마당은 깨끗하게 정리되어있다."
+			"|<color=yellow>무기점</color>|도 겸하는 듯 연식있어 보이는 장비들이 가게 깊숙한 곳에 박혀있다."
+		
+
+
+
+
+
+Class : Scenario
+
+name : 고블린 조우
+term : 0
+level : 1
+condition :			(아직 미정 수치)
+	region : 숲
+	mood : 2		(region의 mood -> danger..?)
+	keyword : null
+	monster : goblin
+	stat : null		(ex | [str, 9])
+scenario : 
+	0 : 
+	stat : 0
+	move : 1
+	progress : event					(progress는 event, quest, remember...?)
+	des : "노랗게 빛나는 눈빛들 중  하나가 가까이 다가온다."
+		"사악한 어린아이의 실소같은 소리가 다가온다."
+		"시야에 잡힌 그 잔상은 |<color=red>고블린</color>|이었다."
+	key : list : [#no]
+	sc_key : 
+		list : [고블린]
+		고블린 : [diction, monster, 고블린, 1]			(키워드 사전 - 카테고리 - 이름 - 페이지(진척도)
+								(sc_key는 여러 상호작용이 가능하게 할까?)
+	effect : 
+		order : 1
+		call : ["Battle", "goblin", 1 ]			(effect까지 끝나고서 move가 된다.
+
+	1 :
+	stat : 1
+	move : 3
+	progress : event
+	des : "눈 앞의 |<color=red>고블린</color>|은 죽기 직전이 되자 필사적으로 |<color=blue>무언가</color>|를 소리쳤다."
+		"아무래도 목숨구걸이 아닐까 싶다."
+	key : list : [#no]
+	sc_key : 
+		list : [고블린, 무언가]
+		고블린 : [diction, monster, 고블린, 1]			(키워드 사전 - 카테고리 - 이름 - 페이지(진척도)
+		무언가 : [dice, int, 2, 2, 3]				(다이스 - 스탯 - 난도 - 성공 - 실패)
+	
+	2 : 
+	stat : 2
+	move : 4
+	progress : event
+	des : "#player는 고블린의 말을 주의깊게 들었다."
+		"자세한 내용은 알아들을 수 없었지만, 살려준다면 자신의 보물을 주겠다는 듯하다."
+	key : 
+		list : [살려준다, 물리친다]
+		살려준다 : [none, 4]
+		물리친다 : [none, 3]
+
+	3 : 
+	stat : 3
+	move : 5
+	progress : event
+	des : "#player는 자비없이 고블린을 쓰러뜨렸다."
+		"고블린의 피 냄새를 맡은 짐승들이 몰려올 것 같다."
+	key : list : [#no]
+	
+	4 :
+	stat : 4
+	move : 5
+	progress : event
+	des : "#player는 무기를 거두고 고블린의 뒤를 따라갔다."
+		"고블린은 약간 비좁아보이는 동굴의 입구로 안내하였다."
+		"아무런 의심없이 동굴로 들어간 #player는 |<color=red>스파이더</color>|의 |<color=blue>거미줄</color>|에 걸렸다!"
+	key : 
+		list : [저항한다, 가만히 있는다]
+		저항한다 : [str, 1, 5, 6, "완력은 거미줄의 탄성을 이겨냈다.", "아무래도 힘이 부족한 것 같다. 거미줄이 약해졌다."]	#(성공, 실패의 대사 추가??)
+		가만히 있는다 : [none, 6]
+	sc_key : 
+		list : [스파이더, 거미줄]
+	
+
+	5 :
+	stat : 5
+	move : -1
+	progress : event
+	des : "#player는 자리를 떠났다."
+	key : list : [#no]
+
+	6 :
+	stat : 6
+	move : 5
+	progress : event
+	des : "#player는 |<color=blue>거미줄</color>|에서 탈출하지 못 하였다."
+		"스파이더가 다가오는 소리가 들려온다."
+	
+	7 : ...		
+
+
+name : 우편 배달
+term : 2
+level : 2
+condition :
+	region : none
+	mood : 마을
+	npc : 노인
+	stat : [dex, 5]
+scenario :
+	0 :
+	stat : 0
+	move : 1
+	progress : quest
+	npc : 노인
+	des : 
+	노인 : des : "저기 우편좀 보내줄 수 있겠나"
+	
+	effect : 
+		quest : [del, 자녀]
+
+
+name : 드래곤
+term : 3
+level : 40
+condition :
+	stat : [level, 30]
+	...? (plot쪽의 기본 조건은 어찌넣어야 하나,..)
+scenario :
+	0 : 
+	stat : 0
+	progress : plot
+	condition : 
+		region : 평원
+		mood : 마을
+		npc : 여관주인
+		keyword : #no
+	npc : 여관주인
+	des :
+	여관주인 : dia : "글쎄, |<color=yellow>드래곤이 나타났다는 소문</color>|이 있더라구 오호호"
+	effect :
+		get : [keyword, 드래곤 소문]
+	
+	1 :		(plot은 단편적인 정보라서, 시간순이라는 거시기가 없어. condition마다 발생이라는 것이지.)
+	stat : 1
+	progress : plot
+	condition : 
+
+	2 :
+	stat : 2
+	progress : quest
+	condition :...
+	npc : 길드마스터
+	길드마스터 : dia : "아무래도 |<color=yellow>죽음의땅</color>|에 무언가 있다고 하더라고. 그곳에 마침 일이 있는데..."
+	effect :
+		quest : [.....]
+	
+
+
+
+Scenario : 거미의숲
+
+npc : edward : {
+	number : 1
+	name : 에드워드
+	sex : 1
+	age : 17
+	feature : "겁쟁이"
+	level : 4
+	stat : [5, 2, 3, 5, 7, 9, 4, 5]
+	des : "두려움에 떨고있는 청년이다."
+	dia : {
+		num : 10
+		0 : {
+		stat : 0
+		dia : "어어어!!! 잡아먹지 말아줘!!!!"
+			"눈 앞의 청년은 몹시 두려워하고 있는 모습이다."
+		1 : {
+		stat : 1
+		dia : "어휴.... 죽다 살았네 정말",
+			"정말로 고마워. 하마터면 저 |<color=yellow>새끼 자이언트거미</color>|에게 당할 뻔했어.."
+		key : 
+			list : [숲에대해, 방금상황에대해]
+			숲에대해 : [mov, 2] 
+			방금상황에대해 : [mov, 3]
+		2 : {
+		stat : 2
+		dia : "아무래도 여기는 |<color=yellow>거미의숲</color>|이라고 봐야겠지."		
+		mov : 3
+	
+name : 식인거미 숲
+level : 1
+condition :
+	region : 숲
+	mood : 2
+	keyword : 
+	town : [pick]	(숲 근처 마을 지정
+scenario :
+	{ chapter : "조우"
+	synopciys : "#player는 edward과 깊은 숲에서 만났다.."	//기존 요약용으로 사용?(사용처 몰두)
+	script : 	//해당 챕터의 진행방식. (어떻게 짜는게 좋을까...)
+		@move : [forest, 1, 1, 1]
+		@npc interect
+		@.....
+		{ move : [region, 1, 2]		//종류/위치/위험
+		{ dia : "왠지 모르게 |<color=yellow>거미줄</color>|의 수가 늘어난 것만 같다..", "저 멀리서 |<color=blue>비명소리</color>|가 들려온다.."
+		sc_key : list : ['비명소리']
+			비명소리 : [sen, 1, 1, 2]	//스탯 sense 마지막꺼. 근데... 스킬은 따로 필요?
+			1 : dia : "이 |<color=yellow>소리</color>|는 아무래도 인간(종족..) 남성의 목소리같다. 저쪽이다."
+			2 : dia : "누구의 소리인지는 모르겠지만, 위급해보인다."
+		{ dia : "비명소리쪽으로 가보니, |<color=red>거대한 거미</color>|가 비명을 지르는 남성에게 다가가고 있었다.", '"저, 저기 살려줘!!"
+		{ battle : [monster, young_giant_spider, 1, 1]
+		{ npc : edward_1 (npc텍스트랑 연동...)
+		{ 
+
+	patch : 
+		list : [town, npc, ...]
+		town : 
+			replace : 
+				{ stat : [type, number]
+				dia : "....."
+				{ stat : 
+			new : 
+				{ stat : [type]
+				dia : "....."
+		npc :
+			o_npc : 	(?)
+				little_f : replace : ...
+			n_npc : edward
+
+
+
+>>>>>>> 9b25280f46ea8b0639b83ca39df9038fac92675f
