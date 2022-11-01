@@ -1,6 +1,8 @@
 ﻿{
-  "Region": {     //여기도 class 명칭이 이상함. Forest : 로 둬야하나?
-    "name": "Forest",
+  "Regionlist": ["Forest", "Plain"],
+
+
+  "Forest": {
     "Type": [
       {
         "situation": 1,
