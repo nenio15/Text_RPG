@@ -9,95 +9,177 @@ using Newtonsoft.Json.Linq;
 public class Textchanger
 {
     //later classify -> json reading
+    //이 데이터는 json에 있을것.
     private string player = "플레이어";
     private string space = "숲";
 
+    //for #player & path + "\Scenario... \Npc...
+    private Dictionary<string, string> convert_hash = new Dictionary<string, string>(); // .Add(key, Value);
+        //private Dictionary<string, string> connet_path = new Dictionary<string, string>;
+    private string path = @"\Resource\Text\";
+    
+
     public void Organize()
     {
-        string mainroute = Application.dataPath + @"\Resource\Text\main.txt";
+        //초기 path설정. 당장의 
+        //string mainroute = Application.dataPath + @"\Resource\Text\main.txt";
+        string mainroute = Application.dataPath + path + "main.txt";
         string jpath = Application.dataPath + @"\Resource\Text\Scenario\scenario.json";  //\Resource\Text\Scenario\tutorial01.txt
         string str = MakeJson(jpath);
+        int move = 0;
+        int i = 0;
 
         //Native Object 방식
         JObject jroot = JObject.Parse(str);
 
         //condition 확인절차. (고민)
-
-        JToken jToken = jroot["Tutorial"]["scenario"];      //tutorial대신 str1이 필요(이전 시나리오에서 받은 값)
-        int move = 0;
-
-        do  //good algorithm?
+        //어떤 시나리오 리스트를 받을지, 다른 json에 정리시키기.. (scenario selector.cs)
+        JToken jbase = jroot["medium_0"];
+        do
         {
-            //now -> start하고 전부 출력(과부화)
-            //later -> 일정부분 출력하고, null되거나 일정 진척 나가면 new 출력
-            JToken jnow = jToken[move];
-
-            //check state
-            if (move != (int)jnow["state"]) Debug.Log(move + " " + jnow["state"] + " 불일치");
-
-            //read selection    -> how?
-            /*
-            foreach(JToken jsel in jnow["selection"])
-            {
-                //selection을... 어디에 저장하냐.?
-            }
-            */
-
-            //description
-            if (jnow["description"] != null)
-                foreach (JToken jdes in jnow["description"])
-                {
-                    string nowline = Setstring(jdes.ToString());
-                    //#처리   don' like. need to change
-                    if (nowline.Contains("#"))
-                    {
-                        nowline = nowline.Replace("#player", player);
-                        nowline = nowline.Replace("#space", space);
-                        nowline = nowline.Replace("#monster", "goblin");
-                    }
-
-                    System.IO.File.AppendAllText(mainroute, nowline + '\n');
-                }
-            
-            //move & call
-            move = (int)jnow["move"]; //move가 다수인 경우는? ...info classify
-            if (jnow["call"].ToString() != "NULL")
-            {
-                JToken jcall = jnow["call"];
-                if (jcall[0].ToString() == "Region")
-                    Region(jcall[1].ToString(), ((int)jcall[2]), ((int)jcall[3]));
-                else if (jcall[0].ToString() == "Battle")
-                    Battle(jcall[1].ToString(), (int)jcall[2]);
-                else if (jcall[0].ToString() == "Town")
-                    Debug.Log(jcall[1].ToString() + ((int)jcall[2]));  //J_town 함수
-
+            JToken jnow = jbase["scenario"][move];
+            //check state       //Debug.Log(jnow["chapter"].ToString() + "\nsynopciys : " + jnow["synopciys"].ToString());
+            foreach( JToken jscript in jnow["script"])
+            {                
+                JToken jlist = jnow["scriptlist"][i++];
+                GetOpcode(jlist.ToString(), jscript[jlist.ToString()]);
             }
 
-        } while (move != -1);
+        } while (false);
 
-        void Region(string spot, int chap, int detail)     //지역별로 얻는다.
+
+        //get scripts ( { } per 1 ) -> "op" : ["codes", "res1", "res2" ...]
+        void GetOpcode(string op, JToken code)  // "op", code = ["cond", "res1", ...]
         {
-            string jpath = Application.dataPath + @"\Resource\Text\Field\Region.json";
-            string str = MakeJson(jpath);
+            int i = 0;
+            //Debug.Log(op + code[0] + code[1]);
+
+            // op = key, code = [ op, "cond", "res1", ...]
+            //dia.key case
+            if(op == "key")
+            {
+                op = code[i++].ToString();
+            }
+            //dia.sc_key case
+            //Debug.Log("getcode : " + op + code[0] + code[1]);
+
+            //scenario.script case
+            switch (op)
+            {
+                //Debug.Log(op);
+                case "dice":
+                    Debug.Log(op + "입니다 " + code[i++] + " " + code[i++] + " " + code[i++] + " " + code[i++]);
+                    break;
+                case "mov": //call region. area. moment
+                    Region(code[i++].ToString(), (int)code[i++], (int)code[i++]);   //Region(code[op][i++].ToString(), (int)code[op][i++], (int)code[op][i++]);
+                    break;
+                case "dia": //get str, show 
+                    foreach (JToken jdes in code)
+                        System.IO.File.AppendAllText(mainroute, Setstring(jdes.ToString()) + '\n');
+                    break;
+                case "npc":
+                    NpcCall(code[i++].ToString(), code[i++].ToString(), code[i++].ToString());
+                    break;
+                case "btl":
+                    Battle(code[i++].ToString(), code[i++].ToString(), (int)code[i++], (int)code[i++]);
+                    break;
+            }
+            return;
+        }
+
+        void Region(string spot, int chap, int detail)     //지역별 get
+        {
+            string str = MakeJson(Application.dataPath + @"\Resource\Text\Field\Region.json");
             JObject jroot = JObject.Parse(str);
             JToken jregion = jroot["Region"];
-            //Debug.Log(str);
+            //jroot["Forest", "sky", "cave", "beach", "sea", "city"] -> enum class로 문자열..?
+            // connect path = jregion["name"].ToString
 
-            if (jregion["name"].ToString() == spot)
-                foreach (JToken des in jregion["Type"][chap]["description"]) //임시 for
-                {
-                    System.IO.File.AppendAllText(mainroute, Setstring(des.ToString()) + '\n');
-                    //Debug.Log(des);  
-                }
+            //if (jregion["name"].ToString() == spot)
+            foreach (JToken des in jregion["Type"][chap]["description"]) //임시 for
+                System.IO.File.AppendAllText(mainroute, Setstring(des.ToString()) + '\n');
+                //Debug.Log(des);
 
+            return;
         }
 
-        void Battle(string monster, int num)
+        void NpcCall(string name, string situ, string num)
         {
-            //Debug.Log(monster + "이 " + num + "마리 나왔습니다.");
+            //해당 npc를 찾아서, situ를 맞추고, num에 있는 dia나 다른 것을 행함
+            string str = MakeJson(Application.dataPath + @"\Resource\Text\Npc\Npc.json");
+            JObject jroot = JObject.Parse(str);
+            JToken jnpc = jroot[name];
+            //convert_hash.Add("#" + name, jnpc["name"].ToString()); // ex) #edward : 에드워드
+
+            //Debug.Log(jnpc["story"]);
+            foreach(JToken dia in jnpc[situ][num]["dia"])
+                System.IO.File.AppendAllText(mainroute, Setstring(dia.ToString()) + '\n');
+
+            //if(jnpc[situ][num]["key"] != null) CreateSelection("key", jnpc[situ][num]);
+            //if (jnpc[situ][num]["sc_key"] != null) CreateSelection("sc_key", jnpc[situ][num]);
+
+            if (jnpc[situ][num]["key"] != null)
+            {
+                JToken key = jnpc[situ][num]["key"];
+                foreach(JToken select in key["list"])
+                {
+                    //list selection을 받아, 아래 선택지obj를 표시한다.
+                    //선택지obj에 <list>[] 값을 전달. 그에 따른 행동을 한다.
+                    //key opcode는 GetOpcode("key", key[select]); 로 따로 취급
+                }
+            }
+
+            return;
         }
 
+        void Battle(string type, string name, int num, int situ)
+        {
 
+            //종류 : 몬스터, 인간형 등등?
+            //이름, 숫자. 그리고 시츄는 발각, 기습, 상태이상 등?
+            Debug.Log(name + "이 " + num + "마리 나왔습니다.");
+            return;
+        }
+
+        void CreateSelection(string k, JToken selection) //before dia
+        {
+            //Debug.Log("1 " + k + selection);
+            //if (selection[k] == null) return;
+            int i = 0;
+            
+            while (selection[k]["list"][i] != null)
+            {   
+                string select = selection[k]["list"][i++].ToString();
+                foreach (JToken effect in selection[k][select]["effect"])
+                    Debug.Log(k + " : " + effect);
+                    //GetOpcode(k, effect); (사실, key랑 sc_key는 선택지를 만드는 옵션이라, 이 함수가 아니다.
+                //GetOpcode(k, selection[k][select]["effect"][0]);
+
+            }
+            
+            return;
+        }
+
+        // key와 sc_key는 dia다음에만 존재한다.(지금은 22/11/16 )
+        // op == key. "key" : { "list" : ... , "s1" : { "effect" : ["op", "codes", "res1" ...], ["op2", ...] }
+        /*
+         * 예, dia.key와 sc_key는 말이죠.. 일단 dia를 들어가요, 그리고서 있어요..
+         * 아마도 script의 dia랑, npc의 dia를 "보고나서" key와 sc_key의 여부를 알아보지. if(jscipt["key"] != null), sc_key
+         * 경우에 따라서는 나눌거야. 근데 이 함수에서 끝낼 수 있다면 좋을듯.
+         * key받고, list에 따른 s1을 받아, 그리고 안에서 effect로 찾아. 그러면, 그 op를 다시..GetOpcode로 해? 무한루프네 하하.
+         * 
+         * effect중에는 dice도 있는데요... 이건 어쩌죠?
+         * sc_key에는 관측이 됨. key에서도 아마 필요할거같아보임
+         *  effect : { .., ["dice", "sen", 1, 1, 2] 형식 받고
+         *  dice : { "1", "2" : ... 로 따로 취급하자. dice는 좀 많이 복잡할거같네..
+         *  
+         *  1.key의 list 하나씩을 받아 effect를 읽는다.
+         *  2.effect의 list에서, ["op", ... ] op에 따라 맞는 행동을 시킨다. (아마 호출..?)
+         *      나머지 파츠는.. op에 대한 code로 쓰고싶은데..
+         *  3.그냥 effect는 어쩌죠..? 있나요? -> 양식은 따로 생각할것.
+         */
+
+        //System.IO.File.AppendAllText(mainroute, "\n"); // + final null line
     }
 
     public string MakeJson(string jpath)    //parsing안 하고 그냥 넣는거는 안되나? 굳이..?
@@ -112,97 +194,22 @@ public class Textchanger
         return str;
     }
 
-    private string Setstring(string old_string)
+    private string Setstring(string raw_string)
     {
-        string[] divied = old_string.Split('"');
-        return divied[1];
+        string[] divied = raw_string.Split('"');
+        return ReplaceS(divied[1]);
     }
 
-    /*
-    public void organ()
+    private string ReplaceS(string c_line)  // + Diction이용, key value값?
     {
-        string mainroute = Application.dataPath + @"\Resource\Text\main.txt";
-        string selfroute = Application.dataPath + @"\Resource\Text\Scenario\tutorial01.txt";
-        string[] scenario = System.IO.File.ReadAllLines(selfroute);
-
-        //string[] tmp;
-        //문제점. @이랑 #을 여기서 할지, 다른 스크립트에서 처리할지, 함수에서 처리할지..
-
-        if (scenario.Length > 0)
-        {
-            for (int i = 0; i < scenario.Length; i++)
-            {
-                //#처리
-                if (scenario[i].Contains("#"))
-                {
-                    scenario[i] = scenario[i].Replace("#player", player);
-                    scenario[i] = scenario[i].Replace("#space", space);
-                    scenario[i] = scenario[i].Replace("#monster", "goblin");
-                }
-
-                if (scenario[i].Contains("@"))  //@처리
-                {
-                    string[] var = scenario[i].Split(',');
-                    if (var[0] == "@Region")
-                    {
-                        //지형묘사 분류 텍스트를 가져와서 001과 01의 탐색 후 추가. 이번에는 단순하게
-                        string desroute = Application.dataPath + @"\Resource\Text\Field\Forest.txt";
-                        string[] field = System.IO.File.ReadAllLines(desroute);
-                        Region(var[1], var[2], var[3]);
-                        //System.IO.File.AppendAllText(mainroute, field[1] + "\n");
-                    }
-                    else if (var[0] == "@Battlefield")
-                    {
-                        //InputJson(path);
-                        //JObject dbSpec = new JObject(nwe JProperty("rmlfajrl"));
-                        //dpSpec.Add("Description", JArray.FromObject(users));
-                        //File.WriteAllText(path, dbSpec.ToString());
-                        System.IO.File.AppendAllText(mainroute, "전투랍니다!! \n");
-                    }
-                    else if (var[0] == "@Selection")
-                    {
-                        System.IO.File.AppendAllText(mainroute, "선택지 \n");
-                    }
-                    else if (var[0] == "@Town")
-                    {
-                        //town호출
-                        System.IO.File.AppendAllText(mainroute, "마을이다!! \n");
-                    }
-                    continue;
-                }
-                if (i >= scenario.Length) break;
-                //텍스트 
-                System.IO.File.AppendAllText(mainroute, scenario[i] + '\n');
-            }
-        }
-
-        //foreach(string line in scenario)
-
-
-        void Region(string spot, string chap, string detail)     //지역별로 얻는다.
-        {
-            if (spot == "forest")
-            {
-                string mainroute = Application.dataPath + @"\Resource\Text\main.txt";
-                string route = Application.dataPath + @"\Resource\Text\Field\Forest.txt";
-                string[] forest_region = System.IO.File.ReadAllLines(route);
-
-                int numbering = int.Parse(detail);
-                int line = VarManager.forest_node[numbering] + 1;
-
-
-                //이 줄부터 END가 있을때까지 출력
-                do
-                {
-                    System.IO.File.AppendAllText(mainroute, forest_region[line] + '\n');
-                } while (!forest_region[++line].Contains("END"));
-
-
-            }
-        }
-
+        if (!c_line.Contains("#")) return c_line;
+        // string player = "홍길동"
+        // just 'for'? or json[converter] = #'list
+        c_line = c_line.Replace("#player", player);
+        c_line = c_line.Replace("#space", space);
+        c_line = c_line.Replace("#edward", "에드워드");
+        c_line = c_line.Replace("#monster", "goblin");
+        return c_line;
     }
-
-    */
 
 }

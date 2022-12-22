@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
 
+// 이게 옛날 main.json 호출 클래스
 public class texttest : MonoBehaviour, IPointerClickHandler
 {
     public Text m_TypingText;
@@ -73,8 +74,16 @@ public class texttest : MonoBehaviour, IPointerClickHandler
         {
             reading = true;
             typing_speed = m_Speed;
-            StartCoroutine(Typing(m_TypingText, contents[current] + '\n'));
-            if (contents.Length >= current) current++;
+
+            if (contents.Length == current)
+            {
+                Debug.Log("다 읽었습니다."); 
+                reading = false;
+                return;
+            }
+            StartCoroutine(Typing(m_TypingText, contents[current++] + '\n'));
+            //if (contents.Length > current + 1) current++
+
             //deletekeyword(robj_i);    //이전 문장의 클릭 오브제 비활성화(추후 수정)
         }
         else

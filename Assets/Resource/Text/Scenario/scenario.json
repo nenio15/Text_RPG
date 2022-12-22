@@ -1,72 +1,170 @@
-﻿{
-  "Tutorial": {
-    "name": "Tutorial",
-
-    "condition": {
-      "region": "null",
-      "keyword": "null",
-      "quest": "null"
+{
+  "small_0" : {
+    "name" : "식인거미 숲",
+    "level" : 1,
+    "condition" : {
+      "region" : "숲",
+      "mood" : 2,
+      "keyword" : "",
+      "town" : ["pick"]
     },
-
-    "scenario": [
+    "scenario" : [
       {
-        "state": 0,
-        "move": 1,
-        "selection": [
-          [ [ "모험가 길드", "거의 모든 마을에 존재하는 길드라고 할 수 있다. 대체로 주변 마물 퇴치에 대한 퀘스트(의뢰)를 받는다" ] ],
-          [ [ "마을", "사람들이 집단을 구성해 만든 거주지." ] ],
-          [ [ "상인", "떠돌아 다니며 상품을 파는 행인" ] ],
-          [
-            [ "부귀영화", "#player는 돈, 지위, 명예따위를 위해 이 험난한 땅에 모험을 시작한 것이다." ],
-            [ "원한, 복수", "#player는 과거 자신의 부모를 살해한 자를 찾기위해 여정을 떠났다." ]
-          ]
-
-        ],
-        "description": [
-          [ "#player는 정처없이 #space을 떠돌아 다니고 있었습니다." ],
-          [ "그를 위해서는 |<color=yellow>모험가 길드</color>|가 있는 |<color=yellow>마을</color>|로 향해야하지요." ],
-          [ "지나가던 |<color=blue>상인</color>|의 이야기에 따르면 이 #space를 가로지르면 마을에 도달할 수 있다고 합니다." ]
-        ],
-        "call": [ "Region", "Forest", 1, 1 ]
-      },
-      {
-        "state": 1,
-        "move": 2,
-        "call": [ "Battle", "goblin", 1 ]
-      },
-      {
-        "state": 2,
-        "move": 3,
-        "call":[ "Region", "Forest", 2, 1 ],
-        "selection": [
-          [
-            "마무리",
-            [ "#player는 #monster에게 자비없는 공격으로 마무리를 지었다." ]//,
-            //[ "Region", "Forest", 2, 1 ]
-          ],
-          [
-            "협박",
-            [ "#player는 #moster를 협박하였다.", "알았어... 알았다구!! 알려주면 될거아냐!" ],
-            [ "Region", "Forest", 2, 9 ]
-          ]
-        ],
-        "description": [
-          [ "#player의 미숙한 실력으로 인해 |<color=red>#monster</color>|는 아직 숨이 붙어있습니다." ]
+        "chapter" : "조우",
+        "synopciys" : "#player는 edward과 깊은 숲에서 만났다..",
+        "script" : [ 
+          { "move" : ["forest", 1, 2] },
+          { 
+            "dia" : [
+              ["왠지 모르게 |<color=yellow>거미줄</color>|의 수가 늘어난 것만 같다."],
+              ["저 멀리서 |<color=blue>비명소리</color>|가 들려온다.."]
+            ],
+            "sc_key" : {
+              "list" : ["비명소리"],
+              "비명소리" : { 
+                "dice" : ["sen", 1, 1, 2],
+                "1" : { "dia" : [["이 |<color=yellow>소리</color>|는 아무래도 인간 남성의 목소리같다. 저쪽이다."]]},
+                "2" : { "dia" : [["누구의 소리인지는 모르겠지만, 위급해보인다."]]}
+              }
+            }
+          },
+          { "dia" : [["비명소리쪽으로 가보니, "]]}
         ]
+      }
+    ]
+  },
+  "small_1" : {
+    "name": "고블린 조우",
+    "term" : 0,
+    "level" : 1,
+    "condition" : {
+      "region" : "숲",
+      "mood" : 2,
+      "keyword" : "null",
+      "monster" : "goblin",
+      "stat" : ["luk", 1]
+    },
+    "scenario" : [
+        {
+          "chapter" : "낯선 등장",
+          "synopciys" : "늑대보다는 높고, 아이보다는 낮은 높이의 빛이 일렁인다.",
+          "script" : [
+            { }
+          ]
 
+      }
+    ]
+  },
+  "medium_0" : {
+    "name" : "자이언트거미 숲",
+    "level" : 2,
+    "condition" : {
+      "region" : "숲",
+      "mood" : 2,
+      "keyword" : "null",
+      "town" : ["pcik"]
+    },
+    "story" : "우연히 마주친 위험에서 구하러 온 이야기",
+    "scenario" : [
+        { 
+        "num" : 10001,
+        "chapter" : "조우",
+        "synopciys" : "#player는 숲을 지나는 와중에 의문의 비명을 듣게 된다.",
+        "scriptlist" : ["mov", "dia", "dia", "npc", "btl", "npc"],
+        "script" : [
+          { "mov" : ["Forest", 1, 2] },
+          { "dia" : [ 
+            ["왠지 모르게 |<color=yellow>거미줄</color>|의 수가 늘어난 것만 같다.."],
+            ["저 멀리서 |<color=blue>비명소리</color>|가 들려온다.."]
+            ],
+            "sc_key" : {
+              "list" : ["비명소리"],
+              "비명소리" : { 
+                "effect" : [
+                  [ "dice", "sen", 1, 1, 2]
+                  //"1" : { "dia" : [["이 |<color=yellow>소리</color>|는 아무래도 인간 남성의 목소리같다. 저쪽이다."]]},
+                  //"2" : { "dia" : [["누구의 소리인지는 모르겠지만, 위급해보인다."]] }
+                ]
+              }
+            }
+          },
+          { "dia" : [["비명소리쪽으로 가보니, |<color=red>거대한 거미</color>|가 비명을 지르는 남성에게 다가가고 있었다."],
+            ["저, 저기 살려줘!!"]]},
+          { "npc" : ["edward", "quest", 0] },
+          { "btl" : ["monster", "young_giant_spider", 1, 1] },
+          { "npc" : ["edward", "quest", 1] }
+        ],
+        "patch" : {
+          "list" : ["npc"],
+          "npc" : { "list" : ["edward"],
+            "edward" : "npc...."
+          }
+        }
       },
       {
-        "state": 3,
-        "move": -1,
-        "description": [
-          [ "#player는 다행히도 숲을 넘어왔습니다." ],
-          [ "지평선 너머에는 아침해가 떠오르고 주위에는 꽃들이 #player를 환영하듯 활짝 피었습니다." ],
-          [ "저 물가너머 마을이 보이기 시작했습니다." ],
-          [ "#player의 여정은 이제부터 시작됩니다." ]
-        ],
-        "call": [ "Town", "Plain", 1]  //call은 override식으로 쓰기(뒤 변수 없으면 <랜덤>)
+        "num" : 10002,
+        "chapter" : "더 깊은 곳으로..",
+        "synopciys" : "#player는 #edward와 함께 숲의 중심부로 향하게 된다.. 자이언트 거미의 중심지는 서식지 그 자체가 거대한 그물이라는 듯이 옮아맨다.",
+        "script" : [
+          { "npc" : ["edward", "quest", 5] },
+          { "dia" : [["#edward가 앞장서서 숲 깊은곳으로 들어간다."]] },
+          { "npc" : ["edward", "quest", 6] },
+          { "dia" : [["바닥 자체가 거미줄로 뒤덮여있어 잡초가 드문드문 자라있다."],
+          ["하늘엔 검푸른 잎이, 바닥엔 새하얀 거미줄이 공간을 정체시킨다..(more?)"]] }
+        ]
+      },
+      {
+        "num" : 10101,
+        "chapter" : "거미줄에 얽힌 장비들",
+        "synopciys" : "점점 빠져들어가는 동안, 장비와 옷가지에 거미줄이 얽혔다. 아무래도 그들의 농간에 당하는 듯 하다.."
+      },
+      {
+        "num" : 10201,
+        "chapter" : "거미줄에 대한 임시방비",
+        "synopciys" : "기생거미가 장비에 얽혀들으려는 것을 발견하였다. #edward와 #player는 더더욱 조심하며 들어갔다."
+      },
+      {
+        "num" : 11001,
+        "chapter" : "커다란 고치",
+        "synopciys" : "목표인 인간 크기의 고치다. #edward는 경솔하게 다가간다..",
+        "script" : [
+          { "npc" : ["edward", "quest", 7] },
+          { "dia" : [["|<color=black>거미줄</color>이 무성하다."]],
+            "sc_key" : {
+              "list" : ["거미줄"],
+              "거미줄" : {
+                "skill" : ["스킬1,2"],
+                "스킬1" : {
+                  "dice" : ["int", 10],
+                  "1" : "성공시..."
+                }
+              }
+            }
+        }
+        ]
+      },
+      {
+        "num" : 11101,
+        "chapter" : "경보울림",
+        "synopciys" : "고치 주변에 거미줄이 위험경보의 장치로 되어있었다.",
+        "script" : [
+          { "dia" : [["거미가 우리 근처로 빠르게 다가온다."]] },
+          { "btl" : ["giant_spider", 2] }
+        ]
+      },
+      {
+        "num" : 11201,
+        "chapter" : "경보-해제",
+        "synopciys" : "고치 주변의 거미줄을 모종의 방법으로 해결하였다.",
+        "script" : [
+          { "dia" : [["거미줄은 알람의 역할을 했던 모양이다."],
+            ["#edward가 가벼운 한숨을 쉬며, #player에게 고마운 눈치를 보인다."]] },
+          { } 
+        ]
       }
-
     ]
+  },
+  "big_0" : {
+
   }
 }

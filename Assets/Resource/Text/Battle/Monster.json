@@ -1,6 +1,6 @@
 ﻿{
   "Goblin": {
-    {
+    "Info": {
       "HP": 3,
       "MP": 0,
       "STR": 2,
@@ -15,6 +15,11 @@
         "List": [ [ "휘두르기" ] ],
         "휘두르기": ["#monster는 #weapon으로 엉성한 휘두름을 펼쳤다."]
       }
+    }
+  },
+  "young_giant_spider": {
+    "Info": {
+      
     }
   }
 }

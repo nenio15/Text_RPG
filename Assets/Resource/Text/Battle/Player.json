@@ -1,30 +1,46 @@
-﻿{
+{
   "Info": {
-    "HP": 5, //임의
-    "MP": 2,
-    "STR": 0,
-    "INT": 0,
-    "DEX": 0,
-    "LUC": 0,
-    "name": "player",
-    "class": "null"
+    "HP": 3,
+    "MP": 1,
+    "C_HP": 3,
+    "C_MP": 1,
+    "STR": 4,
+    "DEX": 3,
+    "INT": 1,
+    "LUC": 1,
+    "CHA": 2,
+    "SEN": 3,
+    "name": "홍길동",
+    "class": "Wariror"
   },
-
-  "Warrior": {
-    "Skill": {
-      "List": [
-        [ "베어넘기기" ],
-        [ "방패" ]
-      ],
-      "베어넘기기": {
-        "MP": 1,
-        "DMG": 5
-      },
-      "방패": {
-        "MP": 1,
-        "DMG": -4
-      }
-    }
+  "Eqip":{
+    "head": ["item_head1"],  
+    "bearst": ["_2", "NONE"],
+    "shoulder": ["_3"],
+    "leg": ["_4"],
+    "shoes": ["_5"],
+    "hands": ["_6"],
+    "weapon": ["old_sword_1"],
+    "subweapon": ["..."],
+    "braklet": ["1", "2"]
+  },
+  "Backpack": {
+    "active" : ["대충 물약1", "대충 투척2"],
+    "eqip" : ["모자1", "투구2"],
+    "etc" : ["잡템1", "판매용2"]
+  },
+  "Skill": {
+    "basic" : [ "탐색", "듣기", "속이기", "추격", "도주", "흥정", "훔치기", "꼬드기기", "이동", "열기/닫기", "숨기"],
+    "class" : [ "베기", "찌르기", "베어넘기기" ],
+    "add" : [ "str_up" ],
+    "keyword" : [" "] 
+  },
+  "Log": {
+    "quest" : [" "], 
+    "cur_quest" : [" "],
+    "goal" : [" "],   
+    "main_quest" : [" "],
+    "charma" : ["chaos", 10] 
+    
   }
-
 }
