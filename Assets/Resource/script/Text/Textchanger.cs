@@ -6,6 +6,11 @@ using UnityEngine.UI;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
+public class Key
+{
+    public string key;
+    public string sc_key;
+}
 public class Textchanger
 {
     //later classify -> json reading
@@ -19,33 +24,44 @@ public class Textchanger
     private string path = @"\Resource\Text\";
     
 
-    public void Organize()
+    public void Organize(int move)
     {
         //초기 path설정. 당장의 
-        //string mainroute = Application.dataPath + @"\Resource\Text\main.txt";
         string mainroute = Application.dataPath + path + "main.txt";
+        string keyroute = Application.dataPath + path + "main.json";
         string jpath = Application.dataPath + @"\Resource\Text\Scenario\scenario.json";  //\Resource\Text\Scenario\tutorial01.txt
         string str = MakeJson(jpath);
-        int move = 0;
-        int i = 0;
+        string key_str = MakeJson(keyroute);
+        File.WriteAllText(keyroute, "{ \"key\" : [{}], \"sc_key\" : [{}] }");    // 초기화
+        //File.WriteAllText(keyroute, "{ \"key\" : {}, \"sc_key\" : {} }");    // 초기화
+        //int move = 0;
+        int op_num = 0;
+        JArray key_jarray = new JArray(), sc_key_jarray = new JArray();
 
         //Native Object 방식
         JObject jroot = JObject.Parse(str);
+        JObject key_jroot = JObject.Parse(key_str);
 
         //condition 확인절차. (고민)
         //어떤 시나리오 리스트를 받을지, 다른 json에 정리시키기.. (scenario selector.cs)
         JToken jbase = jroot["medium_0"];
         do
         {
+            //Debug.Log("CHANGER : " + move);
             JToken jnow = jbase["scenario"][move];
             //check state       //Debug.Log(jnow["chapter"].ToString() + "\nsynopciys : " + jnow["synopciys"].ToString());
             foreach( JToken jscript in jnow["script"])
             {                
-                JToken jlist = jnow["scriptlist"][i++];
+                JToken jlist = jnow["scriptlist"][op_num++];
                 GetOpcode(jlist.ToString(), jscript[jlist.ToString()]);
+                CheckKeys("::opcode here", jscript);
             }
 
         } while (false);
+
+
+        File.WriteAllText(keyroute, key_jroot.ToString());
+        return;
 
 
         //get scripts ( { } per 1 ) -> "op" : ["codes", "res1", "res2" ...]
@@ -68,14 +84,14 @@ public class Textchanger
             {
                 //Debug.Log(op);
                 case "dice":
-                    Debug.Log(op + "입니다 " + code[i++] + " " + code[i++] + " " + code[i++] + " " + code[i++]);
+                    Debug.Log("OPCODE[dice] : " + op + "입니다 " + code[i++] + " " + code[i++] + " " + code[i++] + " " + code[i++]);
                     break;
                 case "mov": //call region. area. moment
                     Region(code[i++].ToString(), (int)code[i++], (int)code[i++]);   //Region(code[op][i++].ToString(), (int)code[op][i++], (int)code[op][i++]);
                     break;
                 case "dia": //get str, show 
                     foreach (JToken jdes in code)
-                        System.IO.File.AppendAllText(mainroute, Setstring(jdes.ToString()) + '\n');
+                        File.AppendAllText(mainroute, Setstring(jdes.ToString()) + '\n');  //System.IO.
                     break;
                 case "npc":
                     NpcCall(code[i++].ToString(), code[i++].ToString(), code[i++].ToString());
@@ -97,7 +113,7 @@ public class Textchanger
 
             //if (jregion["name"].ToString() == spot)
             foreach (JToken des in jregion["Type"][chap]["description"]) //임시 for
-                System.IO.File.AppendAllText(mainroute, Setstring(des.ToString()) + '\n');
+                File.AppendAllText(mainroute, Setstring(des.ToString()) + '\n');
                 //Debug.Log(des);
 
             return;
@@ -110,14 +126,17 @@ public class Textchanger
             JObject jroot = JObject.Parse(str);
             JToken jnpc = jroot[name];
             //convert_hash.Add("#" + name, jnpc["name"].ToString()); // ex) #edward : 에드워드
-
+            
             //Debug.Log(jnpc["story"]);
             foreach(JToken dia in jnpc[situ][num]["dia"])
-                System.IO.File.AppendAllText(mainroute, Setstring(dia.ToString()) + '\n');
-
+                File.AppendAllText(mainroute, Setstring(dia.ToString()) + '\n');
+            
             //if(jnpc[situ][num]["key"] != null) CreateSelection("key", jnpc[situ][num]);
             //if (jnpc[situ][num]["sc_key"] != null) CreateSelection("sc_key", jnpc[situ][num]);
 
+            CheckKeys("opcode..?", jnpc[situ][num]);
+
+            /*
             if (jnpc[situ][num]["key"] != null)
             {
                 JToken key = jnpc[situ][num]["key"];
@@ -128,6 +147,7 @@ public class Textchanger
                     //key opcode는 GetOpcode("key", key[select]); 로 따로 취급
                 }
             }
+            */
 
             return;
         }
@@ -137,8 +157,42 @@ public class Textchanger
 
             //종류 : 몬스터, 인간형 등등?
             //이름, 숫자. 그리고 시츄는 발각, 기습, 상태이상 등?
-            Debug.Log(name + "이 " + num + "마리 나왔습니다.");
+            Debug.Log("JSON[monster] : " + name + "이 " + num + "마리 나왔습니다.");
             return;
+        }
+
+        void CheckKeys(string k, JToken cur_script)
+        {
+            // zzzzzzz.... 이거 걍 json을 배우고서 해야하나... ㅈㄴ복잡해지네,
+
+            // key      list -> effect 일반적인 선택지. 따라서 스탯만 관여
+            // sc_key   list -> action, skill -> dice -> effect 플레이어의 직업, 스킬에 따라 다르게 관여
+
+            // 이러나 저러나, JArray 형식으로 넣어야함. 근데, jarray는 어케 convert하지..?
+            foreach (JProperty keys in cur_script)
+            {
+                if (keys.Name == "key")
+                {
+                    key_jarray.Add(cur_script["key"].ToObject<JObject>());  // jobject만 add되려나..
+                    key_jroot["key"] = key_jarray;   // 이 경우, 다음 case에서 덮어쓰워짐(같 script)
+                    //File.WriteAllText(keyroute, key_jroot.ToString());
+                    /*
+                    foreach (JToken select in keys.Value["list"])
+                    {
+                        Debug.Log("CHECK[key] : " + keys.Value[select.ToString()]["effect"].ToString());
+                    }
+                    */
+                }else if (keys.Name == "sc_key")
+                {
+                    sc_key_jarray.Add(cur_script["sc_key"].ToObject<JObject>());
+                    key_jroot["sc_key"] = sc_key_jarray;    //key_jroot["sc_key"] = cur_script["sc_key"].ToObject<JObject>();
+                    
+                    Debug.Log("key_jroot : " + key_jroot.ToString());
+                        //list selection을 받아, 아래 선택지obj를 표시한다.
+                            //key opcode는 GetOpcode("key", key[select]); 로 따로 취급
+                }
+            }
+
         }
 
         void CreateSelection(string k, JToken selection) //before dia
@@ -162,6 +216,7 @@ public class Textchanger
 
         // key와 sc_key는 dia다음에만 존재한다.(지금은 22/11/16 )
         // op == key. "key" : { "list" : ... , "s1" : { "effect" : ["op", "codes", "res1" ...], ["op2", ...] }
+        
         /*
          * 예, dia.key와 sc_key는 말이죠.. 일단 dia를 들어가요, 그리고서 있어요..
          * 아마도 script의 dia랑, npc의 dia를 "보고나서" key와 sc_key의 여부를 알아보지. if(jscipt["key"] != null), sc_key

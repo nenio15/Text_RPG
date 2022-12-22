@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 public class TextManager : MonoBehaviour, IPointerClickHandler
 {
     public Text m_TypingText;
+    public int idx = 0;
     public float m_Speed = 0.2f;
     private string m_Message;
 
@@ -41,8 +42,9 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         m_ped = new PointerEventData(null);
         typing_speed = m_Speed;
 
-        once.Organize();    //json
+        once.Organize(idx++);    //json
         contents = System.IO.File.ReadAllLines(real_main);
+        //0511은 var 매니저의 소행;; 하... 이거 코드 꼬이면 어떻게 찾냐 미치겠네;;
 
         /*
         for(int i = 0; i < 5; i++)
@@ -50,31 +52,35 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         */
         //robj = GameObject.FindGameObjectsWithTag("click");
 
-
-        /*
-        foreach(string line in contents)
-        {
-            m_Message += line + '\n';
-        }
-        m_TypingText.text = "";
-        //StartCoroutine(Typing(m_TypingText, contents[current], m_Speed));
-        */
     }
-
-    void Update() { }
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (contents.Length == current) //(contents[current] == null)
+        {
+            Debug.Log("READING[end] : 현재 시나리오 " + idx);
+            //여기서 다음 시나리오로 간다. 다만 num이 예상과 다르다면,
+            //return -1값 따위로 여기서 for문으로 탐색할 필요가 있다.
+            once.Organize(idx++);
+            contents = System.IO.File.ReadAllLines(real_main);
+        }
+
         if (!reading)   //normal reading
         {
             reading = true;
             typing_speed = m_Speed;
+            if (contents.Length == current)
+            {
+                Debug.Log("READING : 다 읽었습니다.");
+                reading = false;
+                return;
+            }
             StartCoroutine(Typing(m_TypingText, contents[current] + '\n'));
             if (contents.Length >= current) current++;
             //deletekeyword(robj_i);    //이전 문장의 클릭 오브제 비활성화(추후 수정)
         }
         else            // fast reading
-            typing_speed = 0.4f;
+            typing_speed = 0.0f;
     }
 
     IEnumerator Typing(Text typingText, string message)        //현재 줄 출력(한 글자 씩)
@@ -119,7 +125,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         keywords = keyword_message;
         robj[robj_i].GetComponent<Keyword>().GetKeyword();
         RectTransform rect = robj[robj_i].GetComponent<RectTransform>();
-        Debug.Log(robj[robj_i].GetComponent<Keyword>().keyword);
+        Debug.Log("KEYWORD[obj] : " + robj[robj_i].GetComponent<Keyword>().keyword);
         rect.anchoredPosition = new Vector2(position, -275);
         robj_i = (robj_i + 1) % 5;
 

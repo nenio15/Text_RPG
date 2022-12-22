@@ -89,7 +89,15 @@
             }
           },
           { "dia" : [["비명소리쪽으로 가보니, |<color=red>거대한 거미</color>|가 비명을 지르는 남성에게 다가가고 있었다."],
-            ["저, 저기 살려줘!!"]]},
+            ["저, 저기 살려줘!!"]],
+            "sc_key" : {
+              "list" : ["그런거저런거"],
+              "그런거저런거" : { 
+                "effect" : [
+                  [ "dice", "str", 3, 1, 2]
+                ]
+              }
+            }},
           { "npc" : ["edward", "quest", 0] },
           { "btl" : ["monster", "young_giant_spider", 1, 1] },
           { "npc" : ["edward", "quest", 1] }
@@ -105,6 +113,7 @@
         "num" : 10002,
         "chapter" : "더 깊은 곳으로..",
         "synopciys" : "#player는 #edward와 함께 숲의 중심부로 향하게 된다.. 자이언트 거미의 중심지는 서식지 그 자체가 거대한 그물이라는 듯이 옮아맨다.",
+        "scriptlist" : ["npc", "dia", "npc", "dia"],
         "script" : [
           { "npc" : ["edward", "quest", 5] },
           { "dia" : [["#edward가 앞장서서 숲 깊은곳으로 들어간다."]] },
@@ -127,6 +136,7 @@
         "num" : 11001,
         "chapter" : "커다란 고치",
         "synopciys" : "목표인 인간 크기의 고치다. #edward는 경솔하게 다가간다..",
+        "scriptlist" : ["npc", "dia"],
         "script" : [
           { "npc" : ["edward", "quest", 7] },
           { "dia" : [["|<color=black>거미줄</color>이 무성하다."]],

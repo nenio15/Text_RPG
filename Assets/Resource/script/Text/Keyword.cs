@@ -34,7 +34,7 @@ public class Keyword : MonoBehaviour, IPointerClickHandler
     public void GetKeyword()
     {
         
-        string word = Text.GetComponent<texttest>().keywords;
+        string word = Text.GetComponent<TextManager>().keywords;
         //thinking.. if c -> more complex?
         string[] divided1 = word.Split('>');
         string[] divided2 = divided1[1].Split('<');

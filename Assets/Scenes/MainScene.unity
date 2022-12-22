@@ -2802,7 +2802,7 @@ GameObject:
   - component: {fileID: 1721584780}
   - component: {fileID: 1721584782}
   - component: {fileID: 1721584781}
-  - component: {fileID: 1721584784}
+  - component: {fileID: 1721584783}
   m_Layer: 5
   m_Name: Background
   m_TagString: Text
@@ -2867,7 +2867,7 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1721584779}
   m_CullTransparentMesh: 1
---- !u!114 &1721584784
+--- !u!114 &1721584783
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2876,10 +2876,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1721584779}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c3b8fd86b0b884847819bbf1bc69a6a2, type: 3}
+  m_Script: {fileID: 11500000, guid: 9069f3881db0b454bbc48d5a0aba017d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   m_TypingText: {fileID: 1348554663}
+  idx: 0
   m_Speed: 0.02
   clickobj: {fileID: 8797031535410061350, guid: 8a42dc1d1a9eae344819bb7d8500d29b, type: 3}
   m_canvas: {fileID: 401120346}

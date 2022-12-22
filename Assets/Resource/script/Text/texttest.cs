@@ -43,7 +43,7 @@ public class texttest : MonoBehaviour, IPointerClickHandler
         m_ped = new PointerEventData(null);
         typing_speed = m_Speed;
 
-        once.Organize();    //json
+        //once.Organize();    //json
         contents = System.IO.File.ReadAllLines(avoid);
 
         /*
@@ -77,7 +77,7 @@ public class texttest : MonoBehaviour, IPointerClickHandler
 
             if (contents.Length == current)
             {
-                Debug.Log("다 읽었습니다."); 
+                Debug.Log("READING : 다 읽었습니다."); 
                 reading = false;
                 return;
             }
