@@ -10,6 +10,9 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     public int idx = 0;
     public float m_Speed = 0.2f;
     private string m_Message;
+    public int current = 0;
+    public int keyi = 0;
+    public int sc_keyi = 0;
 
     [SerializeField]
     private GameObject clickobj;
@@ -28,7 +31,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     Textchanger once = new Textchanger();
     //Keyword key = new Keyword();
 
-    int current = 0;
+    
     float typing_speed = 0.2f;
     bool reading = false;
     string[] contents;
@@ -56,25 +59,34 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        for (; robj_i > 0; robj_i--)
+            robj[robj_i - 1].GetComponent<Keyword>().DelKeyword();
+
         if (contents.Length == current) //(contents[current] == null)
         {
             Debug.Log("READING[end] : 현재 시나리오 " + idx);
             //여기서 다음 시나리오로 간다. 다만 num이 예상과 다르다면,
             //return -1값 따위로 여기서 for문으로 탐색할 필요가 있다.
+            // 일단은, 초기화..
+            keyi = 0;
+            sc_keyi = 0;
             once.Organize(idx++);
             contents = System.IO.File.ReadAllLines(real_main);
+            return;
+        }
+
+        if (contents[current] == "#key")
+        {
+            Debug.Log("READING[key] : stop and call selection");
+            //여기서 선택 종이를 불러올것.
+
+            return;
         }
 
         if (!reading)   //normal reading
         {
             reading = true;
             typing_speed = m_Speed;
-            if (contents.Length == current)
-            {
-                Debug.Log("READING : 다 읽었습니다.");
-                reading = false;
-                return;
-            }
             StartCoroutine(Typing(m_TypingText, contents[current] + '\n'));
             if (contents.Length >= current) current++;
             //deletekeyword(robj_i);    //이전 문장의 클릭 오브제 비활성화(추후 수정)
@@ -87,7 +99,8 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     {
         for (int i = 0; i < message.Length; i++)
         {
-            if (message[i] == '|')              //키워드 있을 경우(이것도 한 글자 씩 출력?)
+            //키워드 있을 경우
+            if (message[i] == '|')              
             {
                 string after_message = message.Substring(i + 1);
                 string[] divided_message = after_message.Split('|');

@@ -6,11 +6,6 @@ using UnityEngine.UI;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-public class Key
-{
-    public string key;
-    public string sc_key;
-}
 public class Textchanger
 {
     //later classify -> json reading
@@ -22,25 +17,29 @@ public class Textchanger
     private Dictionary<string, string> convert_hash = new Dictionary<string, string>(); // .Add(key, Value);
         //private Dictionary<string, string> connet_path = new Dictionary<string, string>;
     private string path = @"\Resource\Text\";
-    
+    private string mainroute;
+    // mainroute를 organize에서 정의하고, 여기 변수에다가 저장시켜서 쓸까..?
+    JArray key_jarray, sc_key_jarray;
+    JObject key_jroot;
 
+    // void Start() 이거는 obj에 붙어야만 실행됨.. 흐음.... 흐으으음
+    
     public void Organize(int move)
     {
         //초기 path설정. 당장의 
-        string mainroute = Application.dataPath + path + "main.txt";
+        mainroute = Application.dataPath + path + "main.txt";   // 이거.. 이러면... 흐음.....
         string keyroute = Application.dataPath + path + "main.json";
-        string jpath = Application.dataPath + @"\Resource\Text\Scenario\scenario.json";  //\Resource\Text\Scenario\tutorial01.txt
-        string str = MakeJson(jpath);
+        string scnroute = Application.dataPath + path + @"Scenario\scenario.json";  //\Resource\Text\Scenario\tutorial01.txt
+        string str = MakeJson(scnroute);
         string key_str = MakeJson(keyroute);
         File.WriteAllText(keyroute, "{ \"key\" : [{}], \"sc_key\" : [{}] }");    // 초기화
-        //File.WriteAllText(keyroute, "{ \"key\" : {}, \"sc_key\" : {} }");    // 초기화
-        //int move = 0;
         int op_num = 0;
-        JArray key_jarray = new JArray(), sc_key_jarray = new JArray();
+        key_jarray = new JArray(); 
+        sc_key_jarray = new JArray();
 
         //Native Object 방식
         JObject jroot = JObject.Parse(str);
-        JObject key_jroot = JObject.Parse(key_str);
+        key_jroot = JObject.Parse(key_str);
 
         //condition 확인절차. (고민)
         //어떤 시나리오 리스트를 받을지, 다른 json에 정리시키기.. (scenario selector.cs)
@@ -50,10 +49,10 @@ public class Textchanger
             //Debug.Log("CHANGER : " + move);
             JToken jnow = jbase["scenario"][move];
             //check state       //Debug.Log(jnow["chapter"].ToString() + "\nsynopciys : " + jnow["synopciys"].ToString());
-            foreach( JToken jscript in jnow["script"])
-            {                
+            foreach (JToken jscript in jnow["script"])
+            {
                 JToken jlist = jnow["scriptlist"][op_num++];
-                GetOpcode(jlist.ToString(), jscript[jlist.ToString()]);
+                GetOpcode(jlist.ToString(), jscript[jlist.ToString()], 0);
                 CheckKeys("::opcode here", jscript);
             }
 
@@ -62,180 +61,165 @@ public class Textchanger
 
         File.WriteAllText(keyroute, key_jroot.ToString());
         return;
+    }
 
-
-        //get scripts ( { } per 1 ) -> "op" : ["codes", "res1", "res2" ...]
-        void GetOpcode(string op, JToken code)  // "op", code = ["cond", "res1", ...]
+    //mainroute의 초기화 위치 땜 public이 불가함..?
+    //get scripts ( { } per 1 ) -> "op" : ["codes", "res1", "res2" ...]
+    private void GetOpcode(string op, JToken code, int idx)  // idx == 1 -> effect code
+    {
+        //Debug.Log("getcode : " + op + code[0] + code[1]);
+        switch (op)
         {
-            int i = 0;
-            //Debug.Log(op + code[0] + code[1]);
-
-            // op = key, code = [ op, "cond", "res1", ...]
-            //dia.key case
-            if(op == "key")
-            {
-                op = code[i++].ToString();
-            }
-            //dia.sc_key case
-            //Debug.Log("getcode : " + op + code[0] + code[1]);
-
-            //scenario.script case
-            switch (op)
-            {
-                //Debug.Log(op);
-                case "dice":
-                    Debug.Log("OPCODE[dice] : " + op + "입니다 " + code[i++] + " " + code[i++] + " " + code[i++] + " " + code[i++]);
-                    break;
-                case "mov": //call region. area. moment
-                    Region(code[i++].ToString(), (int)code[i++], (int)code[i++]);   //Region(code[op][i++].ToString(), (int)code[op][i++], (int)code[op][i++]);
-                    break;
-                case "dia": //get str, show 
-                    foreach (JToken jdes in code)
-                        File.AppendAllText(mainroute, Setstring(jdes.ToString()) + '\n');  //System.IO.
-                    break;
-                case "npc":
-                    NpcCall(code[i++].ToString(), code[i++].ToString(), code[i++].ToString());
-                    break;
-                case "btl":
-                    Battle(code[i++].ToString(), code[i++].ToString(), (int)code[i++], (int)code[i++]);
-                    break;
-            }
-            return;
-        }
-
-        void Region(string spot, int chap, int detail)     //지역별 get
-        {
-            string str = MakeJson(Application.dataPath + @"\Resource\Text\Field\Region.json");
-            JObject jroot = JObject.Parse(str);
-            JToken jregion = jroot["Region"];
-            //jroot["Forest", "sky", "cave", "beach", "sea", "city"] -> enum class로 문자열..?
-            // connect path = jregion["name"].ToString
-
-            //if (jregion["name"].ToString() == spot)
-            foreach (JToken des in jregion["Type"][chap]["description"]) //임시 for
-                File.AppendAllText(mainroute, Setstring(des.ToString()) + '\n');
-                //Debug.Log(des);
-
-            return;
-        }
-
-        void NpcCall(string name, string situ, string num)
-        {
-            //해당 npc를 찾아서, situ를 맞추고, num에 있는 dia나 다른 것을 행함
-            string str = MakeJson(Application.dataPath + @"\Resource\Text\Npc\Npc.json");
-            JObject jroot = JObject.Parse(str);
-            JToken jnpc = jroot[name];
-            //convert_hash.Add("#" + name, jnpc["name"].ToString()); // ex) #edward : 에드워드
-            
-            //Debug.Log(jnpc["story"]);
-            foreach(JToken dia in jnpc[situ][num]["dia"])
-                File.AppendAllText(mainroute, Setstring(dia.ToString()) + '\n');
-            
-            //if(jnpc[situ][num]["key"] != null) CreateSelection("key", jnpc[situ][num]);
-            //if (jnpc[situ][num]["sc_key"] != null) CreateSelection("sc_key", jnpc[situ][num]);
-
-            CheckKeys("opcode..?", jnpc[situ][num]);
-
-            /*
-            if (jnpc[situ][num]["key"] != null)
-            {
-                JToken key = jnpc[situ][num]["key"];
-                foreach(JToken select in key["list"])
+            case "dice":
+                RollDice(code); // token을 받을것. 거기서.. 
+                Debug.Log("OPCODE[dice] : " + op + "입니다 " + code[idx++] + " " + code[idx++] + " " + code[idx++] + " " + code[idx++]);
+                break;
+            case "mov": //call region. area. moment
+                Region(code[idx++].ToString(), (int)code[idx++], (int)code[idx++]);   //Region(code[op][i++].ToString(), (int)code[op][i++], (int)code[op][i++]);
+                break;
+            case "dia": //get str, show 
+                if (idx == 1) // effect : [ "dia", [ [1], [2] ] ]   // [1]은 2차원 배열이라 할 수 있겠지..
                 {
-                    //list selection을 받아, 아래 선택지obj를 표시한다.
-                    //선택지obj에 <list>[] 값을 전달. 그에 따른 행동을 한다.
-                    //key opcode는 GetOpcode("key", key[select]); 로 따로 취급
+                    foreach (JToken jdes in code[1])
+                        File.AppendAllText(mainroute, Setstring(jdes.ToString()) + '\n');
+                    break;
                 }
-            }
-            */
-
-            return;
+                foreach (JToken jdes in code)
+                    File.AppendAllText(mainroute, Setstring(jdes.ToString()) + '\n');  //System.IO.
+                break;
+            case "npc":
+                NpcCall(code[idx++].ToString(), code[idx++].ToString(), code[idx++].ToString());
+                break;
+            case "btl":
+                Battle(code[idx++].ToString(), code[idx++].ToString(), (int)code[idx++], (int)code[idx++]);
+                break;
         }
 
-        void Battle(string type, string name, int num, int situ)
+    }
+
+    // key, sc_key -> main.json to use for keywords
+    private void CheckKeys(string k, JToken cur_script)
+    {
+        // key      list -> effect 일반적인 선택지. 따라서 스탯만 관여
+        // sc_key   list -> action, skill -> dice -> effect 플레이어의 직업, 스킬에 따라 다르게 관여
+        foreach (JProperty keys in cur_script)
         {
-
-            //종류 : 몬스터, 인간형 등등?
-            //이름, 숫자. 그리고 시츄는 발각, 기습, 상태이상 등?
-            Debug.Log("JSON[monster] : " + name + "이 " + num + "마리 나왔습니다.");
-            return;
-        }
-
-        void CheckKeys(string k, JToken cur_script)
-        {
-            // zzzzzzz.... 이거 걍 json을 배우고서 해야하나... ㅈㄴ복잡해지네,
-
-            // key      list -> effect 일반적인 선택지. 따라서 스탯만 관여
-            // sc_key   list -> action, skill -> dice -> effect 플레이어의 직업, 스킬에 따라 다르게 관여
-
-            // 이러나 저러나, JArray 형식으로 넣어야함. 근데, jarray는 어케 convert하지..?
-            foreach (JProperty keys in cur_script)
+            if (keys.Name == "key")
             {
-                if (keys.Name == "key")
-                {
-                    key_jarray.Add(cur_script["key"].ToObject<JObject>());  // jobject만 add되려나..
-                    key_jroot["key"] = key_jarray;   // 이 경우, 다음 case에서 덮어쓰워짐(같 script)
-                    //File.WriteAllText(keyroute, key_jroot.ToString());
-                    /*
-                    foreach (JToken select in keys.Value["list"])
-                    {
-                        Debug.Log("CHECK[key] : " + keys.Value[select.ToString()]["effect"].ToString());
-                    }
-                    */
-                }else if (keys.Name == "sc_key")
-                {
-                    sc_key_jarray.Add(cur_script["sc_key"].ToObject<JObject>());
-                    key_jroot["sc_key"] = sc_key_jarray;    //key_jroot["sc_key"] = cur_script["sc_key"].ToObject<JObject>();
-                    
-                    Debug.Log("key_jroot : " + key_jroot.ToString());
-                        //list selection을 받아, 아래 선택지obj를 표시한다.
-                            //key opcode는 GetOpcode("key", key[select]); 로 따로 취급
-                }
+                key_jarray.Add(cur_script["key"].ToObject<JObject>());  // jobject만 add되려나..
+                key_jroot["key"] = key_jarray;
+                File.AppendAllText(mainroute, "#key\n");    // key가 있는 경우, manager를 멈추고 선택지를 보인다.
             }
+            else if (keys.Name == "sc_key")
+            {
+                sc_key_jarray.Add(cur_script["sc_key"].ToObject<JObject>());
+                key_jroot["sc_key"] = sc_key_jarray;                    //key_jroot["sc_key"] = cur_script["sc_key"].ToObject<JObject>();
 
+                Debug.Log("key_jroot : " + key_jroot.ToString());
+                //list selection을 받아, 아래 선택지obj를 표시한다.
+                //key opcode는 GetOpcode("key", key[select]); 로 따로 취급
+            }
         }
 
-        void CreateSelection(string k, JToken selection) //before dia
+    }
+
+    private void RollDice(JToken info)
+    {
+        string stat;
+        int dice_type = 6, dice_up = 0;
+        foreach (JToken list in info["effect"])
+            if (list[0].ToString() == "dice")
+            {
+                stat = list[1].ToString();
+                dice_type = (int)list[2];
+                dice_up = (int)list[3];
+            }
+
+        int roll_result = Random.Range(0, dice_type);
+        Debug.Log("DICE_ROLL : " + roll_result);
+
+        // 대충 상승치.(player 값을 클래스에 따로 받아야할듯 한데...
+        //if ((int)player[stat] >= dice_up) result++;
+        string result = (roll_result >= dice_type / 2) ? "succ" : "fail";
+        Debug.Log("DICE_RESULT : " + result);
+
+        foreach (JToken code in info[result])
+            GetOpcode(code[0].ToString(), code, 1);
+
+    }
+
+    private void Region(string spot, int chap, int detail)     //지역별 get
+    {
+        string str = MakeJson(Application.dataPath + @"\Resource\Text\Field\Region.json");
+        JObject jroot = JObject.Parse(str);
+        JToken jregion = jroot["Region"];
+        //jroot["Forest", "sky", "cave", "beach", "sea", "city"] -> enum class로 문자열..?
+        // connect path = jregion["name"].ToString
+
+        //if (jregion["name"].ToString() == spot)
+        foreach (JToken des in jregion["Type"][chap]["description"]) //임시 for
+            File.AppendAllText(mainroute, Setstring(des.ToString()) + '\n');
+        //Debug.Log(des);
+
+        return;
+    }
+
+    private void NpcCall(string name, string situ, string num)
+    {
+        //해당 npc를 찾아서, situ를 맞추고, num에 있는 dia나 다른 것을 행함
+        string str = MakeJson(Application.dataPath + @"\Resource\Text\Npc\Npc.json");
+        JObject jroot = JObject.Parse(str);
+        JToken jnpc = jroot[name];
+        //convert_hash.Add("#" + name, jnpc["name"].ToString()); // ex) #edward : 에드워드
+
+        //Debug.Log(jnpc["story"]);
+        foreach (JToken dia in jnpc[situ][num]["dia"])
+            File.AppendAllText(mainroute, Setstring(dia.ToString()) + '\n');   //" "는 알아서 추가하던가.. 말던가,
+
+        //if(jnpc[situ][num]["key"] != null) CreateSelection("key", jnpc[situ][num]);
+        CheckKeys("opcode..?", jnpc[situ][num]);
+        return;
+    }
+
+    private void Battle(string type, string name, int num, int situ)
+    {
+
+        //종류 : 몬스터, 인간형 등등?
+        //이름, 숫자. 그리고 시츄는 발각, 기습, 상태이상 등?
+        Debug.Log("JSON[monster] : " + name + "이 " + num + "마리 나왔습니다.");
+        return;
+    }
+
+
+
+    void CreateSelection(string k, JToken selection) //before dia
+    {
+        //Debug.Log("1 " + k + selection);
+        //if (selection[k] == null) return;
+        int i = 0;
+
+        while (selection[k]["list"][i] != null)
         {
-            //Debug.Log("1 " + k + selection);
-            //if (selection[k] == null) return;
-            int i = 0;
-            
-            while (selection[k]["list"][i] != null)
-            {   
-                string select = selection[k]["list"][i++].ToString();
-                foreach (JToken effect in selection[k][select]["effect"])
-                    Debug.Log(k + " : " + effect);
-                    //GetOpcode(k, effect); (사실, key랑 sc_key는 선택지를 만드는 옵션이라, 이 함수가 아니다.
-                //GetOpcode(k, selection[k][select]["effect"][0]);
+            string select = selection[k]["list"][i++].ToString();
+            foreach (JToken effect in selection[k][select]["effect"])
+                Debug.Log(k + " : " + effect);
+            //GetOpcode(k, effect); (사실, key랑 sc_key는 선택지를 만드는 옵션이라, 이 함수가 아니다.
+            //GetOpcode(k, selection[k][select]["effect"][0]);
 
-            }
-            
-            return;
         }
 
-        // key와 sc_key는 dia다음에만 존재한다.(지금은 22/11/16 )
-        // op == key. "key" : { "list" : ... , "s1" : { "effect" : ["op", "codes", "res1" ...], ["op2", ...] }
-        
+        return;
+    }
+
         /*
-         * 예, dia.key와 sc_key는 말이죠.. 일단 dia를 들어가요, 그리고서 있어요..
-         * 아마도 script의 dia랑, npc의 dia를 "보고나서" key와 sc_key의 여부를 알아보지. if(jscipt["key"] != null), sc_key
-         * 경우에 따라서는 나눌거야. 근데 이 함수에서 끝낼 수 있다면 좋을듯.
-         * key받고, list에 따른 s1을 받아, 그리고 안에서 effect로 찾아. 그러면, 그 op를 다시..GetOpcode로 해? 무한루프네 하하.
-         * 
          * effect중에는 dice도 있는데요... 이건 어쩌죠?
          * sc_key에는 관측이 됨. key에서도 아마 필요할거같아보임
          *  effect : { .., ["dice", "sen", 1, 1, 2] 형식 받고
          *  dice : { "1", "2" : ... 로 따로 취급하자. dice는 좀 많이 복잡할거같네..
-         *  
-         *  1.key의 list 하나씩을 받아 effect를 읽는다.
-         *  2.effect의 list에서, ["op", ... ] op에 따라 맞는 행동을 시킨다. (아마 호출..?)
-         *      나머지 파츠는.. op에 대한 code로 쓰고싶은데..
-         *  3.그냥 effect는 어쩌죠..? 있나요? -> 양식은 따로 생각할것.
          */
 
         //System.IO.File.AppendAllText(mainroute, "\n"); // + final null line
-    }
+    
 
     public string MakeJson(string jpath)    //parsing안 하고 그냥 넣는거는 안되나? 굳이..?
     {

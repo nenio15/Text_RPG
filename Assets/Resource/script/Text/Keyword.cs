@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 public class Keyword : MonoBehaviour, IPointerClickHandler
 {   
@@ -16,6 +18,7 @@ public class Keyword : MonoBehaviour, IPointerClickHandler
     private Vector3 destination = new Vector3(0.0f, -500.0f, -4.0f);
     private Vector2 speed = Vector2.zero;
     private float time = 0.1f;
+    private Textchanger clicked = new Textchanger();
 
     void Start()
     {
@@ -54,6 +57,11 @@ public class Keyword : MonoBehaviour, IPointerClickHandler
           3-2. 삭제는 일단, 다음문장을 출력할때 삭제
          4. obj 클릭 -> type case, initiate paper/book/get. and interaction
          */
+    }
+
+    public void DelKeyword()
+    {
+        gameObject.SetActive(false);
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -105,7 +113,7 @@ public class Keyword : MonoBehaviour, IPointerClickHandler
         3. ...?
         */
     }
-    
+
     IEnumerator Moving(GameObject obj)
     {
         //Debug.Log("moving");

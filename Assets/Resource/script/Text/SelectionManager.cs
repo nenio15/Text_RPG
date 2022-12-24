@@ -4,17 +4,8 @@ using UnityEngine;
 
 public class SelectionManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public GameObject[] button;
 
     void ShowSelection()    //선택지 종이 보이기. 
     {
@@ -26,4 +17,11 @@ public class SelectionManager : MonoBehaviour
 
         //this.tranform();
     }
+    
+    void OnClick()
+    {
+        //예.. 그겁니다. 어느 버튼이든 눌리면 다 비활성화되고, 페이퍼 내려가고 그걸 말하고 싶은 겁니다.
+        //다만 이것의 문제는 '어느 버튼'이 눌렸느냐 라는 문제이죠. 이거는 연구가 필요합니다.
+    }
+
 }
