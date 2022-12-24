@@ -37,9 +37,8 @@ public class VarManager : MonoBehaviour
                 //Debug.Log(numbers[1] + ", "+ numbers[2] +", "+ num);
                 node[num] = i;
                 string on = node[num].ToString();
-                //Debug.Log(node[num]);
                 //string mainroute = Application.dataPath + @"\Resource\Text\main.txt";
-                Debug.Log("VAR[region] : " + on);
+                //Debug.Log("VAR[region] : " + on);
                 //System.IO.File.AppendAllText(mainroute, on);
             }
             

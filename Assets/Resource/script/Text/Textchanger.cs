@@ -17,18 +17,16 @@ public class Textchanger
     private Dictionary<string, string> convert_hash = new Dictionary<string, string>(); // .Add(key, Value);
         //private Dictionary<string, string> connet_path = new Dictionary<string, string>;
     private string path = @"\Resource\Text\";
-    private string mainroute;
+    private string mainroute, keyroute;
     // mainroute를 organize에서 정의하고, 여기 변수에다가 저장시켜서 쓸까..?
     JArray key_jarray, sc_key_jarray;
     JObject key_jroot;
 
-    // void Start() 이거는 obj에 붙어야만 실행됨.. 흐음.... 흐으으음
-    
     public void Organize(int move)
     {
         //초기 path설정. 당장의 
         mainroute = Application.dataPath + path + "main.txt";   // 이거.. 이러면... 흐음.....
-        string keyroute = Application.dataPath + path + "main.json";
+        keyroute = Application.dataPath + path + "main.json";
         string scnroute = Application.dataPath + path + @"Scenario\scenario.json";  //\Resource\Text\Scenario\tutorial01.txt
         string str = MakeJson(scnroute);
         string key_str = MakeJson(keyroute);
@@ -59,33 +57,31 @@ public class Textchanger
         } while (false);
 
 
-        File.WriteAllText(keyroute, key_jroot.ToString());
+        
         return;
     }
 
     //mainroute의 초기화 위치 땜 public이 불가함..?
     //get scripts ( { } per 1 ) -> "op" : ["codes", "res1", "res2" ...]
-    private void GetOpcode(string op, JToken code, int idx)  // idx == 1 -> effect code
+    public void GetOpcode(string op, JToken code, int idx)  // idx == 1 -> effect code
     {
-        //Debug.Log("getcode : " + op + code[0] + code[1]);
+        //Debug.Log("GETcode : " + op + " & "+ code);
         switch (op)
         {
             case "dice":
                 RollDice(code); // token을 받을것. 거기서.. 
-                Debug.Log("OPCODE[dice] : " + op + "입니다 " + code[idx++] + " " + code[idx++] + " " + code[idx++] + " " + code[idx++]);
+                //Debug.Log("OPCODE[dice] : " + op + "입니다 " + code[idx++] + " " + code[idx++] + " " + code[idx++] + " " + code[idx++]);
                 break;
             case "mov": //call region. area. moment
                 Region(code[idx++].ToString(), (int)code[idx++], (int)code[idx++]);   //Region(code[op][i++].ToString(), (int)code[op][i++], (int)code[op][i++]);
                 break;
             case "dia": //get str, show 
                 if (idx == 1) // effect : [ "dia", [ [1], [2] ] ]   // [1]은 2차원 배열이라 할 수 있겠지..
-                {
                     foreach (JToken jdes in code[1])
                         File.AppendAllText(mainroute, Setstring(jdes.ToString()) + '\n');
-                    break;
-                }
-                foreach (JToken jdes in code)
-                    File.AppendAllText(mainroute, Setstring(jdes.ToString()) + '\n');  //System.IO.
+                else
+                    foreach (JToken jdes in code)
+                        File.AppendAllText(mainroute, Setstring(jdes.ToString()) + '\n');  //System.IO.
                 break;
             case "npc":
                 NpcCall(code[idx++].ToString(), code[idx++].ToString(), code[idx++].ToString());
@@ -115,14 +111,15 @@ public class Textchanger
                 sc_key_jarray.Add(cur_script["sc_key"].ToObject<JObject>());
                 key_jroot["sc_key"] = sc_key_jarray;                    //key_jroot["sc_key"] = cur_script["sc_key"].ToObject<JObject>();
 
-                Debug.Log("key_jroot : " + key_jroot.ToString());
+                //Debug.Log("key_jroot : " + key_jroot.ToString());
                 //list selection을 받아, 아래 선택지obj를 표시한다.
                 //key opcode는 GetOpcode("key", key[select]); 로 따로 취급
             }
         }
-
+        File.WriteAllText(keyroute, key_jroot.ToString());
     }
 
+    // *** dice의 succ, fail을 effect 안에다 넣을것!! *** 
     private void RollDice(JToken info)
     {
         string stat;
@@ -169,15 +166,19 @@ public class Textchanger
         //해당 npc를 찾아서, situ를 맞추고, num에 있는 dia나 다른 것을 행함
         string str = MakeJson(Application.dataPath + @"\Resource\Text\Npc\Npc.json");
         JObject jroot = JObject.Parse(str);
-        JToken jnpc = jroot[name];
+        JToken jnpc = jroot[name][situ][num];
         //convert_hash.Add("#" + name, jnpc["name"].ToString()); // ex) #edward : 에드워드
-
-        //Debug.Log(jnpc["story"]);
-        foreach (JToken dia in jnpc[situ][num]["dia"])
+        foreach (JToken dia in jnpc["dia"])
             File.AppendAllText(mainroute, Setstring(dia.ToString()) + '\n');   //" "는 알아서 추가하던가.. 말던가,
 
+        foreach (JProperty others in jnpc)
+            if (others.Name == "effect")
+                foreach(JToken code in jnpc["effect"])
+                    GetOpcode(code[0].ToString(), code, 1);
+
+
         //if(jnpc[situ][num]["key"] != null) CreateSelection("key", jnpc[situ][num]);
-        CheckKeys("opcode..?", jnpc[situ][num]);
+        CheckKeys("opcode..?", jnpc);
         return;
     }
 
@@ -190,29 +191,7 @@ public class Textchanger
         return;
     }
 
-
-
-    void CreateSelection(string k, JToken selection) //before dia
-    {
-        //Debug.Log("1 " + k + selection);
-        //if (selection[k] == null) return;
-        int i = 0;
-
-        while (selection[k]["list"][i] != null)
-        {
-            string select = selection[k]["list"][i++].ToString();
-            foreach (JToken effect in selection[k][select]["effect"])
-                Debug.Log(k + " : " + effect);
-            //GetOpcode(k, effect); (사실, key랑 sc_key는 선택지를 만드는 옵션이라, 이 함수가 아니다.
-            //GetOpcode(k, selection[k][select]["effect"][0]);
-
-        }
-
-        return;
-    }
-
         /*
-         * effect중에는 dice도 있는데요... 이건 어쩌죠?
          * sc_key에는 관측이 됨. key에서도 아마 필요할거같아보임
          *  effect : { .., ["dice", "sen", 1, 1, 2] 형식 받고
          *  dice : { "1", "2" : ... 로 따로 취급하자. dice는 좀 많이 복잡할거같네..
@@ -221,7 +200,7 @@ public class Textchanger
         //System.IO.File.AppendAllText(mainroute, "\n"); // + final null line
     
 
-    public string MakeJson(string jpath)    //parsing안 하고 그냥 넣는거는 안되나? 굳이..?
+    private string MakeJson(string jpath)    //parsing안 하고 그냥 넣는거는 안되나? 굳이..?
     {
         string str = null;
         using (StreamReader sr = File.OpenText(jpath))

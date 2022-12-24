@@ -13,6 +13,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     public int current = 0;
     public int keyi = 0;
     public int sc_keyi = 0;
+    public bool stop_read = false;
 
     [SerializeField]
     private GameObject clickobj;
@@ -28,16 +29,18 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     public GameObject[] robj;   //color 클릭 오브제
 
     private string real_main;
-    Textchanger once = new Textchanger();
+    public Textchanger textchanger = new Textchanger();
     //Keyword key = new Keyword();
-
+    [SerializeField]
+    private GameObject Selection;
     
     float typing_speed = 0.2f;
     bool reading = false;
+    
     string[] contents;
 
 
-    void Start()
+    private void Start()
     {
         real_main = Application.dataPath + @"\Resource\Text\main.txt";
         System.IO.File.WriteAllText(real_main, ""); //reset
@@ -45,7 +48,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         m_ped = new PointerEventData(null);
         typing_speed = m_Speed;
 
-        once.Organize(idx++);    //json
+        textchanger.Organize(idx++);    //json
         contents = System.IO.File.ReadAllLines(real_main);
         //0511은 var 매니저의 소행;; 하... 이거 코드 꼬이면 어떻게 찾냐 미치겠네;;
 
@@ -53,35 +56,48 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         for(int i = 0; i < 5; i++)
             Instantiate(clickobj, GameObject.FindWithTag("InScroll").transform);   //키워드 클릭 오브제 생성(+위치)
         */
-        //robj = GameObject.FindGameObjectsWithTag("click");
-
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        for (; robj_i > 0; robj_i--)
-            robj[robj_i - 1].GetComponent<Keyword>().DelKeyword();
+        if (stop_read) return;
 
+        // 시나리오 일단락
         if (contents.Length == current) //(contents[current] == null)
         {
             Debug.Log("READING[end] : 현재 시나리오 " + idx);
             //여기서 다음 시나리오로 간다. 다만 num이 예상과 다르다면,
             //return -1값 따위로 여기서 for문으로 탐색할 필요가 있다.
-            // 일단은, 초기화..
             keyi = 0;
             sc_keyi = 0;
-            once.Organize(idx++);
-            contents = System.IO.File.ReadAllLines(real_main);
+
+            textchanger.Organize(idx++);
+            ReadStory(true);
             return;
         }
 
+        // 선택지 조우
         if (contents[current] == "#key")
         {
             Debug.Log("READING[key] : stop and call selection");
-            //여기서 선택 종이를 불러올것.
-
+            Selection.GetComponent<SelectionManager>().ShowSelection(keyi++);
+            current++;  //#key 뛰어넘기
+            stop_read = true;
             return;
         }
+
+        ReadStory(false);
+    }
+
+    public void ReadStory(bool changed)
+    {
+        if (changed)
+            contents = System.IO.File.ReadAllLines(real_main);
+
+        // 이전 문장 obj 비활성화
+        if (robj_i > 0)
+            for (; robj_i > 0; robj_i--)
+                robj[robj_i - 1].GetComponent<Keyword>().DelKeyword();
 
         if (!reading)   //normal reading
         {
@@ -93,6 +109,8 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         }
         else            // fast reading
             typing_speed = 0.0f;
+
+        stop_read = false;
     }
 
     IEnumerator Typing(Text typingText, string message)        //현재 줄 출력(한 글자 씩)
@@ -138,7 +156,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         keywords = keyword_message;
         robj[robj_i].GetComponent<Keyword>().GetKeyword();
         RectTransform rect = robj[robj_i].GetComponent<RectTransform>();
-        Debug.Log("KEYWORD[obj] : " + robj[robj_i].GetComponent<Keyword>().keyword);
+        //Debug.Log("KEYWORD[obj] : " + robj[robj_i].GetComponent<Keyword>().keyword);
         rect.anchoredPosition = new Vector2(position, -275);
         robj_i = (robj_i + 1) % 5;
 
@@ -152,16 +170,4 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
 
     private string route = Application.dataPath + @"\Resource\Text\main.txt";
     private string[] co_txt;
-
-    void Start()
-    {
-        co_txt = System.IO.File.ReadAllLines(route);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //System.IO.File.ReadLines(route);
-    }
-
     */
