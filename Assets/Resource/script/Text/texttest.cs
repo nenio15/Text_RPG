@@ -130,7 +130,7 @@ public class texttest : MonoBehaviour, IPointerClickHandler
         int position = -407 + (view_position) * 40 + center * 40;        //공백 (띄어쓰기는 크기가 달라), 한 글자 크기 : 40, 띄어쓰기 : 20
 
         keywords = keyword_message;
-        robj[robj_i].GetComponent<Keyword>().GetKeyword();
+        robj[robj_i].GetComponent<Keyword>().GetKeyword(keywords, 0);
         RectTransform rect = robj[robj_i].GetComponent<RectTransform>();
         Debug.Log(robj[robj_i].GetComponent<Keyword>().keyword);
         rect.anchoredPosition = new Vector2(position, -275);
@@ -139,3 +139,11 @@ public class texttest : MonoBehaviour, IPointerClickHandler
     }
 
 }
+/*
+public Text m_TypingText;
+public string m_Message;
+public float m_Speed = 0.2f;
+
+private string route = Application.dataPath + @"\Resource\Text\main.txt";
+private string[] co_txt;
+*/

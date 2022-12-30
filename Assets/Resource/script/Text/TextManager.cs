@@ -6,14 +6,20 @@ using UnityEngine.EventSystems;
 
 public class TextManager : MonoBehaviour, IPointerClickHandler
 {
+    
     public Text m_TypingText;
-    public int idx = 0;
     public float m_Speed = 0.2f;
+    private int idx = 0;
     private string m_Message;
-    public int current = 0;
-    public int keyi = 0;
-    public int sc_keyi = 0;
-    public bool stop_read = false;
+    private int current = 0;
+    
+    private bool stop_read = false;
+
+    [SerializeField]
+    private bool reading = false;
+
+    private int keyi = 0;
+    private int sc_keyi = 0;
 
     [SerializeField]
     private GameObject clickobj;
@@ -35,10 +41,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     private GameObject Selection;
     
     float typing_speed = 0.2f;
-    bool reading = false;
-    
     string[] contents;
-
 
     private void Start()
     {
@@ -51,11 +54,6 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         textchanger.Organize(idx++);    //json
         contents = System.IO.File.ReadAllLines(real_main);
         //0511은 var 매니저의 소행;; 하... 이거 코드 꼬이면 어떻게 찾냐 미치겠네;;
-
-        /*
-        for(int i = 0; i < 5; i++)
-            Instantiate(clickobj, GameObject.FindWithTag("InScroll").transform);   //키워드 클릭 오브제 생성(+위치)
-        */
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -77,13 +75,36 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         }
 
         // 선택지 조우
-        if (contents[current] == "#key")
+        if (!reading)
         {
-            Debug.Log("READING[key] : stop and call selection");
-            Selection.GetComponent<SelectionManager>().ShowSelection(keyi++);
-            current++;  //#key 뛰어넘기
-            stop_read = true;
-            return;
+            if (contents[current][0] == '#')
+            {
+                // outbound의 경우..? (....)
+                if (contents[current].Contains("#key"))  // 더럽군.. 코드..
+                {
+                    Debug.Log("READING[key] : stop and call selection");
+                    Selection.GetComponent<SelectionManager>().ShowSelection("key", keyi++);
+                    
+                    if (contents[current].Contains("sc"))    
+                    {
+                        Debug.Log("READING[sc_key] : ...");
+                        sc_keyi++;
+                    }
+                    stop_read = true;
+                    current++;
+                    return;
+
+                }else if (contents[current].Contains("sc"))
+                {
+                    Debug.Log("READING[sc_key] : only");
+                    sc_keyi++;
+                }
+                current++;
+            }
+
+            if (robj_i > 0)
+                for (; robj_i > 0; robj_i--)
+                    robj[robj_i - 1].GetComponent<Keyword>().DelKeyword();
         }
 
         ReadStory(false);
@@ -91,21 +112,25 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
 
     public void ReadStory(bool changed)
     {
+        // 무시한다의 선택지가 changed도 무시함 ㄷㄷㄷ (다시 확인할것)
         if (changed)
+        {
             contents = System.IO.File.ReadAllLines(real_main);
-
-        // 이전 문장 obj 비활성화
-        if (robj_i > 0)
             for (; robj_i > 0; robj_i--)
                 robj[robj_i - 1].GetComponent<Keyword>().DelKeyword();
-
+        }
+        
         if (!reading)   //normal reading
         {
+            string cur_text = "";
+            while (contents[current][0] != '#')
+                cur_text += STyping(contents[current++] + '\n');
+            cur_text += '\n';
+
             reading = true;
             typing_speed = m_Speed;
-            StartCoroutine(Typing(m_TypingText, contents[current] + '\n'));
-            if (contents.Length >= current) current++;
-            //deletekeyword(robj_i);    //이전 문장의 클릭 오브제 비활성화(추후 수정)
+            StartCoroutine(Showing(m_TypingText, cur_text));
+            //if (contents.Length >= current) current++;
         }
         else            // fast reading
             typing_speed = 0.0f;
@@ -113,18 +138,18 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         stop_read = false;
     }
 
-    IEnumerator Typing(Text typingText, string message)        //현재 줄 출력(한 글자 씩)
+    IEnumerator Showing(Text typingText, string message)
     {
         for (int i = 0; i < message.Length; i++)
         {
             //키워드 있을 경우
-            if (message[i] == '|')              
+            if (message[i] == '|')
             {
                 string after_message = message.Substring(i + 1);
                 string[] divided_message = after_message.Split('|');
                 typingText.text += divided_message[0];
                 i += divided_message[0].Length + 1;
-                newKeyword(i, message, divided_message[0]);     //키워드 선택 오브제 생성
+                //newKeyword(i, message, divided_message[0]);     //키워드 선택 오브제 생성
                 //Debug.Log("키워드의 길이 : " + divided_message[0].Length);
             }
             else
@@ -134,6 +159,23 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
             yield return new WaitForSeconds(typing_speed);
         }
         reading = false;
+    }
+
+    string STyping(string message)        //현재 줄 출력(한 글자 씩)
+    {
+        for (int i = 0; i < message.Length; i++)
+        {
+            //키워드 있을 경우
+            if (message[i] == '|')
+            {
+                string after_message = message.Substring(i + 1);
+                string[] divided_message = after_message.Split('|');
+                i += divided_message[0].Length + 1;
+                newKeyword(i, message, divided_message[0]);     //키워드 선택 오브제 생성
+                //sc_keyi++;  // 키워드 수만큼 늘어나는데....?
+            }
+        }
+        return message;
     }
 
     void newKeyword(int real_position, string message, string keyword_message)  //get view pos
@@ -154,7 +196,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         int position = -407 + (view_position) * 40 + center * 40;        //공백 (띄어쓰기는 크기가 달라), 한 글자 크기 : 40, 띄어쓰기 : 20
 
         keywords = keyword_message;
-        robj[robj_i].GetComponent<Keyword>().GetKeyword();
+        robj[robj_i].GetComponent<Keyword>().GetKeyword(keywords, sc_keyi);
         RectTransform rect = robj[robj_i].GetComponent<RectTransform>();
         //Debug.Log("KEYWORD[obj] : " + robj[robj_i].GetComponent<Keyword>().keyword);
         rect.anchoredPosition = new Vector2(position, -275);
@@ -163,11 +205,3 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     }
 
 }
-    /*
-    public Text m_TypingText;
-    public string m_Message;
-    public float m_Speed = 0.2f;
-
-    private string route = Application.dataPath + @"\Resource\Text\main.txt";
-    private string[] co_txt;
-    */

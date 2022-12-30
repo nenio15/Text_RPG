@@ -94,28 +94,37 @@ public class Textchanger
     }
 
     // key, sc_key -> main.json to use for keywords
-    private void CheckKeys(string k, JToken cur_script)
+    private void CheckKeys(string k, JToken cur_script) // how to use k..?
     {
+        k = "0";
         // key      list -> effect 일반적인 선택지. 따라서 스탯만 관여
         // sc_key   list -> action, skill -> dice -> effect 플레이어의 직업, 스킬에 따라 다르게 관여
         foreach (JProperty keys in cur_script)
         {
             if (keys.Name == "key")
             {
-                key_jarray.Add(cur_script["key"].ToObject<JObject>());  // jobject만 add되려나..
+                key_jarray.Add(cur_script["key"].ToObject<JObject>());  // jobject만 add
                 key_jroot["key"] = key_jarray;
-                File.AppendAllText(mainroute, "#key\n");    // key가 있는 경우, manager를 멈추고 선택지를 보인다.
+                k = "#key\n";
             }
             else if (keys.Name == "sc_key")
             {
                 sc_key_jarray.Add(cur_script["sc_key"].ToObject<JObject>());
                 key_jroot["sc_key"] = sc_key_jarray;                    //key_jroot["sc_key"] = cur_script["sc_key"].ToObject<JObject>();
 
-                //Debug.Log("key_jroot : " + key_jroot.ToString());
+                if (k == "#key\n") k = "#key sc_key\n";
+                else k = "#sc_key\n";     // key가 씹히는 경우가 있다... 흠..
+                
+
                 //list selection을 받아, 아래 선택지obj를 표시한다.
                 //key opcode는 GetOpcode("key", key[select]); 로 따로 취급
             }
+            else if (keys.Name == "dia")
+                k = "#\n";
         }
+
+        if( k[0] == '#')
+            File.AppendAllText(mainroute, k);
         File.WriteAllText(keyroute, key_jroot.ToString());
     }
 
@@ -171,6 +180,8 @@ public class Textchanger
         foreach (JToken dia in jnpc["dia"])
             File.AppendAllText(mainroute, Setstring(dia.ToString()) + '\n');   //" "는 알아서 추가하던가.. 말던가,
 
+        CheckKeys("opcode..?", jnpc);
+
         foreach (JProperty others in jnpc)
             if (others.Name == "effect")
                 foreach(JToken code in jnpc["effect"])
@@ -178,7 +189,7 @@ public class Textchanger
 
 
         //if(jnpc[situ][num]["key"] != null) CreateSelection("key", jnpc[situ][num]);
-        CheckKeys("opcode..?", jnpc);
+        //CheckKeys("opcode..?", jnpc);
         return;
     }
 

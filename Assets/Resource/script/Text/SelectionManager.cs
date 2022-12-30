@@ -4,7 +4,6 @@ using System.IO;
 using UnityEngine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public class SelectionManager : MonoBehaviour
@@ -19,7 +18,7 @@ public class SelectionManager : MonoBehaviour
 
     private JObject jroot;
     private JToken jcur;
-    //private int[] pos = { -200, 200 };
+    private Textchanger textchanger;
     int len = 0;
     
 
@@ -27,15 +26,15 @@ public class SelectionManager : MonoBehaviour
     {
         mainroute = Application.dataPath + @"\Resource\Text\main.txt";
         keyroute = Application.dataPath + @"\Resource\Text\main.json";
-
-
+        textchanger = TextManager.GetComponent<TextManager>().textchanger;
     }
 
-    public void ShowSelection(int idx)
+    public void ShowSelection(string option, int idx)
     {   
         str = MakeJson(keyroute);
         jroot = JObject.Parse(str);
-        jcur = jroot["key"][idx];
+        jcur = jroot[option][idx];
+        Debug.Log("SELECT : " + option);
         // key의 list만큼 할것. list는 저시기 거시기하고.
 
 
@@ -49,13 +48,12 @@ public class SelectionManager : MonoBehaviour
             button[len++].SetActive(true);
         }
 
-        destination = new Vector3(0.0f, -800.0f, -4.0f);
-        StartCoroutine(Moving(gameObject));
+        //destination = new Vector3(0.0f, -800.0f, -4.0f);
+        //StartCoroutine(Moving(gameObject));
     }
     
     public void OnClick(Text t)
     {
-        Textchanger textchanger = TextManager.GetComponent<TextManager>().textchanger;
         Debug.Log("CLICK_TEXT : " + t.text);
         JToken jkey = jcur[t.text];
 
@@ -67,17 +65,48 @@ public class SelectionManager : MonoBehaviour
                 textchanger.GetOpcode(code[0].ToString(), jkey, 1);
             else
                 textchanger.GetOpcode(code[0].ToString(), code, 1);
-            
+            //textchanger.CheckKeys("::opcode", code);
         }
         
+
         //다음 문장 출력(한 줄만)
         TextManager.GetComponent<TextManager>().ReadStory(true);
 
         for (; len > 0; len--)
             button[len - 1].SetActive(false);
 
-        destination = new Vector3(0.0f, -2000.0f, -4.0f);
-        StartCoroutine(Moving(gameObject));
+        //destination = new Vector3(0.0f, -2000.0f, -4.0f);
+        //StartCoroutine(Moving(gameObject));
+    }
+
+    // sc_obj 클릭, 선택지가 갱신된다.
+    public void OnClickObj(GameObject keyword)
+    {
+        string word = keyword.GetComponent<Keyword>().keyword;
+        int idx = keyword.GetComponent<Keyword>().idx;
+        ShowSelection("sc_key", idx);
+        Debug.Log("SC_OBJ : " + word);
+
+        //선택지를 누르면, 기존 main.txt에 내용이 추가된다. 그렇다. 가장 아래에 추가가 된다... 흠
+        // key, sc_key를 상관않고 현재 줄에다가 추가시키고 싶다.
+        // 1.m_text에만 갱신시킨다.
+        // 2.어찌 잘 타일러서, main.txt의 중간에 삽입을 시킨다. 
+        //  2-1. 이 경우, current를 아마 써야할거다. ( before = < current, after = >= current , append, main += after)
+
+        /*
+        JToken jkey = jcur[word];
+        
+        foreach (JToken code in jkey["effect"])
+        {
+
+            if (code[0].ToString() == "dice")
+                textchanger.GetOpcode(code[0].ToString(), jkey, 1);
+            else
+                textchanger.GetOpcode(code[0].ToString(), code, 1);
+        }
+
+        TextManager.GetComponent<TextManager>().ReadStory(true);
+        */
     }
 
     IEnumerator Moving(GameObject obj)
