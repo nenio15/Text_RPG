@@ -1,17 +1,11 @@
 {
   "Info": {
-    "HP": 3,
-    "MP": 1,
-    "C_HP": 3,
-    "C_MP": 1,
-    "STR": 4,
-    "DEX": 3,
-    "INT": 1,
-    "LUC": 1,
-    "CHA": 2,
-    "SEN": 3,
-    "name": "홍길동",
-    "class": "Wariror"
+    "Level" : 1,
+    "Hp": [3, 3], // cur / max
+    "Mp": [1, 1],
+    "Stat" : [4, 3, 1, 1, 2, 3], // STR, DEX, INT, LUC, CHA, SEN
+    "Name": "홍길동",
+    "Class": "Wariror"
   },
   "Eqip":{
     "head": ["item_head1"],  
@@ -40,7 +34,7 @@
     "cur_quest" : [" "],
     "goal" : [" "],   
     "main_quest" : [" "],
-    "charma" : ["chaos", 10] 
-    
+    "charma" : ["chaos", 10],
+    "exp" : [ 0, 100]
   }
 }
