@@ -7,34 +7,97 @@
     "Name": "홍길동",
     "Class": "Wariror"
   },
-  "Eqip":{
-    "head": ["item_head1"],  
-    "bearst": ["_2", "NONE"],
-    "shoulder": ["_3"],
-    "leg": ["_4"],
-    "shoes": ["_5"],
-    "hands": ["_6"],
-    "weapon": ["old_sword_1"],
-    "subweapon": ["..."],
-    "braklet": ["1", "2"]
+  "Eqip": {
+    "head": [
+      "item_head1"
+    ],
+    "bearst": [
+      "_2",
+      "NONE"
+    ],
+    "shoulder": [
+      "_3"
+    ],
+    "leg": [
+      "_4"
+    ],
+    "shoes": [
+      "_5"
+    ],
+    "hands": [
+      "_6"
+    ],
+    "weapon": [
+      "old_sword_1"
+    ],
+    "subweapon": [
+      "..."
+    ],
+    "braklet": [
+      "1",
+      "2"
+    ]
   },
   "Backpack": {
-    "active" : ["대충 물약1", "대충 투척2"],
-    "eqip" : ["모자1", "투구2"],
-    "etc" : ["잡템1", "판매용2"]
+    "active": [
+      "대충 물약1",
+      "대충 투척2"
+    ],
+    "eqip": [
+      "모자1",
+      "투구2"
+    ],
+    "etc": [
+      "잡템1",
+      "판매용2"
+    ]
   },
   "Skill": {
-    "basic" : [ "탐색", "듣기", "속이기", "추격", "도주", "흥정", "훔치기", "꼬드기기", "이동", "열기/닫기", "숨기"],
-    "class" : [ "베기", "찌르기", "베어넘기기" ],
-    "add" : [ "str_up" ],
-    "keyword" : [" "] 
+    "basic": [
+      "탐색",
+      "듣기",
+      "속이기",
+      "추격",
+      "도주",
+      "흥정",
+      "훔치기",
+      "꼬드기기",
+      "이동",
+      "열기/닫기",
+      "숨기"
+    ],
+    "class": [
+      "베기",
+      "찌르기",
+      "베어넘기기"
+    ],
+    "add": [
+      "str_up"
+    ],
+    "keyword": [
+      " "
+    ]
   },
   "Log": {
-    "quest" : [" "], 
-    "cur_quest" : [" "],
-    "goal" : [" "],   
-    "main_quest" : [" "],
-    "charma" : ["chaos", 10],
-    "exp" : [ 0, 100]
+    "quest": [
+      " "
+    ],
+    "cur_quest": [
+      " "
+    ],
+    "goal": [
+      " "
+    ],
+    "main_quest": [
+      " "
+    ],
+    "charma": [
+      "chaos",
+      10
+    ],
+    "exp": [
+      0,
+      100
+    ]
   }
 }
