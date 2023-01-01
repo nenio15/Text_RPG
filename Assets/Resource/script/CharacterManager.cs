@@ -1,12 +1,12 @@
-using System;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using UnityEngine.UI;
 
-[Serializable]
+[System.Serializable]
 public class Character
 {
     public int Level = 1;
@@ -24,7 +24,11 @@ public class Character
 
 public class CharacterManager : MonoBehaviour
 {
-    string charoute;
+    [SerializeField] private GameObject cur_class;  // 현재는 텍스트, 나중엔 이미지
+    [SerializeField] private Text stats;
+    [SerializeField] private string n;
+
+    private string  charoute;
 
     //TextAsset jsonData = Resources.Load("Text/Battle/Player") as TextAsset;
     //var _data = JsonUtility.FromJson<Character>(jsonData.ToString());
@@ -40,16 +44,21 @@ public class CharacterManager : MonoBehaviour
         JToken info = player["Info"];
         JToken bag = player["Backpack"];
 
-        // 적용완료
-        Character list = JsonUtility.FromJson<Character>(info.ToString());
-        list.Level = 2;
-        //JToken ll = list.ToString();
+        // "{\"Level\":2,\"Hp\":[3,3],\"Mp\":[1,1],\"Stat\":[4,3,1,1,2,3],\"Name\":\"홍길동\",\"Class\":\"Wariror\"}"
+        // 내가 원하는 형식으로 안 나온다. (찾아보면 있을지도...)
+        // string newone = JsonUtility.ToJson(list);
 
-        // 이 string을 json으로 변환시켜서 대입시킬것.
-        string newone = JsonUtility.ToJson(list);
-        Debug.Log("new : " + newone);
+        // class는 적용용으로만 쓴다. (갱신은 [" "] 직접참조) (갱신도 class로 하고싶은데... 어려워보인다.)
+        //int level = (int)player["Info"]["Level"]; 이거의 단락화랄까..?
+        Character cur_info = JsonUtility.FromJson<Character>(info.ToString());
+        
+        // 갱신 형식 ( or fun("Level", 2) )
+        player["Info"]["Level"] = 2;
+        cur_info = JsonUtility.FromJson<Character>(info.ToString());
 
-        player["Info"] = newone;
+        stats.text = cur_info.Stat[0] + "\t\t" + cur_info.Stat[2] + "\t\t" + cur_info.Stat[4] + "\n" + cur_info.Stat[1] + "\t\t" + cur_info.Stat[3] + "\t\t" + cur_info.Stat[5];
+        cur_class.GetComponent<Text>().text = cur_info.Class;
+
         File.WriteAllText(charoute, player.ToString());
     }
 

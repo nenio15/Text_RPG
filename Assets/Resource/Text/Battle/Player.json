@@ -1,9 +1,22 @@
 {
   "Info": {
-    "Level" : 1,
-    "Hp": [3, 3], // cur / max
-    "Mp": [1, 1],
-    "Stat" : [4, 3, 1, 1, 2, 3], // STR, DEX, INT, LUC, CHA, SEN
+    "Level": 2,
+    "Hp": [
+      3,
+      3
+    ],
+    "Mp": [
+      1,
+      1
+    ],
+    "Stat": [
+      4,
+      3,
+      1,
+      1,
+      2,
+      3
+    ],
     "Name": "홍길동",
     "Class": "Wariror"
   },

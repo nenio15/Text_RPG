@@ -18,11 +18,6 @@ public class VarManager : MonoBehaviour
         
     }
     
-    void Update()
-    {
-        
-    }
-    
     void Search(ref int[] node, string[] region)
     {
         string[] numbers;
