@@ -1,1 +1,25 @@
-﻿
+﻿{
+    "Forest" : [
+        {
+            "num" : 0,
+            "name" : "forest_with rock",
+            "description" : [
+                [ "숲속에는 #monster와 바닥에 박혀있는 자그마한 |<color=blue>도"]
+            ]
+
+    },
+    {
+        "num" : 1,
+        "name" : "forest_edward",
+        "description" : [
+            [ "거미는 #npc를 뒤에 두고 #player를 대치한다." ],
+            [ "바닥에는 |<color=blue>거미줄</color>|이 늘어져있고" ],
+            [ "주위에는 나무들이 자리해있다."]
+        ],
+        "list" : ["거미줄"],
+        "거미줄" : {
+            "non_list" : ["여기서는", "액션이나", "스킬을 쓸 수 있습니다.", "없는 스킬은", "액션의 분류로 취급됩니다.(보정치추가)"]
+        }
+    }
+]
+}

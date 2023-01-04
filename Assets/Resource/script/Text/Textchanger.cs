@@ -195,7 +195,7 @@ public class Textchanger
 
     private void Battle(string type, string name, int num, int situ)
     {
-
+        File.AppendAllText(mainroute, "#battle " + name + num + '\n');
         //종류 : 몬스터, 인간형 등등?
         //이름, 숫자. 그리고 시츄는 발각, 기습, 상태이상 등?
         Debug.Log("JSON[monster] : " + name + "이 " + num + "마리 나왔습니다.");
