@@ -2484,6 +2484,7 @@ GameObject:
   - component: {fileID: 1001530117}
   - component: {fileID: 1001530119}
   - component: {fileID: 1001530118}
+  - component: {fileID: 1001530120}
   m_Layer: 5
   m_Name: BattleF
   m_TagString: Untagged
@@ -2556,6 +2557,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1001530116}
   m_CullTransparentMesh: 1
+--- !u!114 &1001530120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1001530116}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bde3ebb626e44804594d6cf44e68f576, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  battle_f: {fileID: 0}
+  battle_t: {fileID: 0}
+  robj_i: 0
+  robj: []
+  clickobj: {fileID: 0}
 --- !u!1 &1058663929
 GameObject:
   m_ObjectHideFlags: 0
