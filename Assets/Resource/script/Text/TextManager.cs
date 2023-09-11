@@ -15,6 +15,9 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     
     private bool stop_read = false;
 
+    [SerializeField]    private string cur_scenario = "main_scenario";
+    [SerializeField]    private string cur_subscenario = "Main_1";
+
     [SerializeField]
     private bool reading = false;
 
@@ -51,7 +54,11 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         m_ped = new PointerEventData(null);
         typing_speed = m_Speed;
 
-        textchanger.Organize(idx++);    //json
+        //임시
+        cur_scenario = "scenario";
+        cur_subscenario = "medium_0";
+
+        textchanger.readScenarioParts(idx++, cur_scenario, cur_subscenario);    //json
         contents = System.IO.File.ReadAllLines(real_main);
         //0511은 var 매니저의 소행;; 하... 이거 코드 꼬이면 어떻게 찾냐 미치겠네;;
     }
@@ -69,7 +76,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
             keyi = 0;
             sc_keyi = 0;
 
-            textchanger.Organize(idx++);
+            textchanger.readScenarioParts(idx++, cur_scenario, cur_subscenario);
             ReadStory(true);
             return;
         }
@@ -123,6 +130,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         if (!reading)   //normal reading
         {
             string cur_text = "";
+            Debug.Log(contents[current]);
             while (contents[current][0] != '#')
                 cur_text += STyping(contents[current++] + '\n');
             cur_text += '\n';

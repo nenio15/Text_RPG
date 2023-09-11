@@ -59,7 +59,7 @@ public class SelectionManager : MonoBehaviour
 
         foreach (JToken code in jkey["effect"])
         {
-            //Debug.Log("CLICK_code : " + code.ToString());
+            Debug.Log("CLICK_code : " + code.ToString());
             // dice는 jdes그 자체를 받아야.. 함 -> 그래야 suc이랑, fail을 처리함...(위치를 바꿀까... 어쩔까..)
             if (code[0].ToString() == "dice")
                 textchanger.GetOpcode(code[0].ToString(), jkey, 1);

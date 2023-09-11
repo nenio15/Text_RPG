@@ -22,12 +22,12 @@ public class Textchanger
     JArray key_jarray, sc_key_jarray;
     JObject key_jroot;
 
-    public void Organize(int move)
+    public void readScenarioParts(int move, string jmain, string jsub)
     {
         //초기 path설정. 당장의 
         mainroute = Application.dataPath + path + "main.txt";   // 이거.. 이러면... 흐음.....
         keyroute = Application.dataPath + path + "main.json";
-        string scnroute = Application.dataPath + path + @"Scenario\scenario.json";  //\Resource\Text\Scenario\tutorial01.txt
+        string scnroute = Application.dataPath + path + @"Scenario\" + jmain + ".json";  //\Resource\Text\Scenario\scenarion.json
         string str = MakeJson(scnroute);
         string key_str = MakeJson(keyroute);
         File.WriteAllText(keyroute, "{ \"key\" : [{}], \"sc_key\" : [{}] }");    // 초기화
@@ -41,10 +41,10 @@ public class Textchanger
 
         //condition 확인절차. (고민)
         //어떤 시나리오 리스트를 받을지, 다른 json에 정리시키기.. (scenario selector.cs)
-        JToken jbase = jroot["medium_0"];
+        JToken jbase = jroot[jsub];
         do
         {
-            //Debug.Log("CHANGER : " + move);
+            Debug.Log("CHANGER : " + move);
             JToken jnow = jbase["scenario"][move];
             //check state       //Debug.Log(jnow["chapter"].ToString() + "\nsynopciys : " + jnow["synopciys"].ToString());
             foreach (JToken jscript in jnow["script"])
