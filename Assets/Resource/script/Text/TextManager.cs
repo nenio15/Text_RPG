@@ -54,7 +54,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         m_ped = new PointerEventData(null);
         typing_speed = m_Speed;
 
-        //임시
+        //임시 scenario/medium_0   //main_scenario/Main_1
         cur_scenario = "scenario";
         cur_subscenario = "medium_0";
 
@@ -67,21 +67,9 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     {
         if (stop_read) return;
 
-        // 시나리오 일단락
-        if (contents.Length == current) //(contents[current] == null)
-        {
-            Debug.Log("READING[end] : 현재 시나리오 " + idx);
-            //여기서 다음 시나리오로 간다. 다만 num이 예상과 다르다면,
-            //return -1값 따위로 여기서 for문으로 탐색할 필요가 있다.
-            keyi = 0;
-            sc_keyi = 0;
+        
 
-            textchanger.readScenarioParts(idx++, cur_scenario, cur_subscenario);
-            ReadStory(true);
-            return;
-        }
-
-        // 선택지 조우
+        // 선택지 조우 -> 09-14 this one move to function
         if (!reading)
         {
             if (contents[current][0] == '#')
@@ -114,10 +102,44 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
                     robj[robj_i - 1].GetComponent<Keyword>().DelKeyword();
         }
 
-        ReadStory(false);
+
+        Debug.Log(current + " and " + contents.Length);
+        if (!reading && contents.Length == current) endStoryPart(0, "", "");
+
+        readStory(false);
+
+        
+
     }
 
-    public void ReadStory(bool changed)
+    public void endStoryPart(int move, string next_main, string next_sub)
+    {
+        //현재 시나리오 끝내고 다음 시나리오
+        Debug.Log("READING[end] : 현재 시나리오 " + idx);
+
+        //화면 리셋
+        keyi = 0;
+        sc_keyi = 0;
+        current = 0;
+        reading = false;
+        //text reset
+        m_TypingText.text = "";
+
+        if (next_main == "")
+        {
+            if (move == 0) textchanger.readScenarioParts(idx++, cur_scenario, cur_subscenario);
+            else textchanger.readScenarioParts(move, cur_scenario, cur_subscenario);
+            idx += move; // ... why?
+        }
+        else  //cur scenario end or escape
+        {
+            textchanger.readScenarioParts(0, next_main, next_sub);
+        }
+
+        return;
+    }
+
+    public void readStory(bool changed)
     {
         // 무시한다의 선택지가 changed도 무시함 ㄷㄷㄷ (다시 확인할것)
         if (changed)
@@ -130,14 +152,14 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         if (!reading)   //normal reading
         {
             string cur_text = "";
-            Debug.Log(contents[current]);
+            //Debug.Log(contents[current]);
             while (contents[current][0] != '#')
-                cur_text += STyping(contents[current++] + '\n');
+                cur_text += sTyping(contents[current++] + '\n');
             cur_text += '\n';
 
             reading = true;
             typing_speed = m_Speed;
-            StartCoroutine(Showing(m_TypingText, cur_text));
+            StartCoroutine(showing(m_TypingText, cur_text));
             //if (contents.Length >= current) current++;
         }
         else            // fast reading
@@ -146,7 +168,9 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         stop_read = false;
     }
 
-    IEnumerator Showing(Text typingText, string message)
+    
+
+    IEnumerator showing(Text typingText, string message)
     {
         for (int i = 0; i < message.Length; i++)
         {
@@ -169,7 +193,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         reading = false;
     }
 
-    string STyping(string message)        //현재 줄 출력(한 글자 씩)
+    string sTyping(string message)        //현재 줄 출력(한 글자 씩)
     {
         for (int i = 0; i < message.Length; i++)
         {

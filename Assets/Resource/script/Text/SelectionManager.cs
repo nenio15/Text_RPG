@@ -60,17 +60,22 @@ public class SelectionManager : MonoBehaviour
         foreach (JToken code in jkey["effect"])
         {
             Debug.Log("CLICK_code : " + code.ToString());
-            // dice는 jdes그 자체를 받아야.. 함 -> 그래야 suc이랑, fail을 처리함...(위치를 바꿀까... 어쩔까..)
-            if (code[0].ToString() == "dice")
+            if(code[0].ToString() == "jmp")
+            {
+                if ((int)code[1] != 0) TextManager.GetComponent<TextManager>().endStoryPart((int)code[1], "", "");  //move cur scenario
+                else TextManager.GetComponent<TextManager>().endStoryPart(0, code[2].ToString(), code[3].ToString()); //move another scenario
+
+            }else if (code[0].ToString() == "dice") // dice는 jdes그 자체를 받아야.. 함 -> 그래야 suc이랑, fail을 처리함...(위치를 바꿀까... 어쩔까..)
                 textchanger.GetOpcode(code[0].ToString(), jkey, 1);
             else
                 textchanger.GetOpcode(code[0].ToString(), code, 1);
+            
             //textchanger.CheckKeys("::opcode", code);
         }
         
 
-        //다음 문장 출력(한 줄만)
-        TextManager.GetComponent<TextManager>().ReadStory(true);
+        //다음 문장 출력(한 줄만) ... 23-09-25 없애고 싶은 줄인디..
+        TextManager.GetComponent<TextManager>().readStory(true);
 
         for (; len > 0; len--)
             button[len - 1].SetActive(false);

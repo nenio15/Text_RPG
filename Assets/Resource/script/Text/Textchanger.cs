@@ -22,7 +22,10 @@ public class Textchanger
     JArray key_jarray, sc_key_jarray;
     JObject key_jroot;
 
-    public void readScenarioParts(int move, string jmain, string jsub)
+    //new one..... 23-09-25 plz dev for opcode . selctionmanager -> textchanger
+    public GameObject TextManager;
+
+    public void readScenarioParts(int move, string jmain, string jsub) //, int part
     {
         //초기 path설정. 당장의 
         mainroute = Application.dataPath + path + "main.txt";   // 이거.. 이러면... 흐음.....
@@ -30,8 +33,12 @@ public class Textchanger
         string scnroute = Application.dataPath + path + @"Scenario\" + jmain + ".json";  //\Resource\Text\Scenario\scenarion.json
         string str = MakeJson(scnroute);
         string key_str = MakeJson(keyroute);
+
         File.WriteAllText(keyroute, "{ \"key\" : [{}], \"sc_key\" : [{}] }");    // 초기화
+        File.WriteAllText(mainroute, "");                                       // main reset
+        
         int op_num = 0;
+        
         key_jarray = new JArray(); 
         sc_key_jarray = new JArray();
 
@@ -68,6 +75,12 @@ public class Textchanger
         //Debug.Log("GETcode : " + op + " & "+ code);
         switch (op)
         {
+            /*
+            case "jmp":
+                if ((int)code[1] != 0) TextManager.GetComponent<TextManager>().endStoryPart((int)code[1], "", "");  //move cur scenario
+                else TextManager.GetComponent<TextManager>().endStoryPart(0, code[2].ToString(), code[3].ToString()); //move another scenario
+                break;
+            */
             case "dice":
                 RollDice(code); // token을 받을것. 거기서.. 
                 //Debug.Log("OPCODE[dice] : " + op + "입니다 " + code[idx++] + " " + code[idx++] + " " + code[idx++] + " " + code[idx++]);
@@ -88,6 +101,9 @@ public class Textchanger
                 break;
             case "btl":
                 Battle(code[idx++].ToString(), code[idx++].ToString(), (int)code[idx++], (int)code[idx++]);
+                break;
+            default:
+                Debug.Log(op + " don't exist on Decodeing fucntion");
                 break;
         }
 
