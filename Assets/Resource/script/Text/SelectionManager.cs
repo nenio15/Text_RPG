@@ -8,7 +8,8 @@ using UnityEngine.UI;
 
 public class SelectionManager : MonoBehaviour
 {
-    public GameObject TextManager;
+    [SerializeField] private TextManager textmanager;
+    [SerializeField] private Textchanger textchanger;
     public GameObject[] button;
 
     private Vector3 destination = new Vector3(0.0f, -800.0f, -4.0f);
@@ -18,7 +19,6 @@ public class SelectionManager : MonoBehaviour
 
     private JObject jroot;
     private JToken jcur;
-    private Textchanger textchanger;
     int len = 0;
     
 
@@ -26,7 +26,7 @@ public class SelectionManager : MonoBehaviour
     {
         mainroute = Application.dataPath + @"\Resource\Text\main.txt";
         keyroute = Application.dataPath + @"\Resource\Text\main.json";
-        textchanger = TextManager.GetComponent<TextManager>().textchanger;
+                        //textchanger = TextManager.GetComponent<TextManager>().textchanger;  //텍스트 매니저에 종속된 텍스트체인저 호출
     }
 
     public void ShowSelection(string option, int idx)
@@ -60,13 +60,19 @@ public class SelectionManager : MonoBehaviour
         foreach (JToken code in jkey["effect"])
         {
             Debug.Log("CLICK_code : " + code.ToString());
-            if(code[0].ToString() == "jmp")
-            {
-                if ((int)code[1] != 0) TextManager.GetComponent<TextManager>().endStoryPart((int)code[1], "", "");  //move cur scenario
-                else TextManager.GetComponent<TextManager>().endStoryPart(0, code[2].ToString(), code[3].ToString()); //move another scenario
+            string decode = code[0].ToString();
 
-            }else if (code[0].ToString() == "dice") // dice는 jdes그 자체를 받아야.. 함 -> 그래야 suc이랑, fail을 처리함...(위치를 바꿀까... 어쩔까..)
+            if(decode == "jmp")
+            {
+                if ((int)code[1] != 0) textmanager.endStoryPart((int)code[1], "", "");  //move cur scenario
+                else textmanager.endStoryPart(0, code[2].ToString(), code[3].ToString()); //move another scenario
+
+            }else if (decode == "dice") // dice는 jdes그 자체를 받아야.. 함 -> 그래야 suc이랑, fail을 처리함...(위치를 바꿀까... 어쩔까..)
                 textchanger.GetOpcode(code[0].ToString(), jkey, 1);
+            else if(decode == "rpl"){
+                textmanager.clearText();
+                textchanger.GetOpcode(code[0].ToString(), code, 1);
+            }
             else
                 textchanger.GetOpcode(code[0].ToString(), code, 1);
             
@@ -75,7 +81,7 @@ public class SelectionManager : MonoBehaviour
         
 
         //다음 문장 출력(한 줄만) ... 23-09-25 없애고 싶은 줄인디..
-        TextManager.GetComponent<TextManager>().readStory(true);
+        textmanager.readStory(true);
 
         for (; len > 0; len--)
             button[len - 1].SetActive(false);

@@ -6,8 +6,9 @@ using UnityEngine.UI;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-public class Textchanger
+public class Textchanger : MonoBehaviour
 {
+
     //later classify -> json reading
     //이 데이터는 json에 있을것.
     private string player = "플레이어";
@@ -16,7 +17,7 @@ public class Textchanger
     //for #player & path + "\Scenario... \Npc...
     private Dictionary<string, string> convert_hash = new Dictionary<string, string>(); // .Add(key, Value);
         //private Dictionary<string, string> connet_path = new Dictionary<string, string>;
-    private string path = @"\Resource\Text\";
+    private string path = @"\Resource\Text\";  //this position is moved so... where..?
     private string mainroute, keyroute;
     // mainroute를 organize에서 정의하고, 여기 변수에다가 저장시켜서 쓸까..?
     JArray key_jarray, sc_key_jarray;
@@ -24,16 +25,21 @@ public class Textchanger
 
     //new one..... 23-09-25 plz dev for opcode . selctionmanager -> textchanger
     public GameObject TextManager;
+    //private TextManager textmanager = TextManager.GetComponent<TextManager>().textchanger; // 다른 의미라 필요 없음
 
-    public void readScenarioParts(int move, string jmain, string jsub) //, int part
+    public int readScenarioParts(int move, string jmain, string jsub) //, int part
     {
         //초기 path설정. 당장의 
         mainroute = Application.dataPath + path + "main.txt";   // 이거.. 이러면... 흐음.....
         keyroute = Application.dataPath + path + "main.json";
+        Debug.Log(move + "에서 " + jmain + "그리고 " + jsub);
+
+        // 시나리오 이름으로 추적
         string scnroute = Application.dataPath + path + @"Scenario\" + jmain + ".json";  //\Resource\Text\Scenario\scenarion.json
         string str = MakeJson(scnroute);
         string key_str = MakeJson(keyroute);
 
+        // read 할 부분 초기화
         File.WriteAllText(keyroute, "{ \"key\" : [{}], \"sc_key\" : [{}] }");    // 초기화
         File.WriteAllText(mainroute, "");                                       // main reset
         
@@ -53,24 +59,33 @@ public class Textchanger
         {
             Debug.Log("CHANGER : " + move);
             JToken jnow = jbase["scenario"][move];
+            int lnd_cmd = 0; // non 명령어
             //check state       //Debug.Log(jnow["chapter"].ToString() + "\nsynopciys : " + jnow["synopciys"].ToString());
             foreach (JToken jscript in jnow["script"])
             {
                 JToken jlist = jnow["scriptlist"][op_num++];
-                GetOpcode(jlist.ToString(), jscript[jlist.ToString()], 0);
+                lnd_cmd = GetOpcode(jlist.ToString(), jscript[jlist.ToString()], 0);
                 CheckKeys("::opcode here", jscript);
+
+                if (lnd_cmd == 1) return (int)jscript[jlist.ToString()][0]; //상위 명령이 필요한 경우, 복귀 (일단 임의임....... 무슨 상위냐면 rpl관련이라 리셋이 필요
+                //상위에게 요구하는 바는... 스크립트가 종속관계가 맞는가?
+                //대등관계로 서로 정보를 요구하는 형식이 될 순 없는가. 그러면 이 스크립트가 독립을 해야해.
+                //독립성을 띄느냐는... 모델과 뷰 + 컨트롤러의 형식을 띄고 있지. 독립이 가능해. 그러면... 흠
             }
 
-        } while (false);
+        } while (false); //그냥 뒀어요. 나중에 조건 달 수도 있어서
 
 
-        
-        return;
+        Debug.Log("readParts end one");
+        return 0;
     }
+
+
+    //2024-01-04 | opocde도 따로 빼자 하나의 함수에 하나의 기능을.
 
     //mainroute의 초기화 위치 땜 public이 불가함..?
     //get scripts ( { } per 1 ) -> "op" : ["codes", "res1", "res2" ...]
-    public void GetOpcode(string op, JToken code, int idx)  // idx == 1 -> effect code
+    public int GetOpcode(string op, JToken code, int idx)  // idx == 1 -> effect code
     {
         //Debug.Log("GETcode : " + op + " & "+ code);
         switch (op)
@@ -102,11 +117,18 @@ public class Textchanger
             case "btl":
                 Battle(code[idx++].ToString(), code[idx++].ToString(), (int)code[idx++], (int)code[idx++]);
                 break;
+            case "rpl": // num 6
+                if ((int)code[idx] == -1) break; // escape for ... get out!!!
+                //TextManager.GetComponent<TextManager>().clearText(); // 이거 말고. 매니저한테 명령을 보내면 안될까?
+                readScenarioParts((int)code[idx++], code[idx++].ToString(), code[idx++].ToString());
+                return 1;
+                //break;
             default:
                 Debug.Log(op + " don't exist on Decodeing fucntion");
                 break;
         }
 
+        return 0;
     }
 
     // key, sc_key -> main.json to use for keywords

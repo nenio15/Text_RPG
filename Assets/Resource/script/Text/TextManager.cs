@@ -55,8 +55,8 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         typing_speed = m_Speed;
 
         //임시 scenario/medium_0   //main_scenario/Main_1
-        cur_scenario = "scenario";
-        cur_subscenario = "medium_0";
+        cur_scenario = "town";  //"scenario"
+        cur_subscenario = "plain_town"; //"medium_0"
 
         textchanger.readScenarioParts(idx++, cur_scenario, cur_subscenario);    //json
         contents = System.IO.File.ReadAllLines(real_main);
@@ -75,6 +75,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
             if (contents[current][0] == '#')
             {
                 // outbound의 경우..? (....)
+                // 현재 읽는 페이지가 끝났음
                 if (contents[current].Contains("#key"))  // 더럽군.. 코드..
                 {
                     Debug.Log("READING[key] : stop and call selection");
@@ -112,20 +113,26 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
 
     }
 
-    public void endStoryPart(int move, string next_main, string next_sub)
+    //화면 리셋
+    public void clearText()
     {
-        //현재 시나리오 끝내고 다음 시나리오
-        Debug.Log("READING[end] : 현재 시나리오 " + idx);
-
-        //화면 리셋
+        Debug.Log("clearing...");
         keyi = 0;
         sc_keyi = 0;
         current = 0;
         reading = false;
         //text reset
         m_TypingText.text = "";
+    }
 
-        if (next_main == "")
+    public void endStoryPart(int move, string next_main, string next_sub)
+    {
+        //현재 시나리오 끝내고 다음 시나리오
+        Debug.Log("READING[end] : 현재 시나리오 " + idx);
+        clearText();
+        
+
+        if (next_main == "") // 이거를 활용하면 오류가 없을듯
         {
             if (move == 0) textchanger.readScenarioParts(idx++, cur_scenario, cur_subscenario);
             else textchanger.readScenarioParts(move, cur_scenario, cur_subscenario);
@@ -152,7 +159,8 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         if (!reading)   //normal reading
         {
             string cur_text = "";
-            //Debug.Log(contents[current]);
+            Debug.Log("page pos : " + current);
+            //Debug.Log("page pos : " + contents[current]);
             while (contents[current][0] != '#')
                 cur_text += sTyping(contents[current++] + '\n');
             cur_text += '\n';
