@@ -11,10 +11,10 @@
       "떠나기": {
         "effect": [
           [
-            "rpl",
-            -1,
-            "town",
-            "plain_town"
+            "jmp",
+            0,
+            "region",
+            "Plain"
           ]
         ]
       },
@@ -22,9 +22,7 @@
         "effect": [
           [
             "rpl",
-            1,
-            "town",
-            "plain_town"
+            1
           ]
         ]
       },
@@ -32,9 +30,7 @@
         "effect": [
           [
             "rpl",
-            2,
-            "town",
-            "plain_town"
+            2
           ]
         ]
       },
@@ -42,9 +38,7 @@
         "effect": [
           [
             "rpl",
-            3,
-            "town",
-            "plain_town"
+            3
           ]
         ]
       },
@@ -52,9 +46,7 @@
         "effect": [
           [
             "rpl",
-            4,
-            "town",
-            "plain_town"
+            4
           ]
         ]
       },

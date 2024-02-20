@@ -1,10 +1,7 @@
 {
   "plain_town" : {
     "name" : "평원 마을",
-    "condition" : {
-      "region" : "plain",
-      "mood" : 0
-    },
+    //"nearby" : ["Plain"], // "condition" : {"region" : "Plain"    }, // 마을 스크립트엔 니얼바이 필요없어!!
     "scenario" : [
       {
         "num" : 0,
@@ -27,11 +24,11 @@
         ],
           "key" : {
             "list" : ["떠나기", "촌장집", "대장간", "잡화점", "여관"],
-            "떠나기" : { "effect" : [ ["rpl", -1, "town", "plain_town"]]},
-            "촌장집" : { "effect" : [ ["rpl", 1, "town", "plain_town"]]},
-            "대장간" : { "effect" : [ ["rpl", 2, "town", "plain_town"]]},
-            "잡화점" : { "effect" : [ ["rpl", 3, "town", "plain_town"]]},
-            "여관" : { "effect" : [ ["rpl", 4, "town", "plain_town"]]},
+            "떠나기" : { "effect" : [ ["jmp", 0, "region", "Plain"] ] }, //어디로 나가야하죠? 다른 명령어를 씁시다.
+            "촌장집" : { "effect" : [ ["rpl", 1]]},
+            "대장간" : { "effect" : [ ["rpl", 2]]},
+            "잡화점" : { "effect" : [ ["rpl", 3]]},
+            "여관" : { "effect" : [ ["rpl", 4]]},
             "비명소리" : { 
               "effect" : [ [ "dice", "sen", 6, 1] ],
               "succ" : [ ["dia", [["이 |<color=yellow>소리?</color>|는 아무래도 인간 남성의 목소리같다. 저쪽이다."]]] ],
@@ -48,11 +45,14 @@
       "scriptlist" : ["dia"],
       "script" : [
         { "dia" : [
-          ["여기는 촌장집이다."]
+          ["여기는 촌장집이다."],
+          ["늙었지만 총맹한 눈빛을 한 노인이 #player를 반긴다."],
+          ["마을의 우두머리의 집안은 다른 집보다 근엄이 느껴진다."]
         ],
         "key" : {
-          "list" : ["떠나기"],
-          "떠나기" : { "effect" : [ ["rpl", 0, "town", "plain_town"]]}
+          "list" : ["떠나기", "퀘스트"],
+          "떠나기" : { "effect" : [ ["rpl", 0]]},
+          "퀘스트" : { "effect" : [ ["dia", [["아쉽게도, 지금 급한 일은 없다네"], ["다른 일이라면 찾아주겠다만."]]]]}
         }
       }
       ]
@@ -69,7 +69,7 @@
         ],
         "key" : {
           "list" : ["떠나기"],
-          "떠나기" : { "effect" : [ ["rpl", 0, "town", "plain_town"]]}
+          "떠나기" : { "effect" : [ ["rpl", 0]]}
         }
       }
       ]
@@ -85,7 +85,7 @@
         ],
         "key" : {
           "list" : ["떠나기"],
-          "떠나기" : { "effect" : [ ["rpl", 0, "town", "plain_town"]]}
+          "떠나기" : { "effect" : [ ["rpl", 0]]}
         }
       }
       ]
@@ -102,7 +102,7 @@
         ],
         "key" : {
           "list" : ["떠나기"],
-          "떠나기" : { "effect" : [ ["rpl", 0, "town", "plain_town"]]}
+          "떠나기" : { "effect" : [ ["rpl", 0]]}
         }
       }
       ]
@@ -111,125 +111,5 @@
   ]
     
   }
-  ,
-  "medium_0" : {
-    "name" : "자이언트거미 숲",
-    "level" : 2,
-    "condition" : {
-      "region" : "숲",
-      "mood" : 2,
-      "keyword" : "null",
-      "town" : ["pcik"]
-    },
-    "story" : "우연히 마주친 위험에서 구하러 온 이야기",
-    "scenario" : [
-        { 
-        "num" : 10001,
-        "chapter" : "조우",
-        "synopciys" : "#player는 숲을 지나는 와중에 의문의 비명을 듣게 된다.",
-        "scriptlist" : ["mov", "dia", "dia", "npc", "btl", "npc"],
-        "script" : [
-          { "mov" : ["Forest", 1, 2] },
-          { "dia" : [ 
-            ["왠지 모르게 |<color=yellow>거미줄</color>|의 수가 늘어난 것만 같다.."],
-            ["저 멀리서 |<color=blue>비명소리</color>|가 들려온다.."]
-            ],
-            "sc_key" : {
-              "list" : ["비명소리"],
-              "비명소리" : { 
-                "effect" : [ [ "dice", "sen", 6, 1] ],
-                "succ" : [ ["dia", [["이 |<color=yellow>소리?</color>|는 아무래도 인간 남성의 목소리같다. 저쪽이다."]]] ],
-                "fail" : [ ["dia", [["누구의 소리인지는 모르겠지만, 위급해보인다."]]] ]
-              }
-            }
-          },
-          { "dia" : [["비명소리쪽으로 가보니, |<color=red>거대한 거미</color>|가 비명을 지르는 남성에게 다가가고 있었다."],
-            ["저, 저기 살려줘!!"]],
-            "sc_key" : {
-              "list" : ["그런거저런거"],
-              "그런거저런거" : { 
-                "effect" : [
-                  [ "dice", "str", 3, 1, 2]
-                ]
-              }
-            }},
-          { "npc" : ["edward", "quest", 0] },
-          { "btl" : ["monster", "young_giant_spider", 1, 1] },
-          { "npc" : ["edward", "quest", 1] }
-        ],
-        "patch" : {
-          "list" : ["npc"],
-          "npc" : { "list" : ["edward"],
-            "edward" : "npc...."
-          }
-        }
-      },
-      {
-        "num" : 10002,
-        "chapter" : "더 깊은 곳으로..",
-        "synopciys" : "#player는 #edward와 함께 숲의 중심부로 향하게 된다.. 자이언트 거미의 중심지는 서식지 그 자체가 거대한 그물이라는 듯이 옮아맨다.",
-        "scriptlist" : ["npc", "dia", "npc", "dia"],
-        "script" : [
-          { "npc" : ["edward", "quest", 5] },
-          { "dia" : [["#edward가 앞장서서 숲 깊은곳으로 들어간다."]] },
-          { "npc" : ["edward", "quest", 6] },
-          { "dia" : [["바닥 자체가 거미줄로 뒤덮여있어 잡초가 드문드문 자라있다."],
-          ["하늘엔 검푸른 잎이, 바닥엔 새하얀 거미줄이 공간을 정체시킨다..(more?)"]] }
-        ]
-      },
-      {
-        "num" : 10101,
-        "chapter" : "거미줄에 얽힌 장비들",
-        "synopciys" : "점점 빠져들어가는 동안, 장비와 옷가지에 거미줄이 얽혔다. 아무래도 그들의 농간에 당하는 듯 하다.."
-      },
-      {
-        "num" : 10201,
-        "chapter" : "거미줄에 대한 임시방비",
-        "synopciys" : "기생거미가 장비에 얽혀들으려는 것을 발견하였다. #edward와 #player는 더더욱 조심하며 들어갔다."
-      },
-      {
-        "num" : 11001,
-        "chapter" : "커다란 고치",
-        "synopciys" : "목표인 인간 크기의 고치다. #edward는 경솔하게 다가간다..",
-        "scriptlist" : ["npc", "dia"],
-        "script" : [
-          { "npc" : ["edward", "quest", 7] },
-          { "dia" : [["|<color=black>거미줄</color>이 무성하다."]],
-            "sc_key" : {
-              "list" : ["거미줄"],
-              "거미줄" : {
-                "skill" : ["스킬1,2"],
-                "스킬1" : {
-                  "dice" : ["int", 10],
-                  "1" : "성공시..."
-                }
-              }
-            }
-        }
-        ]
-      },
-      {
-        "num" : 11101,
-        "chapter" : "경보울림",
-        "synopciys" : "고치 주변에 거미줄이 위험경보의 장치로 되어있었다.",
-        "script" : [
-          { "dia" : [["거미가 우리 근처로 빠르게 다가온다."]] },
-          { "btl" : ["giant_spider", 2] }
-        ]
-      },
-      {
-        "num" : 11201,
-        "chapter" : "경보-해제",
-        "synopciys" : "고치 주변의 거미줄을 모종의 방법으로 해결하였다.",
-        "script" : [
-          { "dia" : [["거미줄은 알람의 역할을 했던 모양이다."],
-            ["#edward가 가벼운 한숨을 쉬며, #player에게 고마운 눈치를 보인다."]] },
-          { } 
-        ]
-      }
-    ]
-  },
-  "big_0" : {
-
-  }
+  
 }

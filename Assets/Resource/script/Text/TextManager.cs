@@ -18,8 +18,8 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     [SerializeField]    private string cur_scenario = "main_scenario";
     [SerializeField]    private string cur_subscenario = "Main_1";
 
-    [SerializeField]
-    private bool reading = false;
+    [SerializeField] private bool reading = false;
+    [SerializeField] private int page = 0;
 
     private int keyi = 0;
     private int sc_keyi = 0;
@@ -55,61 +55,70 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         typing_speed = m_Speed;
 
         //임시 scenario/medium_0   //main_scenario/Main_1
-        cur_scenario = "town";  //"scenario"
-        cur_subscenario = "plain_town"; //"medium_0"
+        cur_scenario = "town";  //"scenario" "town" "region"
+        cur_subscenario = "plain_town"; //"medium_0" "plain_town" "Forest"
 
         textchanger.readScenarioParts(idx++, cur_scenario, cur_subscenario);    //json
         contents = System.IO.File.ReadAllLines(real_main);
-        //0511은 var 매니저의 소행;; 하... 이거 코드 꼬이면 어떻게 찾냐 미치겠네;;
     }
 
+    // text click
     public void OnPointerClick(PointerEventData eventData)
     {
+        // 읽는 것 중단. 선택지 우선.
         if (stop_read) return;
 
-        
+        //Debug.Log(current + " and " + contents.Length);
+        if (!reading && contents.Length == current) endStoryPart(++page, "", "");
 
-        // 선택지 조우 -> 09-14 this one move to function
-        if (!reading)
-        {
-            if (contents[current][0] == '#')
-            {
-                // outbound의 경우..? (....)
-                // 현재 읽는 페이지가 끝났음
-                if (contents[current].Contains("#key"))  // 더럽군.. 코드..
-                {
-                    Debug.Log("READING[key] : stop and call selection");
-                    Selection.GetComponent<SelectionManager>().ShowSelection("key", keyi++);
-                    
-                    if (contents[current].Contains("sc"))    
-                    {
-                        Debug.Log("READING[sc_key] : ...");
-                        sc_keyi++;
-                    }
-                    stop_read = true;
-                    current++;
-                    return;
-
-                }else if (contents[current].Contains("sc"))
-                {
-                    Debug.Log("READING[sc_key] : only");
-                    sc_keyi++;
-                }
-                current++;
-            }
-
-            if (robj_i > 0)
-                for (; robj_i > 0; robj_i--)
-                    robj[robj_i - 1].GetComponent<Keyword>().DelKeyword();
-        }
-
-
-        Debug.Log(current + " and " + contents.Length);
-        if (!reading && contents.Length == current) endStoryPart(0, "", "");
+        if (!reading) meetSign();
 
         readStory(false);
+    }
 
-        
+    // 선택지 조우
+    private void meetSign()
+    {
+        //# 있는 문장
+        if (contents[current][0] == '#')
+        {
+
+            // outbound의 경우..? (....)
+            // 현재 읽는 페이지가 끝났음
+            if (contents[current].Contains("#key"))  // 더럽군.. 코드..
+            {
+                Debug.Log("READING[key] : stop and call selection");
+                Selection.GetComponent<SelectionManager>().ShowSelection("key", keyi++);
+
+                if (contents[current].Contains("sc"))
+                {
+                    Debug.Log("READING[sc_key] : ...");
+                    sc_keyi++;
+                }
+                stop_read = true;
+                current++;
+                return;
+
+            }
+            else if (contents[current].Contains("#near"))
+            {
+                Debug.Log("READING[nearby] : ...");
+
+
+            }
+            else if (contents[current].Contains("sc"))
+            {
+                Debug.Log("READING[sc_key] : only");
+                sc_keyi++;
+            }
+            current++;
+        }
+
+        //키워드 블럭들 초기화
+        if (robj_i > 0)
+            for (; robj_i > 0; robj_i--)
+                robj[robj_i - 1].GetComponent<Keyword>().DelKeyword();
+        stop_read = false;
 
     }
 
@@ -129,20 +138,25 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     {
         //현재 시나리오 끝내고 다음 시나리오
         Debug.Log("READING[end] : 현재 시나리오 " + idx);
-        clearText();
-        
+        clearText();  
 
         if (next_main == "") // 이거를 활용하면 오류가 없을듯
         {
-            if (move == 0) textchanger.readScenarioParts(idx++, cur_scenario, cur_subscenario);
-            else textchanger.readScenarioParts(move, cur_scenario, cur_subscenario);
+            //move의 page, num으로 이동                  // if (move == 0) textchanger.readScenarioParts(idx++, cur_scenario, cur_subscenario); // 애초에 0이면 +1이랑 같지. 쓰지마.
+            textchanger.readScenarioParts(move, cur_scenario, cur_subscenario); 
             idx += move; // ... why?
+            page = move;
         }
         else  //cur scenario end or escape
         {
+            cur_scenario = next_main;
+            cur_subscenario = next_sub;
+
             textchanger.readScenarioParts(0, next_main, next_sub);
+            page = 0;
         }
 
+        contents = System.IO.File.ReadAllLines(real_main);
         return;
     }
 
@@ -159,11 +173,15 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         if (!reading)   //normal reading
         {
             string cur_text = "";
-            Debug.Log("page pos : " + current);
+            Debug.Log("Before line : " + contents[current-1 > 0 ? current-1 : 0]);
+            Debug.Log("cur line pos : " + current);
             //Debug.Log("page pos : " + contents[current]);
             while (contents[current][0] != '#')
                 cur_text += sTyping(contents[current++] + '\n');
             cur_text += '\n';
+
+            
+
 
             reading = true;
             typing_speed = m_Speed;

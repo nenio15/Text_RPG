@@ -26,7 +26,6 @@ public class SelectionManager : MonoBehaviour
     {
         mainroute = Application.dataPath + @"\Resource\Text\main.txt";
         keyroute = Application.dataPath + @"\Resource\Text\main.json";
-                        //textchanger = TextManager.GetComponent<TextManager>().textchanger;  //텍스트 매니저에 종속된 텍스트체인저 호출
     }
 
     public void ShowSelection(string option, int idx)
@@ -57,34 +56,23 @@ public class SelectionManager : MonoBehaviour
         Debug.Log("CLICK_TEXT : " + t.text);
         JToken jkey = jcur[t.text];
 
-        foreach (JToken code in jkey["effect"])
+        // 복수의 효과 처리
+        foreach (JToken code in jkey["effect"]) 
         {
             Debug.Log("CLICK_code : " + code.ToString());
             string decode = code[0].ToString();
 
-            if(decode == "jmp")
-            {
-                if ((int)code[1] != 0) textmanager.endStoryPart((int)code[1], "", "");  //move cur scenario
-                else textmanager.endStoryPart(0, code[2].ToString(), code[3].ToString()); //move another scenario
+            //dice는 성공 실패 여부가 포함되어 있어 따로 처리를 한다.(나중에 json변경... 2024-01-29)
+            if (decode == "dice") textchanger.GetOpcode(code[0].ToString(), jkey, 1);
+            else textchanger.GetOpcode(code[0].ToString(), code, 1);
 
-            }else if (decode == "dice") // dice는 jdes그 자체를 받아야.. 함 -> 그래야 suc이랑, fail을 처리함...(위치를 바꿀까... 어쩔까..)
-                textchanger.GetOpcode(code[0].ToString(), jkey, 1);
-            else if(decode == "rpl"){
-                textmanager.clearText();
-                textchanger.GetOpcode(code[0].ToString(), code, 1);
-            }
-            else
-                textchanger.GetOpcode(code[0].ToString(), code, 1);
-            
-            //textchanger.CheckKeys("::opcode", code);
         }
         
 
-        //다음 문장 출력(한 줄만) ... 23-09-25 없애고 싶은 줄인디..
+        //다음 문장 출력(복수의 효과에 에러가 나는가?) 23-09-25 없애고 싶은 줄인디..
         textmanager.readStory(true);
 
-        for (; len > 0; len--)
-            button[len - 1].SetActive(false);
+        for (; len > 0; len--) button[len - 1].SetActive(false);
 
         //destination = new Vector3(0.0f, -2000.0f, -4.0f);
         //StartCoroutine(Moving(gameObject));

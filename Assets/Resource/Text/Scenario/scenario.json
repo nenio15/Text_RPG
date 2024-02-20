@@ -58,11 +58,9 @@
   "medium_0" : {
     "name" : "자이언트거미 숲",
     "level" : 2,
+    "nearby" : ["Plain", "Hill"],
     "condition" : {
-      "region" : "숲",
-      "mood" : 2,
-      "keyword" : "null",
-      "town" : ["pcik"]
+      "region" : "숲"
     },
     "story" : "우연히 마주친 위험에서 구하러 온 이야기",
     "scenario" : [

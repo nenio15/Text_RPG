@@ -8,9 +8,9 @@ using Newtonsoft.Json.Linq;
 
 public class Textchanger : MonoBehaviour
 {
+    [SerializeField] private TextManager textmanager;
 
-    //later classify -> json reading
-    //이 데이터는 json에 있을것.
+    //임의 설정. 캐릭터 스크립트 필요
     private string player = "플레이어";
     private string space = "숲";
 
@@ -19,22 +19,20 @@ public class Textchanger : MonoBehaviour
         //private Dictionary<string, string> connet_path = new Dictionary<string, string>;
     private string path = @"\Resource\Text\";  //this position is moved so... where..?
     private string mainroute, keyroute;
-    // mainroute를 organize에서 정의하고, 여기 변수에다가 저장시켜서 쓸까..?
+
     JArray key_jarray, sc_key_jarray;
     JObject key_jroot;
 
-    //new one..... 23-09-25 plz dev for opcode . selctionmanager -> textchanger
-    public GameObject TextManager;
-    //private TextManager textmanager = TextManager.GetComponent<TextManager>().textchanger; // 다른 의미라 필요 없음
+    [SerializeField] public JToken jbase; // public이어야 참조 되는 거지?
 
-    public int readScenarioParts(int move, string jmain, string jsub) //, int part
+    public int readScenarioParts(int move, string jmain, string jsub)
     {
-        //초기 path설정. 당장의 
-        mainroute = Application.dataPath + path + "main.txt";   // 이거.. 이러면... 흐음.....
+        //초기 path설정. 텍스트 자체에 보여지는 .txt, 실제 자료형 .json
+        mainroute = Application.dataPath + path + "main.txt"; 
         keyroute = Application.dataPath + path + "main.json";
         Debug.Log(move + "에서 " + jmain + "그리고 " + jsub);
 
-        // 시나리오 이름으로 추적
+        // 시나리오 이름으로 추적. (폴더명(@Scenario))\파일명\시나리오명
         string scnroute = Application.dataPath + path + @"Scenario\" + jmain + ".json";  //\Resource\Text\Scenario\scenarion.json
         string str = MakeJson(scnroute);
         string key_str = MakeJson(keyroute);
@@ -54,7 +52,8 @@ public class Textchanger : MonoBehaviour
 
         //condition 확인절차. (고민)
         //어떤 시나리오 리스트를 받을지, 다른 json에 정리시키기.. (scenario selector.cs)
-        JToken jbase = jroot[jsub];
+        jbase = jroot[jsub]; //해당 시나리오
+
         do
         {
             Debug.Log("CHANGER : " + move);
@@ -85,17 +84,23 @@ public class Textchanger : MonoBehaviour
 
     //mainroute의 초기화 위치 땜 public이 불가함..?
     //get scripts ( { } per 1 ) -> "op" : ["codes", "res1", "res2" ...]
+    //아예 하위 스크립트로 빼버릴 것
     public int GetOpcode(string op, JToken code, int idx)  // idx == 1 -> effect code
     {
         //Debug.Log("GETcode : " + op + " & "+ code);
         switch (op)
         {
-            /*
-            case "jmp":
-                if ((int)code[1] != 0) TextManager.GetComponent<TextManager>().endStoryPart((int)code[1], "", "");  //move cur scenario
-                else TextManager.GetComponent<TextManager>().endStoryPart(0, code[2].ToString(), code[3].ToString()); //move another scenario
+            
+            case "jmp": //다른 시나리오, 스크립트로 이동 (그러므로 if문 내용은 안 쓸듯... 2024-01-29
+                Debug.Log("REQUEST[event] : occuring?");
+
+                //if ((int)code[1] != 0) textmanager.endStoryPart((int)code[1], "", "");  //move cur scenario
+                textmanager.endStoryPart(0, code[2].ToString(), code[3].ToString()); //move another scenario
                 break;
-            */
+            case "rpl": //같은 시나리오/마을에서의 이동
+                if ((int)code[idx] == -1) break; // escape for ... get out!!!
+                textmanager.endStoryPart((int)code[1], "", "");
+                break;
             case "dice":
                 RollDice(code); // token을 받을것. 거기서.. 
                 //Debug.Log("OPCODE[dice] : " + op + "입니다 " + code[idx++] + " " + code[idx++] + " " + code[idx++] + " " + code[idx++]);
@@ -117,12 +122,6 @@ public class Textchanger : MonoBehaviour
             case "btl":
                 Battle(code[idx++].ToString(), code[idx++].ToString(), (int)code[idx++], (int)code[idx++]);
                 break;
-            case "rpl": // num 6
-                if ((int)code[idx] == -1) break; // escape for ... get out!!!
-                //TextManager.GetComponent<TextManager>().clearText(); // 이거 말고. 매니저한테 명령을 보내면 안될까?
-                readScenarioParts((int)code[idx++], code[idx++].ToString(), code[idx++].ToString());
-                return 1;
-                //break;
             default:
                 Debug.Log(op + " don't exist on Decodeing fucntion");
                 break;

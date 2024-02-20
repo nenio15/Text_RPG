@@ -1,0 +1,134 @@
+﻿{
+  "Forest": {    
+    "name": "숲",
+    "nearby" : ["Plain"],
+    "scenario" : [
+      {
+        "situation" : 0,
+        "type" : 1,
+        "scriptlist" : ["dia", "dia", "dia"],
+        "script" : [
+          {
+            "dia" : [
+              ["숲의 초입이다."],
+              [ "푸른잎들이 무성한 숲의 경계면이다." ],
+              [ "사아아 들려오는 소리가 귓가에 맴돈다." ]
+            ]
+          },
+          {
+            "dia" : [
+              [ "하늘을 뒤덮는 나뭇잎들이 햇빛을 가린다." ],
+              [ "바깥보다 어두워진 공간이다." ],
+              [ "빽빽해진 도화지 속에 약간의 틈이 있다하면 그곳에는 새순이 돋아있고," ],
+              [ "오래된 고목의 발치를 자세히 들여다보면 버섯들이 무성히 자라나고 있다." ]
+            ]
+          },
+          {
+            "dia" : [
+              [ "습하고 축축한 공기에 신선함이 더해진다." ],
+              [ "환하게 밝혀오는 태양이 #player를 반겨준다."]
+            ],
+            "key" : {
+              "list" : ["평지", "평원 마을"],
+              "평지" : { "effect" : [["jmp", 0, "region", "Plain"]]},
+              "평원 마을" : { "effect" : [["jmp", 0, "town", "plain_town"]]}
+            }
+          }
+
+        ]
+      },
+      {
+        "situation" : 1,
+        "type" : 1,
+        "scriptlist" : ["dia"],
+        "script" : [
+          {
+            "dia" : [
+              [ "정체모를 울음소리가 울려퍼진다." ],
+              [ "메아리치는 소리가 몸을 긴장시킨다."],
+              [ "노란 빛이 드문드문 떠다닌다."]
+            ]
+          }
+        ]
+      },
+      {
+        "situation" : 1,
+        "type" : 0,
+        "scriptlist" : ["dia"],
+        "script" : [
+          {
+            "dia" : [
+              [ "반딧불이들이 푸른 빛을 은은하게 내고있다." ],
+              [ "서늘한 바람이 긴장한 몸을 식혀준다." ],
+              [ "곤충들의 지저귐이 숲의 상황을 알려준다." ]
+            ]
+          }
+        ]
+      },
+      {
+        "situation" : 1,
+        "type" : -1,
+        "scriptlist" : ["dia"],
+        "script" : [
+          {
+            "dia" : [
+              [ "눈앞이 환해진다. 어둑어둑했던 시야에 빛이 가득 채워진다." ]
+            ],
+            "key" : {
+              "list" : ["언덕"],
+              "언덕" : { "effect" : [["jmp", 0, "region", "Hill"]]}
+            }
+          }
+        ]
+      }
+    ]
+  },
+  "Plain":{
+    "name" : "평야",
+    "nearby" :["plain_town", "Forest", "Hill"],
+    "scenario" : [
+      {
+        "situation" : 0,
+        "type" : 1,
+        "scriptlist" : ["dia"],
+        "script" : [
+          {
+            "dia" : [
+              ["평야이다."]
+            ],
+            "key" : {
+              "list" : ["평야마을", "숲", "언덕"],
+              "평야마을" : { "effect" : [["jmp", 0, "town", "plain_town"]]},
+              "숲" : { "effect" : [["jmp", 0, "region", "Forest"]]},
+              "언덕" : { "effect" : [["jmp", 0, "region", "Hill"]]}
+            }
+          }
+        ]
+      }
+    ]
+    
+  },
+  "Hill" : {
+    "name" : "언덕",
+    "nearby" : ["Plain"],
+    "scenario" : [
+      {
+        "situation" : 0,
+        "type" : 1,
+        "scriptlist" : ["dia"],
+        "script" : [
+          {
+            "dia" : [
+              ["hill is on."]
+            ],
+            "key" : {
+              "list" : ["평야"],
+              "평야" : { "effect" : [["jmp", 0, "region", "Plain"]]}
+            }
+          }
+        ]
+      }
+    ]
+  }
+
+}
