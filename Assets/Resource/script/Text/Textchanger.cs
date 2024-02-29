@@ -25,11 +25,15 @@ public class Textchanger : MonoBehaviour
 
     [SerializeField] public JToken jbase; // public이어야 참조 되는 거지?
 
-    public int readScenarioParts(int move, string jmain, string jsub)
+    private void Start()
     {
-        //초기 path설정. 텍스트 자체에 보여지는 .txt, 실제 자료형 .json
-        mainroute = Application.dataPath + path + "main.txt"; 
+        //실제 .txt 키 .json
+        mainroute = Application.dataPath + path + "main.txt";
         keyroute = Application.dataPath + path + "main.json";
+    }
+
+    public int ReadScenarioParts(int move, string jmain, string jsub)
+    {
         Debug.Log(move + "에서 " + jmain + "그리고 " + jsub);
 
         // 시나리오 이름으로 추적. (폴더명(@Scenario))\파일명\시나리오명
@@ -95,11 +99,11 @@ public class Textchanger : MonoBehaviour
                 Debug.Log("REQUEST[event] : occuring?");
 
                 //if ((int)code[1] != 0) textmanager.endStoryPart((int)code[1], "", "");  //move cur scenario
-                textmanager.endStoryPart(0, code[2].ToString(), code[3].ToString()); //move another scenario
+                textmanager.EndStoryPart(0, code[2].ToString(), code[3].ToString()); //move another scenario
                 break;
             case "rpl": //같은 시나리오/마을에서의 이동
                 if ((int)code[idx] == -1) break; // escape for ... get out!!!
-                textmanager.endStoryPart((int)code[1], "", "");
+                textmanager.EndStoryPart((int)code[1], "", "");
                 break;
             case "dice":
                 RollDice(code); // token을 받을것. 거기서.. 

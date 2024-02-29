@@ -4545,6 +4545,7 @@ MonoBehaviour:
   cur_scenario: main_scenario
   cur_subscenario: Main_1
   reading: 0
+  page: 0
   clickobj: {fileID: 8797031535410061350, guid: 8a42dc1d1a9eae344819bb7d8500d29b, type: 3}
   m_canvas: {fileID: 401120346}
   m_gr: {fileID: 401120344}
@@ -4556,8 +4557,8 @@ MonoBehaviour:
   - {fileID: 416428427}
   - {fileID: 1932283542}
   - {fileID: 567243675}
-  textchanger: {fileID: 964707576}
   Selection: {fileID: 1311297207}
+  textchanger: {fileID: 964707576}
 --- !u!1 &1725803009
 GameObject:
   m_ObjectHideFlags: 0

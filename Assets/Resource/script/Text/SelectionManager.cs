@@ -68,9 +68,11 @@ public class SelectionManager : MonoBehaviour
 
         }
         
+        //이벤트 삽입 할거야?
+        //EventInformar.CheckAll();
 
-        //다음 문장 출력(복수의 효과에 에러가 나는가?) 23-09-25 없애고 싶은 줄인디..
-        textmanager.readStory(true);
+        //다음 문장 출력
+        textmanager.ReadStory(true);
 
         for (; len > 0; len--) button[len - 1].SetActive(false);
 
