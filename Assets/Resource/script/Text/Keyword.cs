@@ -24,6 +24,7 @@ public class Keyword : MonoBehaviour    //, IPointerClickHandler
     void Start()
     {
         string root = Application.dataPath + @"\Resource\Text\main.txt";
+        time = 0.1f;
         /*
         SelectPaper = GameObject.FindWithTag("select");     //good way?
         InfoBook = GameObject.FindWithTag("info");

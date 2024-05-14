@@ -25,10 +25,17 @@ public class Character
 public class CharacterManager : MonoBehaviour
 {
     [SerializeField] private GameObject cur_class;  // 현재는 텍스트, 나중엔 이미지
-    [SerializeField] private Text stats;
-    [SerializeField] private string n;
 
+    [Header("TEXT_LIST")]
+    [SerializeField] private Text level;
+    [SerializeField] private Text stats;
+    [SerializeField] private Text bar;
+    [SerializeField] private Text classname;
+
+    
     private string  charoute;
+    public Character cur_info;
+    private JObject player;
 
     //TextAsset jsonData = Resources.Load("Text/Battle/Player") as TextAsset;
     //var _data = JsonUtility.FromJson<Character>(jsonData.ToString());
@@ -36,11 +43,11 @@ public class CharacterManager : MonoBehaviour
     //T obj = JsonUtility.FromJson<T>(jsonData);
     private void Start()
     {
-        charoute = Application.dataPath + @"\Resource\Text\Battle\Player.json";
+        charoute = Application.dataPath + @"\Resource\Text\Player.json";
         string cha = MakeJson(charoute);
 
         // first set
-        JObject player = JObject.Parse(cha);
+        player = JObject.Parse(cha);
         JToken info = player["Info"];
         JToken bag = player["Backpack"];
 
@@ -48,18 +55,33 @@ public class CharacterManager : MonoBehaviour
         // 내가 원하는 형식으로 안 나온다. (찾아보면 있을지도...)
         // string newone = JsonUtility.ToJson(list);
 
-        // class는 적용용으로만 쓴다. (갱신은 [" "] 직접참조) (갱신도 class로 하고싶은데... 어려워보인다.)
         //int level = (int)player["Info"]["Level"]; 이거의 단락화랄까..?
-        Character cur_info = JsonUtility.FromJson<Character>(info.ToString());
-        
-        // 갱신 형식 ( or fun("Level", 2) )
-        player["Info"]["Level"] = 2;
         cur_info = JsonUtility.FromJson<Character>(info.ToString());
+        
+        //반영
+        UploadGame();
 
-        stats.text = cur_info.Stat[0] + "\t\t" + cur_info.Stat[2] + "\t\t" + cur_info.Stat[4] + "\n" + cur_info.Stat[1] + "\t\t" + cur_info.Stat[3] + "\t\t" + cur_info.Stat[5];
-        cur_class.GetComponent<Text>().text = cur_info.Class;
+        //UploadData();
+    }
 
+    // 갱신 형식 고안해볼것. 매개변수 써서 말이지.( or fun("Level", 2) )
+    public void Renew()
+    {
+        player["Info"]["Level"] = 2;
+    }
+
+    public void UploadData()
+    {
         File.WriteAllText(charoute, player.ToString());
+    }
+
+    //게임화면에 반영하기
+    public void UploadGame()
+    {
+        level.text = cur_info.Level.ToString();
+        stats.text = cur_info.Stat[0] + "\t\t" + cur_info.Stat[2] + "\t\t" + cur_info.Stat[4] + "\n" + cur_info.Stat[1] + "\t\t" + cur_info.Stat[3] + "\t\t" + cur_info.Stat[5];
+        bar.text = "Hp : " + cur_info.Hp[0] + "/" + cur_info.Hp[1] + " Mp : " + cur_info.Mp[0] + "/" + cur_info.Mp[1];
+        classname.text = cur_info.Name;
     }
 
 

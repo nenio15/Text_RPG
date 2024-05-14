@@ -11,7 +11,7 @@ public class BattleManager : MonoBehaviour
 
     
     [Header("OBJ_INTERATION")]
-    [SerializeField]private int robj_i = 0;
+    [SerializeField] private int robj_i = 0;
     [SerializeField] private GameObject[] robj;
 
     [SerializeField] private GameObject clickobj;

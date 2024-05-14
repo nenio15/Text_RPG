@@ -113,7 +113,7 @@
   <ItemGroup>
     <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
-    <None Include="Assets\Resource\Text\Battle\player.txt" />
+    <None Include="Assets\Resource\Text\player.txt" />
     <None Include="Assets\Resource\Text\Npc\downtown.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\Resource\Text\Field\PlainTown.txt" />
