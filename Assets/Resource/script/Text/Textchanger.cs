@@ -23,7 +23,7 @@ public class Textchanger : MonoBehaviour
     JArray key_jarray, sc_key_jarray;
     JObject key_jroot;
 
-    [SerializeField] public JToken jbase; // public이어야 참조 되는 거지?
+    [SerializeField] public JObject jbase; // public이어야 참조 되는 거지?
 
     private void Start()
     {
@@ -51,7 +51,7 @@ public class Textchanger : MonoBehaviour
         sc_key_jarray = new JArray();
 
         //Native Object 방식
-        JObject jroot = JObject.Parse(str);
+        jbase = JObject.Parse(str);
         key_jroot = JObject.Parse(key_str);
 
         //condition 확인절차. (고민)
@@ -63,7 +63,8 @@ public class Textchanger : MonoBehaviour
             Debug.Log("CHANGER : " + move);
             JToken jnow = jbase["scenario"][move];
             int lnd_cmd = 0; // non 명령어
-            //check state       //Debug.Log(jnow["chapter"].ToString() + "\nsynopciys : " + jnow["synopciys"].ToString());
+            //check state
+            //Debug.Log(jnow["chapter"].ToString() + "\nsynopciys : " + jnow["synopciys"].ToString());
             foreach (JToken jscript in jnow["script"])
             {
                 JToken jlist = jnow["scriptlist"][op_num++];
@@ -98,7 +99,7 @@ public class Textchanger : MonoBehaviour
             case "jmp": //다른 시나리오, 스크립트로 이동 (그러므로 if문 내용은 안 쓸듯... 2024-01-29
                 Debug.Log("REQUEST[event] : occuring?");
 
-                //if ((int)code[1] != 0) textmanager.endStoryPart((int)code[1], "", "");  //move cur scenario
+                //if ((int)code[1] != 0) textmanager.EndStoryPart((int)code[1], "", "");  //move cur scenario
                 textmanager.EndStoryPart(0, code[2].ToString(), code[3].ToString()); //move another scenario
                 break;
             case "rpl": //같은 시나리오/마을에서의 이동

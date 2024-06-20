@@ -30,7 +30,7 @@
           ],
           "key" : {
             "list" : ["평지", "평원 마을"],
-            "평지" : { "effect" : [["jmp", 0, "region", "Plain"]]},
+            "평지" : { "effect" : [["jmp", 0, "plain", "Plain"]]},
             "평원 마을" : { "effect" : [["jmp", 0, "town", "plain_town"]]}
           }
         }
@@ -75,7 +75,7 @@
           ],
           "key" : {
             "list" : ["언덕"],
-            "언덕" : { "effect" : [["jmp", 0, "region", "Hill"]]}
+            "언덕" : { "effect" : [["jmp", 0, "hill", "Hill"]]}
           }
         }
       ]

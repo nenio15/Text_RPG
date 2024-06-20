@@ -40,7 +40,7 @@
     "num" : 1,
     "chapter" : "dragon",
     "synopciys" : "dragon last",
-    "scriptlist" : ["dia"],
+    "scriptlist" : ["dia", "dia", "dia"],
     "script" : [
       {
         "dia" : [
@@ -54,11 +54,11 @@
       },
       {
         "dia" : [
-          [""],
+          [" "],
           ["..."],
           ["..."],
           ["..."],
-          [""]
+          [" "]
         ]
       },
       {
@@ -70,8 +70,8 @@
           "list" : ["잠에서 깨어난다"],
           "잠에서 깨어난다" : {
             "dice" : ["int", 6, 3],
-            "succ" : { "effect" : [ ["dia", [["몸이 비명을 지르며 현실의 무게감을 느끼게한다."]] ], ["hp-1"], ["hp+1"], ["jmp", 2]  ] },
-            "fail" : { "effect" : [ ["dia", [["아무래도 이 악몽은 끝나질 않을것만 같다..."]] ], ["mp-1"], ["jmp", 2]  ] }
+            "succ" : { "effect" : [ ["dia", [["몸이 비명을 지르며 현실의 무게감을 느끼게한다."]] ], ["hp-1"], ["hp+1"], ["rpl", 2]  ] },
+            "fail" : { "effect" : [ ["dia", [["아무래도 이 악몽은 끝나질 않을것만 같다..."]] ], ["mp-1"], ["rpl", 2]  ] }
           }
         }
       }
@@ -126,7 +126,7 @@
     "num" : 4,
     "chapter" : "dragon",
     "synopciys" : "dragonong",
-    "scriptlist" : ["dia"],
+    "scriptlist" : ["dia", "dia", "dia"],
     "script" : [
       {
         "dia" : [

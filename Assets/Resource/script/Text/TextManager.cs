@@ -59,6 +59,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         //юс╫ц scenario/medium_0   //main_scenario/Main_1
         //cur_scenario = "town";  //"scenario" "town" "region"
         //cur_subscenario = "plain_town"; //"medium_0" "plain_town" "Forest"
+        cur_scenario = PlayerPrefs.GetString("Cur_scenario");
 
         textchanger.ReadScenarioParts(idx++, cur_scenario);//, cur_subscenario);    //json
         contents = System.IO.File.ReadAllLines(real_main);

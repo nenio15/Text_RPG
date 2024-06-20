@@ -23,7 +23,7 @@
       ],
         "key" : {
           "list" : ["떠나기", "촌장집", "대장간", "잡화점", "여관"],
-          "떠나기" : { "effect" : [ ["jmp", 0, "region", "Plain"] ] },
+          "떠나기" : { "effect" : [ ["jmp", 0, "plain", "Plain"] ] },
           "촌장집" : { "effect" : [ ["rpl", 1]]},
           "대장간" : { "effect" : [ ["rpl", 2]]},
           "잡화점" : { "effect" : [ ["rpl", 3]]},

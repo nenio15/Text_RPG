@@ -14,7 +14,7 @@
           ],
           "key" : {
             "list" : ["평야"],
-            "평야" : { "effect" : [["jmp", 0, "region", "Plain"]]}
+            "평야" : { "effect" : [["jmp", 0, "plain", "Plain"]]}
           }
         }
       ]

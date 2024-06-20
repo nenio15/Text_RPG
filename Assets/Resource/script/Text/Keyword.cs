@@ -18,13 +18,13 @@ public class Keyword : MonoBehaviour    //, IPointerClickHandler
 
     private Vector3 destination = new Vector3(0.0f, -500.0f, -4.0f);
     private Vector2 speed = Vector2.zero;
-    private float time = 0.1f;
+    //private float time = 0.1f;
     private Textchanger clicked;      // = new Textchanger();
 
     void Start()
     {
         string root = Application.dataPath + @"\Resource\Text\main.txt";
-        time = 0.1f;
+        //time = 0.1f;
         /*
         SelectPaper = GameObject.FindWithTag("select");     //good way?
         InfoBook = GameObject.FindWithTag("info");

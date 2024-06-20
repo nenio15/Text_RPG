@@ -15,8 +15,8 @@
           "key" : {
             "list" : ["평야마을", "숲", "언덕"],
             "평야마을" : { "effect" : [["jmp", 0, "town", "plain_town"]]},
-            "숲" : { "effect" : [["jmp", 0, "region", "Forest"]]},
-            "언덕" : { "effect" : [["jmp", 0, "region", "Hill"]]}
+            "숲" : { "effect" : [["jmp", 0, "forest", "Forest"]]},
+            "언덕" : { "effect" : [["jmp", 0, "hill", "Hill"]]}
           }
         }
       ]
