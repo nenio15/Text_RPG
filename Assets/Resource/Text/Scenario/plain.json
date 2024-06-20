@@ -1,0 +1,26 @@
+﻿{
+  "title" : "Plain",
+  "name" : "평야",
+  "nearby" :["plain_town", "Forest", "Hill"],
+  "scenario" : [
+    {
+      "situation" : 0,
+      "type" : 1,
+      "scriptlist" : ["dia"],
+      "script" : [
+        {
+          "dia" : [
+            ["평야이다."]
+          ],
+          "key" : {
+            "list" : ["평야마을", "숲", "언덕"],
+            "평야마을" : { "effect" : [["jmp", 0, "town", "plain_town"]]},
+            "숲" : { "effect" : [["jmp", 0, "region", "Forest"]]},
+            "언덕" : { "effect" : [["jmp", 0, "region", "Hill"]]}
+          }
+        }
+      ]
+    }
+  ]
+  
+}

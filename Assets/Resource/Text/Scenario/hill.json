@@ -1,0 +1,23 @@
+﻿{
+  "title" : "Hill",
+  "name" : "언덕",
+  "nearby" : ["Plain"],
+  "scenario" : [
+    {
+      "situation" : 0,
+      "type" : 1,
+      "scriptlist" : ["dia"],
+      "script" : [
+        {
+          "dia" : [
+            ["hill is on."]
+          ],
+          "key" : {
+            "list" : ["평야"],
+            "평야" : { "effect" : [["jmp", 0, "region", "Plain"]]}
+          }
+        }
+      ]
+    }
+  ]
+}

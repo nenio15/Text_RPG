@@ -15,8 +15,8 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     
     private bool stop_read = false;
 
-    [SerializeField]    private string cur_scenario = "main_scenario";
-    [SerializeField]    private string cur_subscenario = "Main_1";
+    [SerializeField] private string cur_scenario = "main_scenario";
+    [SerializeField] private string cur_subscenario = "Main_1";
 
     [SerializeField] private bool reading = false;
     [SerializeField] private int page = 0;
@@ -60,7 +60,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         //cur_scenario = "town";  //"scenario" "town" "region"
         //cur_subscenario = "plain_town"; //"medium_0" "plain_town" "Forest"
 
-        textchanger.ReadScenarioParts(idx++, cur_scenario, cur_subscenario);    //json
+        textchanger.ReadScenarioParts(idx++, cur_scenario);//, cur_subscenario);    //json
         contents = System.IO.File.ReadAllLines(real_main);
     }
 
@@ -180,7 +180,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         if (next_main == "") // 이거를 활용하면 오류가 없을듯
         {
             //move의 page, num으로 이동                  // if (move == 0) textchanger.readScenarioParts(idx++, cur_scenario, cur_subscenario); // 애초에 0이면 +1이랑 같지. 쓰지마.
-            textchanger.ReadScenarioParts(move, cur_scenario, cur_subscenario); 
+            textchanger.ReadScenarioParts(move, cur_scenario);//, cur_subscenario); 
             idx += move; // ... why?
             page = move;
         }
@@ -189,7 +189,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
             cur_scenario = next_main;
             cur_subscenario = next_sub;
 
-            textchanger.ReadScenarioParts(0, next_main, next_sub);
+            textchanger.ReadScenarioParts(0, next_main);//, next_sub);
             page = 0;
         }
 

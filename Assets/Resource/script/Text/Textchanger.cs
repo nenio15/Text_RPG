@@ -32,9 +32,9 @@ public class Textchanger : MonoBehaviour
         keyroute = Application.dataPath + path + "main.json";
     }
 
-    public int ReadScenarioParts(int move, string jmain, string jsub)
+    public int ReadScenarioParts(int move, string jmain)//, string jsub) 없앰 20204-06-20
     {
-        Debug.Log(move + "에서 " + jmain + "그리고 " + jsub);
+        Debug.Log(move + "에서 " + jmain);
 
         // 시나리오 이름으로 추적. (폴더명(@Scenario))\파일명\시나리오명
         string scnroute = Application.dataPath + path + @"Scenario\" + jmain + ".json";  //\Resource\Text\Scenario\scenarion.json
@@ -56,7 +56,7 @@ public class Textchanger : MonoBehaviour
 
         //condition 확인절차. (고민)
         //어떤 시나리오 리스트를 받을지, 다른 json에 정리시키기.. (scenario selector.cs)
-        jbase = jroot[jsub]; //해당 시나리오
+        //jbase = jroot[jsub]; //해당 시나리오
 
         do
         {
