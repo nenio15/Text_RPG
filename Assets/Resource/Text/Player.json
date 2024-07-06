@@ -18,7 +18,8 @@
       3
     ],
     "Name": "홍길동",
-    "Class": "Wariror"
+    "Class": "Wariror",
+    "Skill" : "Rock"
   },
   "Eqip": {
     "head": [
