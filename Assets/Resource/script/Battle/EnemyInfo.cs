@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -51,6 +52,11 @@ public class EnemyInfo : MonoBehaviour
     private Vector3 target;
     //NavMeshAgent agent;
 
+    //몬스터 상단의 표기 세팅
+    [SerializeField] private GameObject myInfo;
+    private TextMeshPro myTextMeshPro;
+    private RectTransform myInfoTr;
+
     public Animator anim;
 
     enum State
@@ -73,9 +79,14 @@ public class EnemyInfo : MonoBehaviour
         //agent.destination = target.transform.position;
 
         //상호작용 첫 수 둡니다
-
         enemy.Skill = skills[Random.Range(0, 3)];
         Debug.Log(enemy.Skill + " : [enemy] is reading...");
+
+        //hp bar text setting
+        myTextMeshPro = myInfo.GetComponent<TextMeshPro>();
+        myInfoTr = myInfo.GetComponent<RectTransform>();
+
+
 
         state = State.Run;
         //StartCoroutine("UpdateRun");
@@ -83,7 +94,8 @@ public class EnemyInfo : MonoBehaviour
 
     private void Update()
     {
-       
+       Vector3 infoPos = new Vector3(transform.position.x, transform.position.y + 50, 0);
+       myInfoTr.position = infoPos;
     }
 
     private void ReadyNewSkill()

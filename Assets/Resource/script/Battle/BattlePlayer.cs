@@ -44,7 +44,6 @@ public class BattlePlayer : MonoBehaviour
     {
         while (true) //trigger is you now... hmm
         {
-            Debug.Log("ajdlfja");
             Vector3 move = new Vector3(target.x - tr.position.x, target.y - tr.position.y, 0).normalized * speed * Time.deltaTime;
             tr.position += move;
 

@@ -5,79 +5,139 @@ using UnityEngine;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine.UI;
+using System.ComponentModel;
+using UnityEditor.Experimental.GraphView;
 
 public class SelectionManager : MonoBehaviour
 {
     [SerializeField] private TextManager textmanager;
     [SerializeField] private Textchanger textchanger;
     public GameObject[] button;
+    [SerializeField] private int len = 0;
 
     private Vector3 destination = new Vector3(0.0f, -800.0f, -4.0f);
     private Vector2 speed = Vector2.zero;
     private float time = 0.2f;
-    private string mainroute, keyroute, str;
+    private string mainroute, jroute, str;
 
     private JObject jroot;
     private JToken jcur;
-    int len = 0;
-    
+    private ConvertJson convertJson = new ConvertJson();
+
+
+    enum State
+    {
+        Scenario,
+        Battle,
+        Strategy
+    }
+
+    State state;
 
     private void Start()
     {
         mainroute = Application.dataPath + @"\Resource\Text\main.txt";
-        keyroute = Application.dataPath + @"\Resource\Text\main.json";
     }
 
-    public void ShowSelection(string option, int idx)
-    {   
-        str = MakeJson(keyroute);
-        jroot = JObject.Parse(str);
-        jcur = jroot[option][idx];
-        Debug.Log("SELECT : " + option);
-        // key의 list만큼 할것. list는 저시기 거시기하고.
+    //시나리오의 셀렉션을 나열한다 + 2024-07-09 시나리오만을 하는게 아니다.
+    public void ShowSelection(string option, int idx, int c_state)
+    {
+        //더럽긴한데... 암튼 state에 대한 명시 완
 
-
-        foreach ( JToken list in jcur["list"])
+        switch (c_state)
         {
-            //RectTransform rect = button[len].GetComponent<RectTransform>();
-            //rect.anchoredPosition = new Vector2(pos[len % 2], (len/2) * -200);
-            // list의 수에 따라 위치변경이긴 한데... 나중에
+            case (int)State.Scenario:
+                state = State.Scenario;
+                jroute = Application.dataPath + @"\Resource\Text\main.json";
+                str = convertJson.MakeJson(jroute);
+                jroot = JObject.Parse(str);
+                jcur = jroot[option][idx];
+                Debug.Log("SELECT : " + option);
 
-            button[len].GetComponentInChildren<Text>().text = list.ToString();
-            button[len++].SetActive(true);
+
+                //리스트에 있는 만큼의 버튼을 활성화, 나열
+                foreach (JToken list in jcur["list"])
+                {
+                    // list의 수에 따른 위치 세팅 변경 ( 그냥 프리셋을 하나 만드는게 편할듯)
+                    //RectTransform rect = button[len].GetComponent<RectTransform>();
+                    //rect.anchoredPosition = new Vector2(pos[len % 2], (len/2) * -200);
+
+                    //버튼 텍스트와 활성화
+                    button[len].GetComponentInChildren<Text>().text = list.ToString();
+                    button[len++].SetActive(true);
+                }
+
+                //destination = new Vector3(0.0f, -800.0f, -4.0f);
+                //StartCoroutine(Moving(gameObject));
+                break;
+            case (int)State.Battle:
+                state = State.Battle;
+                Debug.Log("battle is going on");
+                jroute = Application.dataPath + @"\Resource\Text\Info\Skill.json";
+                str = convertJson.MakeJson(jroute);
+                jroot = JObject.Parse(str);
+                jcur = jroot[option];
+
+                foreach (JToken list in jcur["list"])
+                {
+                    //버튼 텍스트와 활성화
+                    button[len].GetComponentInChildren<Text>().text = list.ToString();
+                    button[len++].SetActive(true);
+                }
+
+                break;
+            case (int)State.Strategy:
+                    state = State.Strategy;
+                    Debug.Log("rollllllling");
+                break;
+
         }
 
-        //destination = new Vector3(0.0f, -800.0f, -4.0f);
-        //StartCoroutine(Moving(gameObject));
+
     }
     
+    //시나리오 선택지랑 배틀 선택지가 다를까 같을까..
     public void OnClick(Text t)
     {
-        Debug.Log("CLICK_TEXT : " + t.text);
-        JToken jkey = jcur[t.text];
-
-        // 복수의 효과 처리
-        foreach (JToken code in jkey["effect"]) 
+        switch (state)
         {
-            Debug.Log("CLICK_code : " + code.ToString());
-            string decode = code[0].ToString();
+            case State.Scenario:
+                Debug.Log("CLICK_TEXT[Scenario] : " + t.text);
+                JToken jkey = jcur[t.text];
 
-            //dice는 성공 실패 여부가 포함되어 있어 따로 처리를 한다.(나중에 json변경... 2024-01-29)
-            if (decode == "dice") textchanger.GetOpcode(code[0].ToString(), jkey, 1);
-            else textchanger.GetOpcode(code[0].ToString(), code, 1);
+                // 복수의 효과 처리
+                foreach (JToken code in jkey["effect"])
+                {
+                    Debug.Log("CLICK_code : " + code.ToString());
+                    string decode = code[0].ToString();
 
+                    //dice는 성공 실패 여부가 포함되어 있어 따로 처리를 한다.(나중에 json변경... 2024-01-29)
+                    if (decode == "dice") textchanger.GetOpcode(code[0].ToString(), jkey, 1);
+                    else textchanger.GetOpcode(code[0].ToString(), code, 1);
+
+                }
+
+                //이벤트 삽입 할거야?
+                //EventInformar.CheckAll();
+
+                //다음 문장 출력
+                textmanager.ReadStory(true);
+                break;
+            case State.Battle:
+                Debug.Log("CLICK_TEXT[Battle] : " + t.text);
+                break;
+            default:
+
+
+
+
+                for (; len > 0; len--) button[len - 1].SetActive(false);
+                break;
         }
-        
-        //이벤트 삽입 할거야?
-        //EventInformar.CheckAll();
-
-        //다음 문장 출력
-        textmanager.ReadStory(true);
-
-        for (; len > 0; len--) button[len - 1].SetActive(false);
-
         //destination = new Vector3(0.0f, -2000.0f, -4.0f);
         //StartCoroutine(Moving(gameObject));
+
+
     }
 
     // sc_obj 클릭, 선택지가 갱신된다.
@@ -85,7 +145,7 @@ public class SelectionManager : MonoBehaviour
     {
         string word = keyword.GetComponent<Keyword>().keyword;
         int idx = keyword.GetComponent<Keyword>().idx;
-        ShowSelection("sc_key", idx);
+        ShowSelection("sc_key", idx, 0);
         Debug.Log("SC_OBJ : " + word);
 
         //선택지를 누르면, 기존 main.txt에 내용이 추가된다. 그렇다. 가장 아래에 추가가 된다... 흠
@@ -117,16 +177,5 @@ public class SelectionManager : MonoBehaviour
             yield return obj.transform.position = Vector2.SmoothDamp(obj.transform.position, destination, ref speed, time);
     }
 
-    private string MakeJson(string jpath)    //parsing안 하고 그냥 넣는거는 안되나? 굳이..?
-    {
-        string str = null;
-        using (StreamReader sr = File.OpenText(jpath))
-        using (JsonTextReader reader = new JsonTextReader(sr))
-        {
-            str = sr.ReadToEnd();
-            sr.Close();
-        }
-        return str;
-    }
 
 }

@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 
 public class TextManager : MonoBehaviour, IPointerClickHandler
 {
-    
+    [Header("TEXTER INFO")]
     public Text m_TypingText;
     public float m_Speed = 0.2f;
     private int idx = 0;
@@ -25,8 +25,6 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     private int keyi = 0;
     private int sc_keyi = 0;
 
-    [SerializeField]
-    private GameObject clickobj;
 
     [Header("RAYCASYER")]
     public Canvas m_canvas;
@@ -34,13 +32,14 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     public PointerEventData m_ped;
 
     [Header("C_KEYWORD")]
+    [SerializeField] private GameObject clickobj;
     public string keywords;   //초기화
     [SerializeField] private int robj_i = 0;
-    public GameObject[] robj;   //color 클릭 오브제
+    public GameObject[] robj;   //color 클릭 오브제. 삭제할듯?
 
     private string real_main;
-    //public Textchanger textchanger = new Textchanger();
-    //Keyword key = new Keyword();
+
+    [Header("REFERENCE")]
     [SerializeField] private GameObject Selection;
     [SerializeField] private Textchanger textchanger;
     private EventInformer eventInformer = new EventInformer();
@@ -123,10 +122,10 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         //# 있는 문장
 
         // 현재 읽는 페이지가 끝났음
-        if (contents[current].Contains("#key"))
+        if (contents[current].Contains("#key")) //key 세팅
         {           
             //선택지를 보여줘 //Debug.Log("READING[key] : stop and call selection");
-            Selection.GetComponent<SelectionManager>().ShowSelection("key", keyi++);
+            Selection.GetComponent<SelectionManager>().ShowSelection("key", keyi++, 0);
 
             if (contents[current].Contains("sc"))
             {
@@ -138,13 +137,13 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
             return;
 
         }
-        else if (contents[current].Contains("#near"))
+        else if (contents[current].Contains("#near")) //near 세팅 (없앨예정)
         {
             Debug.Log("READING[nearby] : ...");
 
 
         }
-        else if (contents[current].Contains("sc"))
+        else if (contents[current].Contains("sc")) //sc_key 세팅 (없앨예정)
         {
             Debug.Log("READING[sc_key] : only");
             sc_keyi++;
@@ -274,6 +273,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         return message;
     }
 
+    //sc_key를 위한 view 세팅임. 아마 삭제할듯? 게임성 + 가독성 문제
     void NewKeyword(int real_position, string message, string keyword_message)  //get view pos
     {
         string before_message = message.Substring(0, real_position);

@@ -36,7 +36,7 @@ public class CharacterData : MonoBehaviour
     {
         
         //json에서 player 인적정보 끌어오기
-        charoute = Application.dataPath + @"\Resource\Text\Player.json";
+        charoute = Application.dataPath + @"\Resource\Text\Info\Player.json";
         string cha = new ConvertJson().MakeJson(charoute); //jsonconverter 있는듯?
         
         // first set

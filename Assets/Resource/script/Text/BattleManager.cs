@@ -2,12 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Newtonsoft.Json.Linq;
 
 public class BattleManager : MonoBehaviour
 {
-    [SerializeField] private Text battle_f;
-    [SerializeField] private Text battle_t;
-
+    //[SerializeField] private Text battleField;
+    [SerializeField] private Text battleText;
+    [SerializeField] private SelectionManager selectionManager;
 
     
     [Header("OBJ_INTERATION")]
@@ -22,6 +23,7 @@ public class BattleManager : MonoBehaviour
     private string path = @"\Resource\Text\Battle\";
 
     // 대충 배틀 관리자 입니다 예.
+    private JObject jroot;
 
     // Start is called before the first frame update
     private void Start()
@@ -29,10 +31,13 @@ public class BattleManager : MonoBehaviour
         battlefield = Application.dataPath + path + @"Field\BattleField.json";
         monroute = Application.dataPath + path + "Monster.json";
         proute = Application.dataPath + path + "Player.json";
+        Debug.Log("claslejljliafji");
+        CallBattle();
     }
 
     public void CallBattle()
     {
+        selectionManager.ShowSelection("Action", 0, 1);
 
     }
 

@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 public class Textchanger : MonoBehaviour
 {
     [SerializeField] private TextManager textmanager;
+    ConvertJson convertJson = new ConvertJson();
 
     //임의 설정. 캐릭터 스크립트 필요
     private string player = "플레이어";
@@ -23,8 +24,9 @@ public class Textchanger : MonoBehaviour
     JArray key_jarray, sc_key_jarray;
     JObject key_jroot;
 
-    [SerializeField] public JObject jbase; // public이어야 참조 되는 거지?
+    [SerializeField] public JObject jbase;
 
+    //시나리오를 진행하는 뼈대 루트 설정
     private void Start()
     {
         //실제 .txt 키 .json
@@ -38,15 +40,16 @@ public class Textchanger : MonoBehaviour
 
         // 시나리오 이름으로 추적. (폴더명(@Scenario))\파일명\시나리오명
         string scnroute = Application.dataPath + path + @"Scenario\" + jmain + ".json";  //\Resource\Text\Scenario\scenarion.json
-        string str = MakeJson(scnroute);
-        string key_str = MakeJson(keyroute);
+        string str = convertJson.MakeJson(scnroute);
+        string key_str = convertJson.MakeJson(keyroute);
+
+
+        int op_num = 0;
 
         // read 할 부분 초기화
         File.WriteAllText(keyroute, "{ \"key\" : [{}], \"sc_key\" : [{}] }");    // 초기화
         File.WriteAllText(mainroute, "");                                       // main reset
-        
-        int op_num = 0;
-        
+
         key_jarray = new JArray(); 
         sc_key_jarray = new JArray();
 
@@ -77,7 +80,7 @@ public class Textchanger : MonoBehaviour
                 //독립성을 띄느냐는... 모델과 뷰 + 컨트롤러의 형식을 띄고 있지. 독립이 가능해. 그러면... 흠
             }
 
-        } while (false); //그냥 뒀어요. 나중에 조건 달 수도 있어서
+        } while (false); //그냥 둠. 나중에 조건 달 수도 있어서
 
 
         Debug.Log("readParts end one");
@@ -98,22 +101,21 @@ public class Textchanger : MonoBehaviour
             
             case "jmp": //다른 시나리오, 스크립트로 이동 (그러므로 if문 내용은 안 쓸듯... 2024-01-29
                 Debug.Log("REQUEST[event] : occuring?");
-
-                //if ((int)code[1] != 0) textmanager.EndStoryPart((int)code[1], "", "");  //move cur scenario
+                                                                                //if ((int)code[1] != 0) textmanager.EndStoryPart((int)code[1], "", "");  //move cur scenario
                 textmanager.EndStoryPart(0, code[2].ToString(), code[3].ToString()); //move another scenario
                 break;
-            case "rpl": //같은 시나리오/마을에서의 이동
-                if ((int)code[idx] == -1) break; // escape for ... get out!!!
+            case "rpl": //같은 json(시나리오/마을)에서의 이동
+                if ((int)code[idx] == -1) break;                            // escape for ... get out!!!
                 textmanager.EndStoryPart((int)code[1], "", "");
                 break;
-            case "dice":
+            case "dice": //dice roll 
                 RollDice(code); // token을 받을것. 거기서.. 
                 //Debug.Log("OPCODE[dice] : " + op + "입니다 " + code[idx++] + " " + code[idx++] + " " + code[idx++] + " " + code[idx++]);
                 break;
-            case "mov": //call region. area. moment
+            case "mov": //call region. area. moment //버려진 명령어. 2024-07-09. ※폐기할것.
                 Region(code[idx++].ToString(), (int)code[idx++], (int)code[idx++]);   //Region(code[op][i++].ToString(), (int)code[op][i++], (int)code[op][i++]);
                 break;
-            case "dia": //get str, show 
+            case "dia": //시나리오 show
                 if (idx == 1) // effect : [ "dia", [ [1], [2] ] ]   // [1]은 2차원 배열이라 할 수 있겠지..
                     foreach (JToken jdes in code[1])
                         File.AppendAllText(mainroute, Setstring(jdes.ToString()) + '\n');
@@ -121,7 +123,7 @@ public class Textchanger : MonoBehaviour
                     foreach (JToken jdes in code)
                         File.AppendAllText(mainroute, Setstring(jdes.ToString()) + '\n');  //System.IO.
                 break;
-            case "npc":
+            case "npc": //뼈대만 남은 코드..
                 NpcCall(code[idx++].ToString(), code[idx++].ToString(), code[idx++].ToString());
                 break;
             case "btl":
@@ -198,11 +200,9 @@ public class Textchanger : MonoBehaviour
 
     private void Region(string spot, int chap, int detail)     //지역별 get
     {
-        string str = MakeJson(Application.dataPath + @"\Resource\Text\Field\Region.json");
+        string str = convertJson.MakeJson(Application.dataPath + @"\Resource\Text\Field\Region.json");
         JObject jroot = JObject.Parse(str);
-        JToken jregion = jroot["Region"];
-        //jroot["Forest", "sky", "cave", "beach", "sea", "city"] -> enum class로 문자열..?
-        // connect path = jregion["name"].ToString
+        JToken jregion = jroot["Region"];                                                                           //jroot["Forest", "sky", "cave", "beach", "sea", "city"] -> enum class로 문자열..?
 
         //if (jregion["name"].ToString() == spot)
         foreach (JToken des in jregion["Type"][chap]["description"]) //임시 for
@@ -215,7 +215,7 @@ public class Textchanger : MonoBehaviour
     private void NpcCall(string name, string situ, string num)
     {
         //해당 npc를 찾아서, situ를 맞추고, num에 있는 dia나 다른 것을 행함
-        string str = MakeJson(Application.dataPath + @"\Resource\Text\Npc\Npc.json");
+        string str = convertJson.MakeJson(Application.dataPath + @"\Resource\Text\Npc\Npc.json");
         JObject jroot = JObject.Parse(str);
         JToken jnpc = jroot[name][situ][num];
         //convert_hash.Add("#" + name, jnpc["name"].ToString()); // ex) #edward : 에드워드
@@ -252,18 +252,6 @@ public class Textchanger : MonoBehaviour
 
         //System.IO.File.AppendAllText(mainroute, "\n"); // + final null line
     
-
-    private string MakeJson(string jpath)    //parsing안 하고 그냥 넣는거는 안되나? 굳이..?
-    {
-        string str = null;
-        using (StreamReader sr = File.OpenText(jpath))
-        using (JsonTextReader reader = new JsonTextReader(sr))
-        {
-            str = sr.ReadToEnd();
-            sr.Close();
-        }
-        return str;
-    }
 
     private string Setstring(string raw_string)
     {
