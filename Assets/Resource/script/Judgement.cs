@@ -3,40 +3,32 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DiceDecision : MonoBehaviour
+public class Judgement : MonoBehaviour
 {
     public bool player_win = false;
-    [SerializeField] private GameObject player;
-    [SerializeField] private GameObject enemy;
+    //[SerializeField] private GameObject player;
+    //[SerializeField] private GameObject enemy;
     [SerializeField] private PlayerUiManager playerUiManager;
     [SerializeField] private SelectionManager selectionManager;
-
+    [SerializeField] private BattleManager battleManager;
 
 
     private void Start()
     {
-        player = GameObject.Find("Player");
-        //임의 세팅
-        enemy = GameObject.Find("Enemy1");
+        //player = GameObject.Find("Player");
+        playerUiManager = FindObjectOfType<PlayerUiManager>();
+        selectionManager = FindObjectOfType<SelectionManager>();
 
-        selectionManager = GameObject.Find("selectpaper").GetComponent<SelectionManager>();
+        //임의 세팅
+        //enemy = GameObject.Find("Enemy1");
+        battleManager = FindObjectOfType<BattleManager>();
         //selectionManager.ShowSelection("Action", 0, 1);
     }
 
-    public void Desicion(string enemy_name)
+    //합 승부 //값 계산해서 돌려줘.
+    public void DesicionWinner(GameObject player, GameObject enemy, string strategy)
     {
-        //이거 무조건 발동이면... 흠... 기획 다시 볼것.
-        InstantStrategy();
-    }
-
-
-    //합 승부
-    public void DesicionWinner(string enemy_name)
-    {
-        
-
-        //player = GameObject.Find(player_name);
-        enemy = GameObject.Find(enemy_name);
+        Debug.Log(strategy);
 
         //서로 기술 정의
         string pSkill = player.GetComponent<CharacterData>().player_info.Skill;
@@ -50,6 +42,7 @@ public class DiceDecision : MonoBehaviour
         {
             Debug.Log("비김");
             //비긴건 뭐가 없는데...
+            //변수형을 string이나 enum으로 바꿀것. (-1 0 1)
         }
         else if ((pSkill == "Scissors" && eSkill == "Paper") ||
                      (pSkill == "Rock" && eSkill == "Scissors") ||
@@ -63,37 +56,20 @@ public class DiceDecision : MonoBehaviour
             player_win = false;
         }
         
-        //둘다 필요?
-        enemy.GetComponent<BattleEnemy>().EndTurn(player_win);
-        player.GetComponent<BattlePlayer>().EndTurn(player_win);
-        playerUiManager.UploadToGame();
+        //둘다 필요? ... 이거 battle에게 전담할것.
+        //enemy.GetComponent<BattleEnemy>().EndTurn(player_win);
+        //player.GetComponent<BattlePlayer>().EndTurn(player_win);
+        //playerUiManager.UploadToGame();
 
-
-        //전투 종료 판정이 필요.
-        EndCheck();
+        //전투 종료 판정
+        battleManager.BattleEndCheck(player, enemy, player_win);
     }
 
-    public void Press()
-    {
-        //한턴이라는 개념 동안. 거시기를 한다.
-        player.GetComponent<BattlePlayer>().StartCoroutine("UpdateRun");
-        enemy.GetComponent<BattleEnemy>().StartCoroutine("UpdateRun");
-
-        //그럴려면?
-
-    }
-
-    private void EndCheck()
-    {
-        //체킹을 enemy imgae rendering의 활성화 여부로.. // collider
-
-        selectionManager.ShowSelection("Action", 0, 1);
-
-    }
-
+    //순간전략 활성화
     private void InstantStrategy()
     {
         //enemy.Getcomponent<>.weapon
+        //임의로 club
         selectionManager.ShowSelection("Club", 0, 2);
     }
 

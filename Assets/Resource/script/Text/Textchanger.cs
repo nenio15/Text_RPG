@@ -66,7 +66,7 @@ public class TextChanger : MonoBehaviour
 
         do
         {
-            Debug.Log("CHANGER : " + move);
+            //Debug.Log("CHANGER : " + move);
             JToken jnow = jbase["scenario"][move];
             int lnd_cmd = 0; // non 명령어
             //check state
@@ -86,7 +86,7 @@ public class TextChanger : MonoBehaviour
         } while (false); //그냥 둠. 나중에 조건 달 수도 있어서
 
 
-        Debug.Log("readParts end one");
+        //Debug.Log("readParts end one");
         return 0;
     }
 
@@ -247,6 +247,8 @@ public class TextChanger : MonoBehaviour
         //종류 : 몬스터, 인간형 등등?
         //이름, 숫자. 그리고 시츄는 발각, 기습, 상태이상 등?
         Debug.Log("JSON[monster] : " + jbattle + "이 " + root + "발생.");
+
+        File.AppendAllText(mainroute, "#btl\n");
         return;
     }
 

@@ -13,12 +13,16 @@
       {
         "chapter" : "낯선 등장",
         "synopciys" : "늑대보다는 높고, 아이보다는 낮은 높이의 빛이 일렁인다.",
-        "scriptlist" : ["dia", "btl"],
+        "scriptlist" : ["dia", "btl", "key"],
         "script" : [
           { 
             "dia" : [["야생의 고블린이 나타났다!!!"], ["그게 뭐 어때서"]]
           },
-          { "btl" : ["goblin", "forest_goblin", 1, 0]}
+          { "btl" : ["goblin", "forest_goblin", 1, 0]},
+          { "key" : {
+            "list" : ["평지"],
+            "평지" : {"effect" : [["jmp", 0, "plain", "Plain"]]}
+          }}
         ]
     }
   ]

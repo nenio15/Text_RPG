@@ -26,7 +26,8 @@ public class BattleEnemy : MonoBehaviour
     [SerializeField] private GameObject Player;
     [SerializeField] private GameObject self;
     [SerializeField] public Enemy enemy = new Enemy(); //임시
-    
+    private BattleManager battleManager;
+
     public float speed = 400.0f;
     private Transform tr;
 
@@ -48,19 +49,18 @@ public class BattleEnemy : MonoBehaviour
         Attack
     }
 
-    
-
-    State state;
+    //State state;
     string[] skills = { "Rock", "Scissors", "Paper" };
 
-    private void Start()
+    private void Awake()
     {
         Player = GameObject.Find("Player").gameObject;
         self = gameObject;
+        battleManager = GameObject.FindObjectOfType<BattleManager>();
         //myInfo = gameObject.gameObject.gameObject;
         //button[len].GetComponentInChildren<Text>().text = list.ToString();
 
-        state = State.Idle;
+        //state = State.Idle;
         tr = GetComponent<Transform>();
         target = Player.transform.position; //갱신도 잇어야함
         //agent.destination = target.transform.position;
@@ -74,7 +74,7 @@ public class BattleEnemy : MonoBehaviour
 
 
 
-        state = State.Run;
+        //state = State.Run;
         //StartCoroutine("UpdateRun");
     }
 
@@ -87,17 +87,18 @@ public class BattleEnemy : MonoBehaviour
     private void ReadyNewSkill()
     {
         enemy.Skill = skills[Random.Range(0, 3)];
-        Debug.Log(enemy.Skill + " : [enemy] is reading...");
+        Debug.Log(enemy.Skill + " : is [enemy] skill");
     }
 
     private void EnemyInteractive()
     {
-        state = State.Attack;
+        //state = State.Attack;
         //한번만 실행해야하는데... 거까진 알고리즘이 기억이 안난다. 프리즈? 
-
-        GameObject.Find("Desicion").GetComponent<DiceDecision>().Desicion(self.name.ToString()); //흠
+        battleManager.Interaction(self);
+        
+        //battlemanager.Interaction(self.name.ToString()); //흠
         //GameObject.Find("Desicion").GetComponent<DiceDecision>().DesicionWinner(self.name.ToString()); 
-        tr.position = new Vector3(-300, 300);
+        //tr.position = new Vector3(-300, 300);
         ReadyNewSkill();
     }
 
@@ -128,8 +129,10 @@ public class BattleEnemy : MonoBehaviour
         }
 
         StopCoroutine("UpdateRun");
-        CheckDead();
+        tr.position = new Vector3(-300, 300);
+
         //여기다가 죽었는지도 추가 확인. 감소. 디버프. 사망.
+        CheckDead();
     }
 
     private void CheckDead()

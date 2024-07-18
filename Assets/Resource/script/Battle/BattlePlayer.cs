@@ -15,6 +15,17 @@ public class BattlePlayer : MonoBehaviour
     private Vector3 target;
 
 
+    void Awake()
+    {
+        playerUiManager = GameObject.Find("Stat").GetComponent<PlayerUiManager>();
+        characterData = gameObject.GetComponent<CharacterData>();
+
+
+        tr = GetComponent<Transform>();
+        target = Enemy.transform.position;
+        //Debug.Log(characterManager.cur_info.Skill + " this is player skill...");
+        //StartCoroutine("Run");
+    }
 
     //플레이어는 자신이 rock, scissor, paper를 골라야하는데.... 그건 select를 불러와야해
     //그게 기억이 안나네..
@@ -30,26 +41,7 @@ public class BattlePlayer : MonoBehaviour
 
 
         StopCoroutine("UpdateRun");
-    }
-
-    void Start()
-    {
-        playerUiManager = GameObject.Find("Stat").GetComponent<PlayerUiManager>();
-        characterData = gameObject.GetComponent<CharacterData>();
-
-
-        tr = GetComponent<Transform>();
-        target = Enemy.transform.position;
-        //Debug.Log(characterManager.cur_info.Skill + " this is player skill...");
-        //StartCoroutine("Run");
-    }
-
-    void Update()
-    {
-
-    }
-
-    
+    }    
 
     IEnumerator UpdateRun()
     {

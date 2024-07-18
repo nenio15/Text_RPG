@@ -16,10 +16,10 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     private bool stop_read = false;
 
     [SerializeField] private string cur_scenario = "main_scenario";
-    [SerializeField] private string cur_subscenario = "Main_1";
+    //[SerializeField] private string cur_subscenario = "Main_1";
 
     [SerializeField] private bool reading = false;
-    [SerializeField] private int page = 0;
+    //[SerializeField] private int page = 0;
     //[SerializeField] public bool eventcall = false;
 
     private int keyi = 0;
@@ -77,7 +77,8 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
             //if (contents.Length == current) EndStoryPart(++page, "", "");
 
             //#(중단점) 조우
-            if (contents[current][0] == '#') MeetSign();
+            if (contents[current][0] == '#')
+                if (MeetSign()) return; 
 
         }
 
@@ -86,43 +87,48 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     }
 
     //중단점 처리
-    private void MeetSign()
+    private bool MeetSign()
     {
+        stop_read = true;
         //switch로 바꿀 필요가 있다면 바꿀것.(#key말고 사용도가 있다면.)
         //# 있는 문장
+        StopCoroutine("Showing");
+
 
         // 현재 읽는 페이지가 끝났음
-        if (contents[current].Contains("#key")) //key 세팅
-        {           
-            //선택지를 보여줘 //Debug.Log("READING[key] : stop and call selection");
-            Selection.GetComponent<SelectionManager>().ShowSelection("key", keyi++, 0);
-
-            if (contents[current].Contains("sc"))
-            {
-                Debug.Log("READING[sc_key] : ...");
-                sc_keyi++;
-            }
-            stop_read = true;
-            //current++;
-            return;
-
-        }
-        else if (contents[current].Contains("#near")) //near 세팅 (없앨예정)
+        switch (contents[current])
         {
-            Debug.Log("READING[nearby] : ...");
+            case "#key":
+                //선택지를 보여줘 //Debug.Log("READING[key] : stop and call selection");
+                Selection.GetComponent<SelectionManager>().ShowSelection("key", keyi++, 0);
+
+                if (contents[current].Contains("sc"))
+                {
+                    Debug.Log("READING[sc_key] : ...");
+                    sc_keyi++;
+                }
+                //stop_read = true;
+                return true;
+            case "#btl":
+                //선택지한테 말하거나, 디시즌한테 말하거나.
+                GameObject.Find("Battle").GetComponent<BattleManager>().BattleEntry();
+                return true;
+            default:
+                current++;
+                stop_read = false;
+                break;
 
         }
-        else if (contents[current].Contains("sc")) //sc_key 세팅 (없앨예정)
-        {
-            Debug.Log("READING[sc_key] : only");
-            sc_keyi++;
-        }
+
+
         
         //키워드 블럭들 초기화 -> 이것도 이사 시킬것.
         if (robj_i > 0)
             for (; robj_i > 0; robj_i--)
                 robj[robj_i - 1].GetComponent<Keyword>().DelKeyword();
         //stop_read = false;
+
+        return false;
 
     }
 

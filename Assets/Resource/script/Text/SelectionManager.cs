@@ -11,9 +11,11 @@ using UnityEngine.Timeline;
 
 public class SelectionManager : MonoBehaviour
 {
-    [SerializeField] private TextManager textmanager;
-    [SerializeField] private TextChanger textchanger;
+    [SerializeField] private TextManager textManager;
+    [SerializeField] private TextChanger textChanger;
     [SerializeField] private GameObject player;
+    [SerializeField] private Judgement judgement;
+    [SerializeField] private BattleManager battleManager;
     public GameObject[] button;
     [SerializeField] private int len = 0;
     
@@ -40,9 +42,11 @@ public class SelectionManager : MonoBehaviour
 
     private void Start()
     {
-        //textmanager = GameObject.Find("Background").GetComponent<TextManager>();
-        textchanger = GameObject.Find("Controller").GetComponent<TextChanger>();
-        player = GameObject.Find("Player");
+        textManager = FindObjectOfType<TextManager>();
+        textChanger = GameObject.FindObjectOfType<TextChanger>();
+        //player = GameObject.Find("Player");
+        judgement = FindObjectOfType<Judgement>();
+        battleManager = GameObject.FindObjectOfType<BattleManager>();
 
         mainroute = Application.dataPath + @"\Resource\Text\main.txt";
     }
@@ -80,18 +84,14 @@ public class SelectionManager : MonoBehaviour
                 break;
             case (int)State.Battle:
                 state = State.Battle;
-                Debug.Log("battle is going on");
+                player = GameObject.Find("Player");
+
                 jroute = Application.dataPath + @"\Resource\Text\Info\Skill.json";
                 str = convertJson.MakeJson(jroute);
                 jroot = JObject.Parse(str);
                 jcur = jroot[option];
 
-                foreach (JToken list in jcur["list"])
-                {
-                    //버튼 텍스트와 활성화
-                    button[len].GetComponentInChildren<Text>().text = list.ToString();
-                    button[len++].SetActive(true);
-                }
+                BtnActive(jcur);
 
                 break;
             case (int)State.Strategy:
@@ -102,12 +102,7 @@ public class SelectionManager : MonoBehaviour
                 jroot = JObject.Parse(str);
                 jcur = jroot[option];
 
-                foreach (JToken list in jcur["list"])
-                {
-                    //버튼 텍스트와 활성화
-                    button[len].GetComponentInChildren<Text>().text = list.ToString();
-                    button[len++].SetActive(true);
-                }
+                BtnActive(jcur);
 
                 break;
 
@@ -116,7 +111,7 @@ public class SelectionManager : MonoBehaviour
 
     }
     
-    //시나리오 선택지랑 배틀 선택지가 다를까 같을까..
+    //btn 클릭시 상호작용
     public void OnClick(Text t)
     {
         switch (state)
@@ -132,8 +127,8 @@ public class SelectionManager : MonoBehaviour
                     string decode = code[0].ToString();
 
                     //dice는 성공 실패 여부가 포함되어 있어 따로 처리를 한다.(나중에 json변경... 2024-01-29)
-                    if (decode == "dice") textchanger.GetOpcode(code[0].ToString(), jkey, 1);
-                    else textchanger.GetOpcode(code[0].ToString(), code, 1);
+                    if (decode == "dice") textChanger.GetOpcode(code[0].ToString(), jkey, 1);
+                    else textChanger.GetOpcode(code[0].ToString(), code, 1);
 
                 }
 
@@ -141,7 +136,7 @@ public class SelectionManager : MonoBehaviour
                 //EventInformar.CheckAll();
 
                 //다음 문장 출력
-                textmanager.ReadStory(true);
+                textManager.ReadStory(true);
                 break;
             case State.Battle:
                 //Debug.Log("CLICK_TEXT[Battle] : " + t.text);
@@ -150,9 +145,10 @@ public class SelectionManager : MonoBehaviour
                 break;
             case State.Strategy:
                 Debug.Log("CLICK_TEXT[STATEGY]" + t.text);
-                //일단 흐름상 여기는 맞음.....
-                for (; len > 0; len--) button[len - 1].SetActive(false);
-                GameObject.Find("Desicion").GetComponent<DiceDecision>().DesicionWinner("Enemy1"); 
+                //순서가 꼬여서 먼저 비활성화?
+                BtnUnActive();
+
+                judgement.DesicionWinner(battleManager.player, battleManager.adjacent_enemy, t.text);
 
                 return;
             default:
@@ -162,7 +158,7 @@ public class SelectionManager : MonoBehaviour
         //destination = new Vector3(0.0f, -2000.0f, -4.0f);
         //StartCoroutine(Moving(gameObject));
 
-        for (; len > 0; len--) button[len - 1].SetActive(false);
+        BtnUnActive();
     }
 
     // sc_obj 클릭, 선택지가 갱신된다.
@@ -202,5 +198,21 @@ public class SelectionManager : MonoBehaviour
             yield return obj.transform.position = Vector2.SmoothDamp(obj.transform.position, destination, ref speed, time);
     }
 
+    //버튼 텍스트와 활성화
+    public void BtnActive(JToken jcur)
+    {
+        foreach (JToken list in jcur["list"])
+        {
+
+            button[len].GetComponentInChildren<Text>().text = list.ToString();
+            button[len++].SetActive(true);
+        }
+    }
+
+    //버튼 비활성화
+    public void BtnUnActive()
+    {
+        for (; len > 0; len--) button[len - 1].SetActive(false);
+    }
 
 }
