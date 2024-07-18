@@ -41,7 +41,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
 
     [Header("REFERENCE")]
     [SerializeField] private GameObject Selection;
-    [SerializeField] private Textchanger textchanger;
+    [SerializeField] private TextChanger textchanger;
     private EventInformer eventInformer = new EventInformer();
 
     float typing_speed = 0.2f;
@@ -55,10 +55,10 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         m_ped = new PointerEventData(null);
         typing_speed = m_Speed;
 
-        //임시 scenario/medium_0   //main_scenario/Main_1
-        //cur_scenario = "town";  //"scenario" "town" "region"
-        //cur_subscenario = "plain_town"; //"medium_0" "plain_town" "Forest"
+        //start scene에서 시나리오 받아오기
         cur_scenario = PlayerPrefs.GetString("Cur_scenario");
+
+
 
         textchanger.ReadScenarioParts(idx++, cur_scenario);//, cur_subscenario);    //json
         contents = System.IO.File.ReadAllLines(real_main);
@@ -67,58 +67,28 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     // text click
     public void OnPointerClick(PointerEventData eventData)
     {
-        // 읽는 것 중단.   선택지 우선.
+        // 읽는 것을 중단.
         if (stop_read) return;
 
-        // 빠르게 읽기 제거
+        // 텍스트가 출력되는 상황이 아니라면.
         if (!reading)
         {
-            //현재장 읽기 끝 여하(#포함)       //Debug.Log(current + " and " + contents.Length);
-            if (contents.Length == current) EndStoryPart(++page, "", "");
+            //현재장 다 읽음                                      (#포함)
+            //if (contents.Length == current) EndStoryPart(++page, "", "");
 
-            //이벤트 삽입 여하 // 플래그를 어디다 세워야하나?
-            //if (eventcall) EventCalling();
-
-            //선택지 조우 여하 
-            if (contents[current][0] == '#')
-            {
-                //이벤트 조우 여하
-                if (contents[current].Contains("#key"))
-                    if (eventInformer.CheckInsertEvent(cur_scenario))
-                    {
-                        EventCalling(0, "main_scenario", "Main_1");
-                        ReadStory(false);
-                        return;
-                    }
-
-
-                //선택지 show
-                Debug.Log("reuturn to original space");
-                MeetSign();
-            }
+            //#(중단점) 조우
+            if (contents[current][0] == '#') MeetSign();
 
         }
+
+        //페이지 읽기
         ReadStory(false);
     }
 
-    private void EventCalling(int move, string main, string sub)
-    {
-        //eventcall = false;
-
-        //event choose (say something..) 정하고 불러
-
-
-        //before save and event insert
-        Debug.Log("[CALLING_EVENT] : Main_1 1...");
-        eventInformer.ScenarioSaveTmp();
-        EndStoryPart(move, main, sub);
-        //and back my save.... how?
-
-    }
-
-    // 선택지 조우
+    //중단점 처리
     private void MeetSign()
     {
+        //switch로 바꿀 필요가 있다면 바꿀것.(#key말고 사용도가 있다면.)
         //# 있는 문장
 
         // 현재 읽는 페이지가 끝났음
@@ -133,7 +103,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
                 sc_keyi++;
             }
             stop_read = true;
-            current++;
+            //current++;
             return;
 
         }
@@ -141,65 +111,39 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         {
             Debug.Log("READING[nearby] : ...");
 
-
         }
         else if (contents[current].Contains("sc")) //sc_key 세팅 (없앨예정)
         {
             Debug.Log("READING[sc_key] : only");
             sc_keyi++;
         }
-        current++;
         
-
-        //키워드 블럭들 초기화
+        //키워드 블럭들 초기화 -> 이것도 이사 시킬것.
         if (robj_i > 0)
             for (; robj_i > 0; robj_i--)
                 robj[robj_i - 1].GetComponent<Keyword>().DelKeyword();
-        stop_read = false;
+        //stop_read = false;
 
     }
 
-    //화면 리셋
+    //스크립트 + 뷰 리셋
     public void ClearText()
     {
-        Debug.Log("clearing...");
         keyi = 0;
         sc_keyi = 0;
         current = 0;
         reading = false;
-        //text reset
+        stop_read = false;
         m_TypingText.text = "";
-    }
 
-    public void EndStoryPart(int move, string next_main, string next_sub)
-    {
-        //현재 시나리오 끝내고 다음 시나리오
-        Debug.Log("READING[end] : 현재 시나리오 " + idx);
-        ClearText();  
-
-        if (next_main == "") // 이거를 활용하면 오류가 없을듯
-        {
-            //move의 page, num으로 이동                  // if (move == 0) textchanger.readScenarioParts(idx++, cur_scenario, cur_subscenario); // 애초에 0이면 +1이랑 같지. 쓰지마.
-            textchanger.ReadScenarioParts(move, cur_scenario);//, cur_subscenario); 
-            idx += move; // ... why?
-            page = move;
-        }
-        else  //cur scenario end or escape
-        {
-            cur_scenario = next_main;
-            cur_subscenario = next_sub;
-
-            textchanger.ReadScenarioParts(0, next_main);//, next_sub);
-            page = 0;
-        }
-
+        //새로 채우기
         contents = System.IO.File.ReadAllLines(real_main);
-        return;
     }
 
+    //main 읽어내기
     public void ReadStory(bool changed)
     {
-        // 무시한다의 선택지가 changed도 무시함 ㄷㄷㄷ (다시 확인할것)
+        // 무시한다의 선택지가 changed도 무시함 ㄷㄷㄷ (다시 확인할것) // 뭔 코드야..
         if (changed)
         {
             contents = System.IO.File.ReadAllLines(real_main);
@@ -210,34 +154,29 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         if (!reading)   //normal reading
         {
             string cur_text = "";
-            Debug.Log("Before line : " + contents[current-1 > 0 ? current-1 : 0]);
-            Debug.Log("cur line pos : " + current);
-            //Debug.Log("page pos : " + contents[current]);
             while (contents[current][0] != '#')
                 cur_text += STyping(contents[current++] + '\n');
             cur_text += '\n';
 
-            
-
-
-            reading = true;
+            //타이핑 효과
             typing_speed = m_Speed;
             StartCoroutine(Showing(m_TypingText, cur_text));
-            //if (contents.Length >= current) current++;
+
+            //중복 클릭시 순간 출력으로 전환
+            reading = true;
         }
         else            // fast reading
             typing_speed = 0.0f;
 
-        stop_read = false;
     }
 
     
-
+    //타이핑 효과
     IEnumerator Showing(Text typingText, string message)
     {
         for (int i = 0; i < message.Length; i++)
         {
-            //키워드 있을 경우
+            //키워드 있을 경우 -> 삭제 예정
             if (message[i] == '|')
             {
                 string after_message = message.Substring(i + 1);
@@ -253,6 +192,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
             }
             yield return new WaitForSeconds(typing_speed);
         }
+        //첫 출력
         reading = false;
     }
 

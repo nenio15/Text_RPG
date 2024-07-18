@@ -1,9 +1,9 @@
 {
   "Action": {
     "list": [
-      "가위",
-      "바위",
-      "보"
+      "Scissors",
+      "Rock",
+      "Paper"
     ],
     "공격": {
       "dice": ["str", 20, 2],

@@ -19,7 +19,7 @@ public class Keyword : MonoBehaviour    //, IPointerClickHandler
     private Vector3 destination = new Vector3(0.0f, -500.0f, -4.0f);
     private Vector2 speed = Vector2.zero;
     //private float time = 0.1f;
-    private Textchanger clicked;      // = new Textchanger();
+    private TextChanger clicked;      // = new Textchanger();
 
     void Start()
     {

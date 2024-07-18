@@ -7,13 +7,16 @@ using Newtonsoft.Json.Linq;
 using UnityEngine.UI;
 using System.ComponentModel;
 using UnityEditor.Experimental.GraphView;
+using UnityEngine.Timeline;
 
 public class SelectionManager : MonoBehaviour
 {
     [SerializeField] private TextManager textmanager;
-    [SerializeField] private Textchanger textchanger;
+    [SerializeField] private TextChanger textchanger;
+    [SerializeField] private GameObject player;
     public GameObject[] button;
     [SerializeField] private int len = 0;
+    
 
     private Vector3 destination = new Vector3(0.0f, -800.0f, -4.0f);
     private Vector2 speed = Vector2.zero;
@@ -24,6 +27,7 @@ public class SelectionManager : MonoBehaviour
     private JToken jcur;
     private ConvertJson convertJson = new ConvertJson();
 
+    public string atb;
 
     enum State
     {
@@ -36,13 +40,16 @@ public class SelectionManager : MonoBehaviour
 
     private void Start()
     {
+        //textmanager = GameObject.Find("Background").GetComponent<TextManager>();
+        textchanger = GameObject.Find("Controller").GetComponent<TextChanger>();
+        player = GameObject.Find("Player");
+
         mainroute = Application.dataPath + @"\Resource\Text\main.txt";
     }
 
-    //시나리오의 셀렉션을 나열한다 + 2024-07-09 시나리오만을 하는게 아니다.
+    //셀렉션 나열
     public void ShowSelection(string option, int idx, int c_state)
     {
-        //더럽긴한데... 암튼 state에 대한 명시 완
 
         switch (c_state)
         {
@@ -64,6 +71,7 @@ public class SelectionManager : MonoBehaviour
 
                     //버튼 텍스트와 활성화
                     button[len].GetComponentInChildren<Text>().text = list.ToString();
+                    atb = list.ToString();
                     button[len++].SetActive(true);
                 }
 
@@ -87,8 +95,20 @@ public class SelectionManager : MonoBehaviour
 
                 break;
             case (int)State.Strategy:
-                    state = State.Strategy;
-                    Debug.Log("rollllllling");
+                state = State.Strategy;
+                Debug.Log("INSTANT STRATEGY");
+                jroute = Application.dataPath + @"\Resource\Text\Battle\WeaponAction.json";
+                str = convertJson.MakeJson(jroute);
+                jroot = JObject.Parse(str);
+                jcur = jroot[option];
+
+                foreach (JToken list in jcur["list"])
+                {
+                    //버튼 텍스트와 활성화
+                    button[len].GetComponentInChildren<Text>().text = list.ToString();
+                    button[len++].SetActive(true);
+                }
+
                 break;
 
         }
@@ -105,7 +125,7 @@ public class SelectionManager : MonoBehaviour
                 Debug.Log("CLICK_TEXT[Scenario] : " + t.text);
                 JToken jkey = jcur[t.text];
 
-                // 복수의 효과 처리
+                // 복수의 효과 처리 -> 따로 함수 처리
                 foreach (JToken code in jkey["effect"])
                 {
                     Debug.Log("CLICK_code : " + code.ToString());
@@ -124,20 +144,25 @@ public class SelectionManager : MonoBehaviour
                 textmanager.ReadStory(true);
                 break;
             case State.Battle:
-                Debug.Log("CLICK_TEXT[Battle] : " + t.text);
+                //Debug.Log("CLICK_TEXT[Battle] : " + t.text);
+                //클릭한 버튼 내용을 player_info에 반영
+                player.GetComponent<CharacterData>().UpdateData(0, t.text);
                 break;
+            case State.Strategy:
+                Debug.Log("CLICK_TEXT[STATEGY]" + t.text);
+                //일단 흐름상 여기는 맞음.....
+                for (; len > 0; len--) button[len - 1].SetActive(false);
+                GameObject.Find("Desicion").GetComponent<DiceDecision>().DesicionWinner("Enemy1"); 
+
+                return;
             default:
 
-
-
-
-                for (; len > 0; len--) button[len - 1].SetActive(false);
                 break;
         }
         //destination = new Vector3(0.0f, -2000.0f, -4.0f);
         //StartCoroutine(Moving(gameObject));
 
-
+        for (; len > 0; len--) button[len - 1].SetActive(false);
     }
 
     // sc_obj 클릭, 선택지가 갱신된다.

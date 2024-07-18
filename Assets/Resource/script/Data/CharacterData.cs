@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine.UI;
 using System;
+using static UnityEditor.LightingExplorerTableColumn;
 
 [System.Serializable]
 public class Character
@@ -26,10 +27,19 @@ public class CharacterData : MonoBehaviour
 {
     //json 루트
     private string charoute;
-    private JObject player;
+    public JObject player;
 
     //player의 메인 루트 데이터
     public Character player_info;
+
+
+    enum DataType
+    {
+        Skill,
+        Hp,
+        Mp,
+        Exp
+    }
 
     // Start is called before the first frame update
     private void Start()
@@ -47,8 +57,26 @@ public class CharacterData : MonoBehaviour
         player_info = JsonUtility.FromJson<Character>(info.ToString());
     }
 
+    public void UpdateData(int type, string content)
+    {
+        switch (type)
+        {
+            case (int)DataType.Skill: 
+                player_info.Skill = content; 
+                player["Info"]["Skill"] = content; //json에 반영되나, 중복적인 선언이다. 다만 복잡도를 생각해 일단 이렇게 둔다.
+                break;
+            case 1:
+                break;
+            default:
+                break;
+        }
+
+        UploadToData();
+
+    }
+
     //Json파일에 반영
-    public void UploadToData()
+    private void UploadToData()
     {
         File.WriteAllText(charoute, player.ToString());
     }

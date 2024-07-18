@@ -14,7 +14,7 @@ public class EventInformer
     // 다른 스크립트한테 알려주는 건 좋아. 근데 얻어내는건 이 스크립트가 직접 해내야지.
 
     // Start is called before the first frame update
-    [SerializeField] private Textchanger textchanger;
+    [SerializeField] private TextChanger textchanger;
 
     /*
     // 필요없는 함수. jmp에서 얻는 걸로 전부 해결할거야.

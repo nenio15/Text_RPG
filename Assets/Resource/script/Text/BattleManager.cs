@@ -25,21 +25,15 @@ public class BattleManager : MonoBehaviour
     // 대충 배틀 관리자 입니다 예.
     private JObject jroot;
 
-    // Start is called before the first frame update
+    // 해당 스크립트는 text '뷰' 전용으로 바꿀 예정
     private void Start()
     {
         battlefield = Application.dataPath + path + @"Field\BattleField.json";
         monroute = Application.dataPath + path + "Monster.json";
         proute = Application.dataPath + path + "Player.json";
-        Debug.Log("claslejljliafji");
-        CallBattle();
-    }
-
-    public void CallBattle()
-    {
-        selectionManager.ShowSelection("Action", 0, 1);
 
     }
+
 
     public void DuringBattle()
     {

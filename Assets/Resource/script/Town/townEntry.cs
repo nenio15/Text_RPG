@@ -21,7 +21,7 @@ public class townEntry : MonoBehaviour
      */
 
     // 묘사는 매니저를 통해야합니다. 매니저는 체인저를 통하죠.
-    private Textchanger tchanger = new Textchanger();
+    private TextChanger tchanger = new TextChanger();
 
     void Entry(string jmain, string jsub)
     {

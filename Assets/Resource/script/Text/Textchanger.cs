@@ -6,7 +6,7 @@ using UnityEngine.UI;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-public class Textchanger : MonoBehaviour
+public class TextChanger : MonoBehaviour
 {
     [SerializeField] private TextManager textmanager;
     ConvertJson convertJson = new ConvertJson();
@@ -20,6 +20,8 @@ public class Textchanger : MonoBehaviour
         //private Dictionary<string, string> connet_path = new Dictionary<string, string>;
     private string path = @"\Resource\Text\";  //this position is moved so... where..?
     private string mainroute, keyroute;
+    private string curmain;
+
 
     JArray key_jarray, sc_key_jarray;
     JObject key_jroot;
@@ -39,7 +41,8 @@ public class Textchanger : MonoBehaviour
         Debug.Log(move + "에서 " + jmain);
 
         // 시나리오 이름으로 추적. (폴더명(@Scenario))\파일명\시나리오명
-        string scnroute = Application.dataPath + path + @"Scenario\" + jmain + ".json";  //\Resource\Text\Scenario\scenarion.json
+        curmain = jmain;
+        string scnroute = Application.dataPath + path + @"Scenario\" + curmain + ".json";  //\Resource\Text\Scenario\scenarion.json
         string str = convertJson.MakeJson(scnroute);
         string key_str = convertJson.MakeJson(keyroute);
 
@@ -100,13 +103,15 @@ public class Textchanger : MonoBehaviour
         {
             
             case "jmp": //다른 시나리오, 스크립트로 이동 (그러므로 if문 내용은 안 쓸듯... 2024-01-29
-                Debug.Log("REQUEST[event] : occuring?");
-                                                                                //if ((int)code[1] != 0) textmanager.EndStoryPart((int)code[1], "", "");  //move cur scenario
-                textmanager.EndStoryPart(0, code[2].ToString(), code[3].ToString()); //move another scenario
+                Debug.Log("REQUEST[event] : occuring?");            //if ((int)code[1] != 0) textmanager.EndStoryPart((int)code[1], "", "");  //move cur scenario
+                textmanager.ClearText();
+                ReadScenarioParts((int)code[1], code[2].ToString());
                 break;
             case "rpl": //같은 json(시나리오/마을)에서의 이동
                 if ((int)code[idx] == -1) break;                            // escape for ... get out!!!
-                textmanager.EndStoryPart((int)code[1], "", "");
+                textmanager.ClearText();
+                ReadScenarioParts((int)code[1], curmain);
+                //textmanager.EndStoryPart((int)code[1], "", "");
                 break;
             case "dice": //dice roll 
                 RollDice(code); // token을 받을것. 거기서.. 
@@ -235,12 +240,13 @@ public class Textchanger : MonoBehaviour
         return;
     }
 
-    private void Battle(string type, string name, int num, int situ)
+    private void Battle(string jbattle, string root, int num, int situ)
     {
-        File.AppendAllText(mainroute, "#battle " + name + num + '\n');
+
+        //File.AppendAllText(mainroute, "#battle " + name + num + '\n');
         //종류 : 몬스터, 인간형 등등?
         //이름, 숫자. 그리고 시츄는 발각, 기습, 상태이상 등?
-        Debug.Log("JSON[monster] : " + name + "이 " + num + "마리 나왔습니다.");
+        Debug.Log("JSON[monster] : " + jbattle + "이 " + root + "발생.");
         return;
     }
 

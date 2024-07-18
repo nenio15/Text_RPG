@@ -9,22 +9,42 @@ public class DiceDecision : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] private GameObject enemy;
     [SerializeField] private PlayerUiManager playerUiManager;
+    [SerializeField] private SelectionManager selectionManager;
 
 
 
-    //이런저런게 있지만 암튼 이겻고 결정해줘
+    private void Start()
+    {
+        player = GameObject.Find("Player");
+        //임의 세팅
+        enemy = GameObject.Find("Enemy1");
+
+        selectionManager = GameObject.Find("selectpaper").GetComponent<SelectionManager>();
+        //selectionManager.ShowSelection("Action", 0, 1);
+    }
+
+    public void Desicion(string enemy_name)
+    {
+        //이거 무조건 발동이면... 흠... 기획 다시 볼것.
+        InstantStrategy();
+    }
+
+
+    //합 승부
     public void DesicionWinner(string enemy_name)
     {
-        enemy = GameObject.Find(enemy_name);
-        //player = GameObject.Find(player_name);
-        //에네미가 누군데. 플레이어가 누군데.
+        
 
-        string pSkill = "Paper";//player.GetComponent<BattlePlayer>().player.Skill;
-        string eSkill = enemy.GetComponent<EnemyInfo>().enemy.Skill;
+        //player = GameObject.Find(player_name);
+        enemy = GameObject.Find(enemy_name);
+
+        //서로 기술 정의
+        string pSkill = player.GetComponent<CharacterData>().player_info.Skill;
+        string eSkill = enemy.GetComponent<BattleEnemy>().enemy.Skill;
 
         //모종의 방식(다이스로) 승리자를 결정짓는다.
         //그러면 승리판정이랑 각 계수의 혜택을 돌려준다.
-        //if(player is win
+        Debug.Log(eSkill + " vs " + pSkill);
 
         if (pSkill == eSkill)
         {
@@ -40,28 +60,42 @@ public class DiceDecision : MonoBehaviour
         }
         else 
         {
-            //Debug.Log("enemy이김");
             player_win = false;
         }
         
         //둘다 필요?
-        enemy.GetComponent<EnemyInfo>().EndTurn(player_win);
+        enemy.GetComponent<BattleEnemy>().EndTurn(player_win);
         player.GetComponent<BattlePlayer>().EndTurn(player_win);
         playerUiManager.UploadToGame();
+
+
+        //전투 종료 판정이 필요.
+        EndCheck();
     }
 
     public void Press()
     {
         //한턴이라는 개념 동안. 거시기를 한다.
-        player.GetComponent<BattlePlayer>().StartCoroutine("Run");
-        enemy.GetComponent<EnemyInfo>().StartCoroutine("UpdateRun");
+        player.GetComponent<BattlePlayer>().StartCoroutine("UpdateRun");
+        enemy.GetComponent<BattleEnemy>().StartCoroutine("UpdateRun");
 
         //그럴려면?
 
     }
 
-    private void Start()
+    private void EndCheck()
     {
-        enemy = GameObject.Find("Enemy1");
+        //체킹을 enemy imgae rendering의 활성화 여부로.. // collider
+
+        selectionManager.ShowSelection("Action", 0, 1);
+
     }
+
+    private void InstantStrategy()
+    {
+        //enemy.Getcomponent<>.weapon
+        selectionManager.ShowSelection("Club", 0, 2);
+    }
+
+
 }

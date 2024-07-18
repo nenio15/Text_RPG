@@ -6,7 +6,7 @@ using UnityEngine.AI;
 using UnityEngine.UI;
 using UnityEngine.UIElements;
 
-[System.Serializable] //아직 어떤 느낌이 좋을지 모르겠네...
+[System.Serializable]
 public class Enemy
 {
     public int Level = 1;
@@ -16,30 +16,12 @@ public class Enemy
 
     public string Type = "Goblin";
     public string Class = "Warrior";
+    public string Weapon = "Club";
     public string Skill = "Rock";
 }
 
-/*
- * 이걸 한 스크립트에 쓸까 아니면 달리 나눠야할까
- * ※ 하나의 함수에 하나의 기능을 에 위반하지는 않음.
- * 
- * 
- * 1.적 인적사항
- * 2.적 공격 3종류 선택기 + 보여주는거.
-            * 3.적 움직임
- * 4.적이 움직이고 멈추는 트리거
- * 5.적이 플레이어와 가까우면 상호작용하는 트리거
- * 
- * 일단 움직임부터 끝내자구
- * 
- * ㅡ움직임ㅡ
- * 1.아군의 위치와 자신의 위치를 비교
- * 2.그에 맞게 움직일것.
- * 
- */
 
-
-public class EnemyInfo : MonoBehaviour
+public class BattleEnemy : MonoBehaviour
 {
     [SerializeField] private GameObject Player;
     [SerializeField] private GameObject self;
@@ -73,14 +55,18 @@ public class EnemyInfo : MonoBehaviour
 
     private void Start()
     {
+        Player = GameObject.Find("Player").gameObject;
+        self = gameObject;
+        //myInfo = gameObject.gameObject.gameObject;
+        //button[len].GetComponentInChildren<Text>().text = list.ToString();
+
         state = State.Idle;
         tr = GetComponent<Transform>();
         target = Player.transform.position; //갱신도 잇어야함
         //agent.destination = target.transform.position;
 
         //상호작용 첫 수 둡니다
-        enemy.Skill = skills[Random.Range(0, 3)];
-        Debug.Log(enemy.Skill + " : [enemy] is reading...");
+        ReadyNewSkill();
 
         //hp bar text setting
         myTextMeshPro = myInfo.GetComponent<TextMeshPro>();
@@ -101,7 +87,7 @@ public class EnemyInfo : MonoBehaviour
     private void ReadyNewSkill()
     {
         enemy.Skill = skills[Random.Range(0, 3)];
-        //Debug.Log(enemy.Skill + " : [enemy] is reading...");
+        Debug.Log(enemy.Skill + " : [enemy] is reading...");
     }
 
     private void EnemyInteractive()
@@ -109,7 +95,8 @@ public class EnemyInfo : MonoBehaviour
         state = State.Attack;
         //한번만 실행해야하는데... 거까진 알고리즘이 기억이 안난다. 프리즈? 
 
-        GameObject.Find("Desicion").GetComponent<DiceDecision>().DesicionWinner(self.name.ToString()); //흠
+        GameObject.Find("Desicion").GetComponent<DiceDecision>().Desicion(self.name.ToString()); //흠
+        //GameObject.Find("Desicion").GetComponent<DiceDecision>().DesicionWinner(self.name.ToString()); 
         tr.position = new Vector3(-300, 300);
         ReadyNewSkill();
     }
@@ -139,9 +126,8 @@ public class EnemyInfo : MonoBehaviour
             //Debug.Log("he loses");
             enemy.Hp[0] -= 1;
         }
-        else Debug.Log("he wins");
 
-        
+        StopCoroutine("UpdateRun");
         CheckDead();
         //여기다가 죽었는지도 추가 확인. 감소. 디버프. 사망.
     }

@@ -1,0 +1,22 @@
+﻿{
+    "forest_goblin" : {
+        "num" : 1,
+        "condition" : [{
+            "none" : "none"
+        }],
+        "Field" : {
+            "Region" : "forest"
+        },
+        "monsterlist" : ["Goblin"],
+        "monster" : [
+            {
+                "Goblin" : {
+                    "num" : 1,
+                    "level" : 1,
+                    "epic" : "none",
+                    "weapon" : "Club"
+                }
+            }
+    ]
+    }
+}

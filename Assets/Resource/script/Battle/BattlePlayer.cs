@@ -15,6 +15,7 @@ public class BattlePlayer : MonoBehaviour
     private Vector3 target;
 
 
+
     //플레이어는 자신이 rock, scissor, paper를 골라야하는데.... 그건 select를 불러와야해
     //그게 기억이 안나네..
     public void EndTurn(bool win)
@@ -26,10 +27,17 @@ public class BattlePlayer : MonoBehaviour
             playerUiManager.UploadToGame();
         }
         //여기서 hp+-같은거랑 이거저거.. 그러면 물론, 계수를 인수로 받아야겠지?
+
+
+        StopCoroutine("UpdateRun");
     }
 
     void Start()
     {
+        playerUiManager = GameObject.Find("Stat").GetComponent<PlayerUiManager>();
+        characterData = gameObject.GetComponent<CharacterData>();
+
+
         tr = GetComponent<Transform>();
         target = Enemy.transform.position;
         //Debug.Log(characterManager.cur_info.Skill + " this is player skill...");
@@ -40,7 +48,10 @@ public class BattlePlayer : MonoBehaviour
     {
 
     }
-    IEnumerator Run()
+
+    
+
+    IEnumerator UpdateRun()
     {
         while (true) //trigger is you now... hmm
         {

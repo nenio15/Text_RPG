@@ -26,7 +26,7 @@ public class texttest : MonoBehaviour, IPointerClickHandler
     public GameObject[] robj;
 
     private string avoid;
-    Textchanger once = new Textchanger();
+    TextChanger once = new TextChanger();
     //Keyword key = new Keyword();
 
     int current = 0;
