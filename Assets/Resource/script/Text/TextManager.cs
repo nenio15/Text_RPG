@@ -13,7 +13,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     private string m_Message;
     private int current = 0;
     
-    private bool stop_read = false;
+    public bool stop_read = false;
 
     [SerializeField] private string cur_scenario = "main_scenario";
     //[SerializeField] private string cur_subscenario = "Main_1";
@@ -111,6 +111,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
                 return true;
             case "#btl":
                 //선택지한테 말하거나, 디시즌한테 말하거나.
+                current++; //복귀 시 다음 줄 읽기
                 GameObject.Find("Battle").GetComponent<BattleManager>().BattleEntry();
                 return true;
             default:
