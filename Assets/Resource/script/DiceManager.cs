@@ -4,6 +4,25 @@ using UnityEngine;
 
 public class DiceManager
 {
+    private readonly DiceOption diceOption = new DiceOption();
+
+    private void tmp()
+    {
+        float sum = 0;
+
+        foreach(float i in diceOption.muscle)
+        {
+            sum += DiceRoll() * i;
+        }
+
+        Debug.Log(sum);
+    }
+
+
+    private int DiceRoll()
+    {
+        return Random.Range(0, 20);   
+    }
     //대실패 0, 실패 1, 성공 2, 대성공 3
     /*
     public int DiceRoll6(int num)

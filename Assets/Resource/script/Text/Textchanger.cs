@@ -9,6 +9,7 @@ using Newtonsoft.Json.Linq;
 public class TextChanger : MonoBehaviour
 {
     [SerializeField] private TextManager textmanager;
+    [SerializeField] private BattleManager battlemanager;
     ConvertJson convertJson = new ConvertJson();
 
     //임의 설정. 캐릭터 스크립트 필요
@@ -34,11 +35,13 @@ public class TextChanger : MonoBehaviour
         //실제 .txt 키 .json
         mainroute = Application.dataPath + path + "main.txt";
         keyroute = Application.dataPath + path + "main.json";
+
+        battlemanager = FindObjectOfType<BattleManager>();
     }
 
     public int ReadScenarioParts(int move, string jmain)//, string jsub) 없앰 20204-06-20
     {
-        Debug.Log(move + "에서 " + jmain);
+        //Debug.Log(move + "에서 " + jmain);
 
         // 시나리오 이름으로 추적. (폴더명(@Scenario))\파일명\시나리오명
         curmain = jmain;
@@ -242,13 +245,16 @@ public class TextChanger : MonoBehaviour
 
     private void Battle(string jbattle, string root, int num, int situ)
     {
-
+        
         //File.AppendAllText(mainroute, "#battle " + name + num + '\n');
         //종류 : 몬스터, 인간형 등등?
         //이름, 숫자. 그리고 시츄는 발각, 기습, 상태이상 등?
         Debug.Log("JSON[monster] : " + jbattle + "이 " + root + "발생.");
+        battlemanager.BattlePreset(jbattle, root, num, situ); //"goblin", "forest_goblin", 1, 0]},
 
         File.AppendAllText(mainroute, "#btl\n");
+        //여기서 변수를 주어야 읽지.
+
         return;
     }
 

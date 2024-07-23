@@ -99,7 +99,7 @@ public class BattleEnemy : MonoBehaviour
         //battlemanager.Interaction(self.name.ToString()); //흠
         //GameObject.Find("Desicion").GetComponent<DiceDecision>().DesicionWinner(self.name.ToString()); 
         //tr.position = new Vector3(-300, 300);
-        ReadyNewSkill();
+        
     }
 
 
@@ -133,6 +133,8 @@ public class BattleEnemy : MonoBehaviour
 
         //여기다가 죽었는지도 추가 확인. 감소. 디버프. 사망.
         CheckDead();
+
+        ReadyNewSkill();
     }
 
     private void CheckDead()

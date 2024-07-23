@@ -95,6 +95,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01_UGUI.cs" />
     <Compile Include="Assets\Resource\Script\Data\CharacterData.cs" />
+    <Compile Include="Assets\Resource\Script\Data\DiceOption.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\SimpleScript.cs" />
     <Compile Include="Assets\Resource\Script\Scenario\main001.cs" />
     <Compile Include="Assets\Resource\Script\UI\ScrollButton.cs" />

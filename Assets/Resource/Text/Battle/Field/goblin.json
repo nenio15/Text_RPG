@@ -1,5 +1,6 @@
 ﻿{
     "forest_goblin" : {
+        "name" : "for debugging and goblin!",
         "num" : 1,
         "condition" : [{
             "none" : "none"
