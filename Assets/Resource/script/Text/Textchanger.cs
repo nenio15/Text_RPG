@@ -17,19 +17,18 @@ public class TextChanger : MonoBehaviour
     private string space = "숲";
 
     //for #player & path + "\Scenario... \Npc...
-    private Dictionary<string, string> convert_hash = new Dictionary<string, string>(); // .Add(key, Value);
-        //private Dictionary<string, string> connet_path = new Dictionary<string, string>;
+    //private Dictionary<string, string> convert_hash = new Dictionary<string, string>(); // .Add(key, Value);
+
+    //경로 설정
     private string path = @"\Resource\Text\";  //this position is moved so... where..?
     private string mainroute, keyroute;
     private string curmain;
-
 
     JArray key_jarray, sc_key_jarray;
     JObject key_jroot;
 
     [SerializeField] public JObject jbase;
 
-    //시나리오를 진행하는 뼈대 루트 설정
     private void Start()
     {
         //실제 .txt 키 .json
@@ -39,16 +38,13 @@ public class TextChanger : MonoBehaviour
         battlemanager = FindObjectOfType<BattleManager>();
     }
 
-    public int ReadScenarioParts(int move, string jmain)//, string jsub) 없앰 20204-06-20
+    public int ReadScenarioParts(int move, string jmain)
     {
-        //Debug.Log(move + "에서 " + jmain);
-
         // 시나리오 이름으로 추적. (폴더명(@Scenario))\파일명\시나리오명
         curmain = jmain;
-        string scnroute = Application.dataPath + path + @"Scenario\" + curmain + ".json";  //\Resource\Text\Scenario\scenarion.json
+        string scnroute = Application.dataPath + path + @"Scenario\" + curmain + ".json";
         string str = convertJson.MakeJson(scnroute);
         string key_str = convertJson.MakeJson(keyroute);
-
 
         int op_num = 0;
 
@@ -63,42 +59,28 @@ public class TextChanger : MonoBehaviour
         jbase = JObject.Parse(str);
         key_jroot = JObject.Parse(key_str);
 
-        //condition 확인절차. (고민)
-        //어떤 시나리오 리스트를 받을지, 다른 json에 정리시키기.. (scenario selector.cs)
-        //jbase = jroot[jsub]; //해당 시나리오
-
         do
         {
             //Debug.Log("CHANGER : " + move);
             JToken jnow = jbase["scenario"][move];
-            int lnd_cmd = 0; // non 명령어
-            //check state
-            //Debug.Log(jnow["chapter"].ToString() + "\nsynopciys : " + jnow["synopciys"].ToString());
+            //int lnd_cmd = 0; // non 명령어
             foreach (JToken jscript in jnow["script"])
             {
                 JToken jlist = jnow["scriptlist"][op_num++];
-                lnd_cmd = GetOpcode(jlist.ToString(), jscript[jlist.ToString()], 0);
+                //lnd_cmd = GetOpcode(jlist.ToString(), jscript[jlist.ToString()], 0);
+                GetOpcode(jlist.ToString(), jscript[jlist.ToString()], 0);
                 CheckKeys("::opcode here", jscript);
 
-                if (lnd_cmd == 1) return (int)jscript[jlist.ToString()][0]; //상위 명령이 필요한 경우, 복귀 (일단 임의임....... 무슨 상위냐면 rpl관련이라 리셋이 필요
-                //상위에게 요구하는 바는... 스크립트가 종속관계가 맞는가?
-                //대등관계로 서로 정보를 요구하는 형식이 될 순 없는가. 그러면 이 스크립트가 독립을 해야해.
-                //독립성을 띄느냐는... 모델과 뷰 + 컨트롤러의 형식을 띄고 있지. 독립이 가능해. 그러면... 흠
+                //if (lnd_cmd == 1) return (int)jscript[jlist.ToString()][0]; //상위 명령이 필요한 경우, 복귀 (일단 임의임....... 무슨 상위냐면 rpl관련이라 리셋이 필요
             }
 
-        } while (false); //그냥 둠. 나중에 조건 달 수도 있어서
-
+        } while (false);
 
         //Debug.Log("readParts end one");
         return 0;
     }
 
-
-    //2024-01-04 | opocde도 따로 빼자 하나의 함수에 하나의 기능을.
-
-    //mainroute의 초기화 위치 땜 public이 불가함..?
-    //get scripts ( { } per 1 ) -> "op" : ["codes", "res1", "res2" ...]
-    //아예 하위 스크립트로 빼버릴 것
+    //아예 하위 스크립트로 빼버릴 것. 내지는 하위 함수를 하위 스크립트로
     public int GetOpcode(string op, JToken code, int idx)  // idx == 1 -> effect code
     {
         //Debug.Log("GETcode : " + op + " & "+ code);
