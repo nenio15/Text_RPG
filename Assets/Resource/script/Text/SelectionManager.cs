@@ -66,18 +66,7 @@ public class SelectionManager : MonoBehaviour
                 Debug.Log("SELECT : " + option);
 
 
-                //리스트에 있는 만큼의 버튼을 활성화, 나열
-                foreach (JToken list in jcur["list"])
-                {
-                    // list의 수에 따른 위치 세팅 변경 ( 그냥 프리셋을 하나 만드는게 편할듯)
-                    //RectTransform rect = button[len].GetComponent<RectTransform>();
-                    //rect.anchoredPosition = new Vector2(pos[len % 2], (len/2) * -200);
-
-                    //버튼 텍스트와 활성화
-                    button[len].GetComponentInChildren<Text>().text = list.ToString();
-                    atb = list.ToString();
-                    button[len++].SetActive(true);
-                }
+                BtnActive(jcur);
 
                 //destination = new Vector3(0.0f, -800.0f, -4.0f);
                 //StartCoroutine(Moving(gameObject));
@@ -150,7 +139,7 @@ public class SelectionManager : MonoBehaviour
 
                 judgement.DesicionWinner(battleManager.player, battleManager.adjacent_enemy, t.text);
 
-                return;
+                break;
             default:
 
                 break;
@@ -203,8 +192,10 @@ public class SelectionManager : MonoBehaviour
     {
         foreach (JToken list in jcur["list"])
         {
+            BtnData tmp = button[len].GetComponent<BtnData>();
+            tmp.Active(list.ToString(), "");
 
-            button[len].GetComponentInChildren<Text>().text = list.ToString();
+            atb = list.ToString();
             button[len++].SetActive(true);
         }
     }

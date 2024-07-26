@@ -22,6 +22,7 @@ public class DesicionButton : MonoBehaviour
                 battleManager.TurnStart();
                 break;
             case "scenario":
+
                 break;
             default:
                 break;

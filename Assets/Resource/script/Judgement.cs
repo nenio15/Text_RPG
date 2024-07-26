@@ -36,11 +36,11 @@ public class Judgement : MonoBehaviour
 
         //모종의 방식(다이스로) 승리자를 결정짓는다.
         //그러면 승리판정이랑 각 계수의 혜택을 돌려준다.
-        Debug.Log(eSkill + " vs " + pSkill);
+        //Debug.Log(eSkill + " vs " + pSkill);
 
         if (pSkill == eSkill)
         {
-            Debug.Log("비김");
+            //Debug.Log("비김");
             //비긴건 뭐가 없는데...
             //변수형을 string이나 enum으로 바꿀것. (-1 0 1)
         }

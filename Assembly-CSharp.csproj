@@ -72,6 +72,7 @@
     <Compile Include="Assets\Resource\Script\Text\Keyword.cs" />
     <Compile Include="Assets\Resource\Script\Scene\MoveStartScene.cs" />
     <Compile Include="Assets\Resource\Script\start_game.cs" />
+    <Compile Include="Assets\Resource\Script\Data\BtnData.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
     <Compile Include="Assets\Resource\Script\Battle\BattleManager.cs" />
@@ -89,6 +90,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\Resource\Script\Town\townEntry.cs" />
+    <Compile Include="Assets\Resource\Script\Data\Item\ItemData.cs" />
     <Compile Include="Assets\Resource\Script\Scene\StartScene_Event.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
