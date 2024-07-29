@@ -18,11 +18,17 @@ public class BtnData : MonoBehaviour
     public bool chosen = false;
 
 
-    public void Active(string display, string dice)
+    public void Active(string display, string dicetype = "", int diff = 0)
     {
         displayText.text = display;
-        levelDescriptionText.text = dice;
-        if (dice != "") levelDescriptionText.text += "\n" + difficulty;
+        levelDescriptionText.text = dicetype;
+        difficulty = diff;
+        if (dicetype != null)
+        {
+            //여기서 난이도 조절 함수 추가.
+            //difficulty -= LevelDown();
+            levelDescriptionText.text += "\n" + difficulty;
+        }
 
     }
 

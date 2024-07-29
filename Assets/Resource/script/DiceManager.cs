@@ -18,6 +18,16 @@ public class DiceManager
         Debug.Log(sum);
     }
 
+    public string RollingDice(int level, int dice = 20)
+    {
+        int result = Random.Range(0, dice);
+        Debug.Log("[Roll Dice] : " + result);
+        //대충 주사위 돌아가는 뷰(애니메이션)
+
+        if(result >= level) return "succ";
+        else return "fail";
+    }
+
 
     private int DiceRoll()
     {

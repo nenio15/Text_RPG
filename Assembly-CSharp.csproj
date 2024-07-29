@@ -108,6 +108,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
     <Compile Include="Assets\Resource\Script\Text\TouchEvent.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
+    <Compile Include="Assets\Resource\Script\Text\Textchanger.cs" />
     <Compile Include="Assets\Resource\Script\UI\ButtonManager.cs" />
     <Compile Include="Assets\Resource\Script\Battle\BattleEnemy.cs" />
     <Compile Include="Assets\Resource\Script\UI\DesicionButton.cs" />
@@ -116,7 +117,6 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_FrameRateCounter.cs" />
     <Compile Include="Assets\Resource\Script\Return.cs" />
-    <Compile Include="Assets\Resource\Script\Text\TextChanger.cs" />
     <Compile Include="Assets\Resource\Script\Data\ConvertJson.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextConsoleSimulator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TeleType.cs" />

@@ -18,6 +18,8 @@ public class SelectionManager : MonoBehaviour
     [SerializeField] private BattleManager battleManager;
     public GameObject[] button;
     [SerializeField] private int len = 0;
+
+    private DiceManager diceManager;
     
 
     private Vector3 destination = new Vector3(0.0f, -800.0f, -4.0f);
@@ -47,6 +49,7 @@ public class SelectionManager : MonoBehaviour
         //player = GameObject.Find("Player");
         judgement = FindObjectOfType<Judgement>();
         battleManager = GameObject.FindObjectOfType<BattleManager>();
+        diceManager = new DiceManager();
 
         mainroute = Application.dataPath + @"\Resource\Text\main.txt";
     }
@@ -101,24 +104,37 @@ public class SelectionManager : MonoBehaviour
     }
     
     //btn 클릭시 상호작용
-    public void OnClick(Text t)
+    public void OnClick(GameObject btn)
     {
+        BtnData btnData = btn.GetComponent<BtnData>();
+
         switch (state)
         {
             case State.Scenario:
-                Debug.Log("CLICK_TEXT[Scenario] : " + t.text);
-                JToken jkey = jcur[t.text];
+                Debug.Log("CLICK_TEXT[Scenario] : " + btnData.displayText.text);
+                JToken jkey = jcur[btnData.displayText.text]["effect"];
+                string result;
 
-                // 복수의 효과 처리 -> 따로 함수 처리
-                foreach (JToken code in jkey["effect"])
+                //if (btnData.diceType != "") DiceManager(); 대충 다이스 처리를 가자구요..
+                /* 1.roll dice. 
+                 * 2.그리고 결과값 반환을 받는다. 
+                 * 3.성공 실패를 debug로 일단 보여준다. 
+                 * 4.결과값의 effect를 읽어낸다.(아래 함수)
+                 */
+                // 다이스롤 처리
+                if (btnData.diceType != "")
+                {
+                    result = diceManager.RollingDice(btnData.difficulty);
+                    jkey = jcur[btnData.displayText.text][result];
+                }
+
+                // 효과들 처리
+                foreach (JToken code in jkey)
                 {
                     Debug.Log("CLICK_code : " + code.ToString());
-                    string decode = code[0].ToString();
-
-                    //dice는 성공 실패 여부가 포함되어 있어 따로 처리를 한다.(나중에 json변경... 2024-01-29)
-                    if (decode == "dice") textChanger.GetOpcode(code[0].ToString(), jkey, 1);
-                    else textChanger.GetOpcode(code[0].ToString(), code, 1);
-
+                    textChanger.GetOpcode(code[0].ToString(), code, 1);
+                    //string decode = code[0].ToString();  //dice는 없다.
+                    //if (decode == "dice") textChanger.GetOpcode(code[0].ToString(), jkey, 1);
                 }
 
                 //이벤트 삽입 할거야?
@@ -128,16 +144,15 @@ public class SelectionManager : MonoBehaviour
                 textManager.ReadStory(true);
                 break;
             case State.Battle:
-                //Debug.Log("CLICK_TEXT[Battle] : " + t.text);
                 //클릭한 버튼 내용을 player_info에 반영
-                player.GetComponent<CharacterData>().UpdateData(0, t.text);
+                player.GetComponent<CharacterData>().UpdateData(0, btnData.displayText.text);
                 break;
             case State.Strategy:
-                Debug.Log("CLICK_TEXT[STATEGY]" + t.text);
+                Debug.Log("CLICK_TEXT[STATEGY]" + btnData.displayText.text);
                 //순서가 꼬여서 먼저 비활성화?
                 BtnUnActive();
 
-                judgement.DesicionWinner(battleManager.player, battleManager.adjacent_enemy, t.text);
+                judgement.DesicionWinner(battleManager.player, battleManager.adjacent_enemy, btnData.displayText.text);
 
                 break;
             default:
@@ -193,9 +208,17 @@ public class SelectionManager : MonoBehaviour
         foreach (JToken list in jcur["list"])
         {
             BtnData tmp = button[len].GetComponent<BtnData>();
-            tmp.Active(list.ToString(), "");
+            int idx = 0;
 
-            atb = list.ToString();
+            //dtn 활성화는 key의 경우와 전투의 경우에 한함. 때문에 idx를 굳이 변경할 필요는... 없을듯?
+            if (jcur[list.ToString()]["effect"][0][idx].ToString() == "dice")
+            {
+                JToken jtmp = jcur[list.ToString()]["effect"][0];
+                tmp.Active(list.ToString(), jtmp[++idx].ToString(), (int)jtmp[++idx]);
+            }
+            else tmp.Active(list.ToString());
+
+            atb = list.ToString(); //나중에 지울것. 디버깅용
             button[len++].SetActive(true);
         }
     }

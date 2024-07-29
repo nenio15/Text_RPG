@@ -83,25 +83,25 @@ public class TextChanger : MonoBehaviour
     //아예 하위 스크립트로 빼버릴 것. 내지는 하위 함수를 하위 스크립트로
     public int GetOpcode(string op, JToken code, int idx)  // idx == 1 -> effect code
     {
-        //Debug.Log("GETcode : " + op + " & "+ code);
+        Debug.Log("GETcode : " + op + " & "+ code);
         switch (op)
         {
             
-            case "jmp": //다른 시나리오, 스크립트로 이동 (그러므로 if문 내용은 안 쓸듯... 2024-01-29
+            case "jmp": //다른 시나리오로 이동  // jmp/0/plain/Plain | 0/plain/Plain
                 Debug.Log("REQUEST[event] : occuring?");            //if ((int)code[1] != 0) textmanager.EndStoryPart((int)code[1], "", "");  //move cur scenario
                 textmanager.ClearText();
-                ReadScenarioParts((int)code[1], code[2].ToString());
+                ReadScenarioParts((int)code[++idx], code[++idx].ToString());
                 break;
             case "rpl": //같은 json(시나리오/마을)에서의 이동
                 if ((int)code[idx] == -1) break;                            // escape for ... get out!!!
                 textmanager.ClearText();
-                ReadScenarioParts((int)code[1], curmain);
+                ReadScenarioParts((int)code[idx], curmain);
                 //textmanager.EndStoryPart((int)code[1], "", "");
                 break;
-            case "dice": //dice roll 
-                RollDice(code); // token을 받을것. 거기서.. 
+            //case "dice": //dice roll 
+            //    RollDice(code); // token을 받을것. 거기서.. 
                 //Debug.Log("OPCODE[dice] : " + op + "입니다 " + code[idx++] + " " + code[idx++] + " " + code[idx++] + " " + code[idx++]);
-                break;
+            //    break;
             case "mov": //call region. area. moment //버려진 명령어. 2024-07-09. ※폐기할것.
                 Region(code[idx++].ToString(), (int)code[idx++], (int)code[idx++]);   //Region(code[op][i++].ToString(), (int)code[op][i++], (int)code[op][i++]);
                 break;
@@ -171,8 +171,8 @@ public class TextChanger : MonoBehaviour
             if (list[0].ToString() == "dice")
             {
                 stat = list[1].ToString();
-                dice_type = (int)list[2];
-                dice_up = (int)list[3];
+                dice_type = (int)list[3]; //방식이 달ㄹ라요...
+                dice_up = (int)list[2];
             }
 
         int roll_result = Random.Range(0, dice_type);
@@ -184,7 +184,9 @@ public class TextChanger : MonoBehaviour
         Debug.Log("DICE_RESULT : " + result);
 
         foreach (JToken code in info[result])
+        {
             GetOpcode(code[0].ToString(), code, 1);
+        }
 
     }
 

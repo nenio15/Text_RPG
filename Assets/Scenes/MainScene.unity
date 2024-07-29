@@ -6155,14 +6155,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Button
       objectReference: {fileID: 0}
-    - target: {fileID: 1333361151649412259, guid: dbd3978176913d74899f46b78ace04ab, type: 3}
-      propertyPath: index
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1333361151649412259, guid: dbd3978176913d74899f46b78ace04ab, type: 3}
-      propertyPath: chosen
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5033201334973760652, guid: dbd3978176913d74899f46b78ace04ab, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -6247,10 +6239,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 1311297210}
-    - target: {fileID: 5755476087587165638, guid: dbd3978176913d74899f46b78ace04ab, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: OnClick
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
