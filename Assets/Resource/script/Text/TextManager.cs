@@ -11,7 +11,8 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     public float m_Speed = 0.2f;
     private int idx = 0;
     private string m_Message;
-    private int current = 0;
+    
+    [SerializeField] private int current = 0;
     
     public bool stop_read = false;
 
@@ -44,8 +45,8 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     [SerializeField] private TextChanger textchanger;
     private EventInformer eventInformer = new EventInformer();
 
-    float typing_speed = 0.2f;
-    string[] contents;
+    private float typing_speed = 0.2f;
+    [SerializeField] private string[] contents;
 
     private void Start()
     {
@@ -58,8 +59,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         //start scene에서 시나리오 받아오기
         cur_scenario = PlayerPrefs.GetString("Cur_scenario");
 
-
-
+        //읽기 시작
         textchanger.ReadScenarioParts(idx++, cur_scenario);//, cur_subscenario);    //json
         contents = System.IO.File.ReadAllLines(real_main);
     }
@@ -70,11 +70,16 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         // 읽는 것을 중단.
         if (stop_read) return;
 
+        //null 참조 방지 임시 코드
+        if (contents.Length <= current) current = contents.Length - 1;
+
         // 텍스트가 출력되는 상황이 아니라면.
         if (!reading)
         {
             //현재장 다 읽음                                      (#포함)
             //if (contents.Length == current) EndStoryPart(++page, "", "");
+
+            
 
             //#(중단점) 조우
             if (contents[current][0] == '#')
@@ -94,19 +99,27 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         //# 있는 문장
         StopCoroutine("Showing");
 
-
         // 현재 읽는 페이지가 끝났음
         switch (contents[current])
         {
+            case "#jmp":
+            case "#rpl":
+                textchanger.ReadScenarioParts(textchanger.pre_move, textchanger.pre_main);
+                ClearText();
+                return true;
             case "#key":
                 //선택지를 보여줘 //Debug.Log("READING[key] : stop and call selection");
                 Selection.GetComponent<SelectionManager>().ShowSelection("key", keyi++, 0);
-
+                current++;
+                /*
                 if (contents[current].Contains("sc"))
                 {
                     Debug.Log("READING[sc_key] : ...");
                     sc_keyi++;
                 }
+                */
+                //내용물 변경 유무
+                contents = System.IO.File.ReadAllLines(real_main);
                 //stop_read = true;
                 return true;
             case "#btl":
@@ -150,7 +163,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     //main 읽어내기
     public void ReadStory(bool changed)
     {
-        // 무시한다의 선택지가 changed도 무시함 ㄷㄷㄷ (다시 확인할것) // 뭔 코드야..
+        //contents의 배열이 확정되어버리나? 그럼 안되는데..흠.
         if (changed)
         {
             contents = System.IO.File.ReadAllLines(real_main);
@@ -161,7 +174,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         if (!reading)   //normal reading
         {
             string cur_text = "";
-            while (contents[current][0] != '#')
+            while (!contents[current].Contains('#'))
                 cur_text += STyping(contents[current++] + '\n');
             cur_text += '\n';
 
@@ -175,6 +188,14 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         else            // fast reading
             typing_speed = 0.0f;
 
+    }
+
+    //외부에서 읽기 재시작
+    public void Reread()
+    {
+        reading = false;
+        stop_read = false;
+        contents = System.IO.File.ReadAllLines(real_main);
     }
 
     

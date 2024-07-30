@@ -17,7 +17,7 @@ public class DiceManager
 
         Debug.Log(sum);
     }
-
+    
     public string RollingDice(int level, int dice = 20)
     {
         int result = Random.Range(0, dice);

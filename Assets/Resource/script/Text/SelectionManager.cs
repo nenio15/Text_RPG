@@ -115,12 +115,6 @@ public class SelectionManager : MonoBehaviour
                 JToken jkey = jcur[btnData.displayText.text]["effect"];
                 string result;
 
-                //if (btnData.diceType != "") DiceManager(); 대충 다이스 처리를 가자구요..
-                /* 1.roll dice. 
-                 * 2.그리고 결과값 반환을 받는다. 
-                 * 3.성공 실패를 debug로 일단 보여준다. 
-                 * 4.결과값의 effect를 읽어낸다.(아래 함수)
-                 */
                 // 다이스롤 처리
                 if (btnData.diceType != "")
                 {
@@ -131,17 +125,16 @@ public class SelectionManager : MonoBehaviour
                 // 효과들 처리
                 foreach (JToken code in jkey)
                 {
-                    Debug.Log("CLICK_code : " + code.ToString());
+                    //Debug.Log("CLICK_code : " + code.ToString());
                     textChanger.GetOpcode(code[0].ToString(), code, 1);
-                    //string decode = code[0].ToString();  //dice는 없다.
-                    //if (decode == "dice") textChanger.GetOpcode(code[0].ToString(), jkey, 1);
                 }
 
                 //이벤트 삽입 할거야?
                 //EventInformar.CheckAll();
 
                 //다음 문장 출력
-                textManager.ReadStory(true);
+                //textManager.ReadStory(true);
+                textManager.Reread();
                 break;
             case State.Battle:
                 //클릭한 버튼 내용을 player_info에 반영

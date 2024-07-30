@@ -24,6 +24,10 @@ public class TextChanger : MonoBehaviour
     private string mainroute, keyroute;
     private string curmain;
 
+    //미리 갈 경로 설정
+    public string pre_main;
+    public int pre_move;
+
     JArray key_jarray, sc_key_jarray;
     JObject key_jroot;
 
@@ -63,15 +67,12 @@ public class TextChanger : MonoBehaviour
         {
             //Debug.Log("CHANGER : " + move);
             JToken jnow = jbase["scenario"][move];
-            //int lnd_cmd = 0; // non 명령어
-            foreach (JToken jscript in jnow["script"])
+            foreach (JToken jscript in jnow["script"]) //json 시나리오의 양상을 따라간다.
             {
+                //정해진 code list를 읽고, key를 읽는다.
                 JToken jlist = jnow["scriptlist"][op_num++];
-                //lnd_cmd = GetOpcode(jlist.ToString(), jscript[jlist.ToString()], 0);
-                GetOpcode(jlist.ToString(), jscript[jlist.ToString()], 0);
+                GetOpcode(jlist.ToString(), jscript[jlist.ToString()], 0); 
                 CheckKeys("::opcode here", jscript);
-
-                //if (lnd_cmd == 1) return (int)jscript[jlist.ToString()][0]; //상위 명령이 필요한 경우, 복귀 (일단 임의임....... 무슨 상위냐면 rpl관련이라 리셋이 필요
             }
 
         } while (false);
@@ -83,25 +84,29 @@ public class TextChanger : MonoBehaviour
     //아예 하위 스크립트로 빼버릴 것. 내지는 하위 함수를 하위 스크립트로
     public int GetOpcode(string op, JToken code, int idx)  // idx == 1 -> effect code
     {
-        Debug.Log("GETcode : " + op + " & "+ code);
+        //Debug.Log("GETcode : " + op + " & "+ code);
         switch (op)
         {
-            
             case "jmp": //다른 시나리오로 이동  // jmp/0/plain/Plain | 0/plain/Plain
-                Debug.Log("REQUEST[event] : occuring?");            //if ((int)code[1] != 0) textmanager.EndStoryPart((int)code[1], "", "");  //move cur scenario
-                textmanager.ClearText();
-                ReadScenarioParts((int)code[++idx], code[++idx].ToString());
-                break;
             case "rpl": //같은 json(시나리오/마을)에서의 이동
-                if ((int)code[idx] == -1) break;                            // escape for ... get out!!!
-                textmanager.ClearText();
-                ReadScenarioParts((int)code[idx], curmain);
-                //textmanager.EndStoryPart((int)code[1], "", "");
+                if ((int)code[idx] == -1) break; // 필요한지 ㅁ?ㄹ
+                pre_move = (int)code[idx++];
+                pre_main = (op == "rpl") ? curmain : code[idx].ToString();
+
+                File.AppendAllText(mainroute, '#' + op + '\n');
                 break;
-            //case "dice": //dice roll 
-            //    RollDice(code); // token을 받을것. 거기서.. 
-                //Debug.Log("OPCODE[dice] : " + op + "입니다 " + code[idx++] + " " + code[idx++] + " " + code[idx++] + " " + code[idx++]);
-            //    break;
+            /*
+            textmanager.ClearText();
+            ReadScenarioParts((int)code[++idx], code[++idx].ToString());  // "jmp" | 0, "plain", "Plain"
+            break;
+
+            if ((int)code[idx] == -1) break;                            // escape for ... get out!!!
+            Debug.Log("rpl : " +  code[idx]);
+            textmanager.ClearText();
+            ReadScenarioParts((int)code[idx], curmain);                 // "rpl" | 1
+            //textmanager.EndStoryPart((int)code[1], "", "");
+            break;
+            */
             case "mov": //call region. area. moment //버려진 명령어. 2024-07-09. ※폐기할것.
                 Region(code[idx++].ToString(), (int)code[idx++], (int)code[idx++]);   //Region(code[op][i++].ToString(), (int)code[op][i++], (int)code[op][i++]);
                 break;
@@ -234,10 +239,12 @@ public class TextChanger : MonoBehaviour
         //종류 : 몬스터, 인간형 등등?
         //이름, 숫자. 그리고 시츄는 발각, 기습, 상태이상 등?
         Debug.Log("JSON[monster] : " + jbattle + "이 " + root + "발생.");
+
+        //배틀 미리 세팅
         battlemanager.BattlePreset(jbattle, root, num, situ); //"goblin", "forest_goblin", 1, 0]},
 
+        //TextManager가 읽으면 배틀 진입
         File.AppendAllText(mainroute, "#btl\n");
-        //여기서 변수를 주어야 읽지.
 
         return;
     }

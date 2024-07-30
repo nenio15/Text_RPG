@@ -20,10 +20,16 @@ public class BtnData : MonoBehaviour
 
     public void Active(string display, string dicetype = "", int diff = 0)
     {
+        //내부 데이터 변경
+        diceType = dicetype;
+        difficulty = diff;
+
+        //뷰 변경
         displayText.text = display;
         levelDescriptionText.text = dicetype;
-        difficulty = diff;
-        if (dicetype != null)
+
+        //다이스 있을시..
+        if (dicetype != "")
         {
             //여기서 난이도 조절 함수 추가.
             //difficulty -= LevelDown();
