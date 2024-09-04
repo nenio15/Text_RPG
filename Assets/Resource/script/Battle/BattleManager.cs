@@ -24,7 +24,7 @@ public class BattleManager : MonoBehaviour
 
 
     [SerializeField] private GameObject battleFieldView;
-    private GameObject scrollView;
+    [SerializeField] private GameObject scrollView;
     [SerializeField] private SelectionManager selectionManager;
     [SerializeField] private PlayerUiManager playerUiManager;
     private Judgement judgement;
@@ -49,7 +49,7 @@ public class BattleManager : MonoBehaviour
         proute = Application.dataPath + path + "Player.json";
         //battlefieldview = GameObject.Find("BattleField");
         //Debug.Log(battleFieldView.name);
-        scrollView = GameObject.Find("Scroll View");
+        //scrollView = GameObject.Find("Scroll View");
         selectionManager = FindObjectOfType<SelectionManager>();
         judgement = FindObjectOfType<Judgement>();
         playerUiManager = FindObjectOfType<PlayerUiManager>();

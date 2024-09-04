@@ -1,0 +1,40 @@
+﻿{
+  "set" : {
+    "background" : "goblin_forest_event1.png",
+    "camera" : {
+      "pos" : [0, 0],
+      "script" : "non move ... 이런 느낌. 여기서 프리셋적인 동작을 시네마틱 지정.?"
+    },
+    "decoration" : [
+      {
+        "name" : "grass1",
+        "pos" : [100, 20]
+    },
+    {
+      "name" : "grass2",
+      "pos" : [200, -10]
+    }
+  ],
+  "obstacle" : [
+    {
+      "name" : "orc_tree1",
+      "pos" : [0, 40]
+    }
+  ],
+  "charater" : [
+    {
+      "type" : "enemy",
+      "name" : "goblin1",
+      "state" : "awake",
+      "pos" : [50, 100]
+    },
+    {
+      "type" : "player",
+      "name" : "player",
+      "pos" : [0, 0]
+    }
+  ]
+
+  }
+
+}

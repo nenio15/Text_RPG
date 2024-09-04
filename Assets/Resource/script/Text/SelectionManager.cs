@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using System.ComponentModel;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine.Timeline;
+using System.Globalization;
 
 public class SelectionManager : MonoBehaviour
 {
@@ -44,6 +45,7 @@ public class SelectionManager : MonoBehaviour
 
     private void Start()
     {
+        //이거 싹다 지정으로 바꿀것 2024-07-30
         textManager = FindObjectOfType<TextManager>();
         textChanger = GameObject.FindObjectOfType<TextChanger>();
         //player = GameObject.Find("Player");
@@ -54,12 +56,13 @@ public class SelectionManager : MonoBehaviour
         mainroute = Application.dataPath + @"\Resource\Text\main.txt";
     }
 
-    //셀렉션 나열
+    //선택지 나열. 각 상황에 따른 다른 지점 참조
     public void ShowSelection(string option, int idx, int c_state)
     {
 
         switch (c_state)
         {
+            //시나리오인 경우
             case (int)State.Scenario:
                 state = State.Scenario;
                 jroute = Application.dataPath + @"\Resource\Text\main.json";
@@ -69,11 +72,11 @@ public class SelectionManager : MonoBehaviour
                 Debug.Log("SELECT : " + option);
 
 
-                BtnActive(jcur);
-
                 //destination = new Vector3(0.0f, -800.0f, -4.0f);
                 //StartCoroutine(Moving(gameObject));
-                break;
+                BtnScenarioActive(jcur);
+                return;
+            //전투의 경우.
             case (int)State.Battle:
                 state = State.Battle;
                 player = GameObject.Find("Player");
@@ -83,9 +86,8 @@ public class SelectionManager : MonoBehaviour
                 jroot = JObject.Parse(str);
                 jcur = jroot[option];
 
-                BtnActive(jcur);
-
-                break;
+                BtnBattleActive(jcur);
+                return;
             case (int)State.Strategy:
                 state = State.Strategy;
                 Debug.Log("INSTANT STRATEGY");
@@ -94,13 +96,9 @@ public class SelectionManager : MonoBehaviour
                 jroot = JObject.Parse(str);
                 jcur = jroot[option];
 
-                BtnActive(jcur);
-
-                break;
-
+                BtnBattleActive(jcur);
+                return;
         }
-
-
     }
     
     //btn 클릭시 상호작용
@@ -111,15 +109,15 @@ public class SelectionManager : MonoBehaviour
         switch (state)
         {
             case State.Scenario:
-                Debug.Log("CLICK_TEXT[Scenario] : " + btnData.displayText.text);
-                JToken jkey = jcur[btnData.displayText.text]["effect"];
+                Debug.Log("CLICK_TEXT[Scenario] : " + btnData.displayDescription);
+                JToken jkey = jcur[btnData.displayDescription]["effect"];
                 string result;
 
                 // 다이스롤 처리
                 if (btnData.diceType != "")
                 {
                     result = diceManager.RollingDice(btnData.difficulty);
-                    jkey = jcur[btnData.displayText.text][result];
+                    jkey = jcur[btnData.displayDescription][result];
                 }
 
                 // 효과들 처리
@@ -147,7 +145,7 @@ public class SelectionManager : MonoBehaviour
 
                 judgement.DesicionWinner(battleManager.player, battleManager.adjacent_enemy, btnData.displayText.text);
 
-                break;
+                return;
             default:
 
                 break;
@@ -196,28 +194,42 @@ public class SelectionManager : MonoBehaviour
     }
 
     //버튼 텍스트와 활성화
-    public void BtnActive(JToken jcur)
+    private void BtnScenarioActive(JToken jcur)
     {
-        foreach (JToken list in jcur["list"])
+        foreach (string list in jcur["list"]) // string이 형변환 괜찮나?
         {
-            BtnData tmp = button[len].GetComponent<BtnData>();
             int idx = 0;
+            BtnData tmp = button[len].GetComponent<BtnData>();
 
-            //dtn 활성화는 key의 경우와 전투의 경우에 한함. 때문에 idx를 굳이 변경할 필요는... 없을듯?
-            if (jcur[list.ToString()]["effect"][0][idx].ToString() == "dice")
-            {
-                JToken jtmp = jcur[list.ToString()]["effect"][0];
-                tmp.Active(list.ToString(), jtmp[++idx].ToString(), (int)jtmp[++idx]);
-            }
-            else tmp.Active(list.ToString());
+            //effect의 내용물이 없는 경우, 에러 반환
+            if (jcur[list]["effect"] == null) { Debug.LogError("[ERROR][JSON] : effect contain non contents"); return; }
+            JToken jtmp = jcur[list]["effect"][0];
 
-            atb = list.ToString(); //나중에 지울것. 디버깅용
+            //dice가 있는 경우
+            if (jtmp[idx].ToString().Equals("dice")) tmp.Active(list, jtmp[++idx].ToString(), (int)jtmp[++idx]);
+            else tmp.Active(list);
+
+            //버튼 뷰 활성화
             button[len++].SetActive(true);
         }
     }
 
+    //전투 버튼 활성화
+    private void BtnBattleActive(JToken jcur)
+    {
+        if (jcur["list"] == null) { Debug.LogError("[ERROR][JSON] : battle action has no contents"); return; }
+        
+        foreach (string list in jcur["list"])
+        {
+            BtnData tmp = button[len].GetComponent<BtnData>();
+            tmp.Active(list);
+            button[len++].SetActive(true);
+        }
+    }
+
+
     //버튼 비활성화
-    public void BtnUnActive()
+    private void BtnUnActive()
     {
         for (; len > 0; len--) button[len - 1].SetActive(false);
     }

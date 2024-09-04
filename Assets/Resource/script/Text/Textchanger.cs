@@ -84,6 +84,44 @@ public class TextChanger : MonoBehaviour
     //아예 하위 스크립트로 빼버릴 것. 내지는 하위 함수를 하위 스크립트로
     public int GetOpcode(string op, JToken code, int idx)  // idx == 1 -> effect code
     {
+        //나중에... 바꿀것.
+        /*
+         *  //... 이거를 사전해석시켜서 생기는 문제가 많은데(rpl, sound, img, move, condia)... 그냥 그때그때 읽는걸로 해버려 그냥?
+         *  //그러면 위의 ReadScenarioParts도 변경해서. page넘길때마다 실행되도록 바꿔야함. 추가로 값도 이리저리. 함수를 하나더 만들어야함.
+         *  
+         *  //이거... 하위 스크립트로 빼자 그냥.. 그게 났겠다.
+         * foreach (JProperty opcodes in cur_script){ 
+         *  switch(opcodes.Name)
+         *  {
+         *      case "rpl": //이동... 이것도 애매한게 발동 시점이.. key의 effect에 있는게 아닌 이상 코드가 꼬여.... 이것도 고민해봐야겠네.
+         *      
+         *      case "dia": //본문
+         *      
+         *      case "sound": //소리효과 재생 (옵션 있)
+         *      
+         *      case "img": //삽화추가
+         *      
+         *      case "move": //맵 상 이동. (이걸 여기 넣는게 맞겠지... 다른 조건에서 집어넣으려면 제약상황이 많아져. 결국 json에 넣는거는 필연이고.
+         *      
+         *      case "key": //선택지 key 추가
+         *      
+         *      case "condia": //조건부 대화문. 여기서... 다이스 굴리는 형식으로, 그거 이펙트 따로 빼고, 
+         *  
+         *      //case "wait": //흠좀무.. 필요한 기능은 맞지. 그러면 이 코드 자체를 느리게 해야할텐데. 그게 구현이 쉽냐의 문제. 나중에 구현할것.
+         * 
+         *      case "btl": //배틀 소환
+         *      
+         *      //case "npc": //rpl과 같은? 대화로 들어가기.. 나중에 구현
+         *      
+         *      case "quest": //퀘스트 진행도 내지는 획득 류
+         *      
+         *      case "value": //player hp나 mp, exp등의 값을 추가, 제거하는 레벨. + 아이템, 서사 획득.
+         *      
+         *  }
+         * }
+         */
+
+
         //Debug.Log("GETcode : " + op + " & "+ code);
         switch (op)
         {
@@ -95,34 +133,20 @@ public class TextChanger : MonoBehaviour
 
                 File.AppendAllText(mainroute, '#' + op + '\n');
                 break;
-            /*
-            textmanager.ClearText();
-            ReadScenarioParts((int)code[++idx], code[++idx].ToString());  // "jmp" | 0, "plain", "Plain"
-            break;
-
-            if ((int)code[idx] == -1) break;                            // escape for ... get out!!!
-            Debug.Log("rpl : " +  code[idx]);
-            textmanager.ClearText();
-            ReadScenarioParts((int)code[idx], curmain);                 // "rpl" | 1
-            //textmanager.EndStoryPart((int)code[1], "", "");
-            break;
-            */
-            case "mov": //call region. area. moment //버려진 명령어. 2024-07-09. ※폐기할것.
-                Region(code[idx++].ToString(), (int)code[idx++], (int)code[idx++]);   //Region(code[op][i++].ToString(), (int)code[op][i++], (int)code[op][i++]);
-                break;
-            case "dia": //시나리오 show
-                if (idx == 1) // effect : [ "dia", [ [1], [2] ] ]   // [1]은 2차원 배열이라 할 수 있겠지..
-                    foreach (JToken jdes in code[1])
+            case "dia": //시나리오 show // effect : [ "dia", [ [1], [2] ] ]   // [1]은 2차원 배열이라 할 수 있겠지..
+                if (idx == 1) foreach (JToken jdes in code[1]) 
                         File.AppendAllText(mainroute, Setstring(jdes.ToString()) + '\n');
-                else
-                    foreach (JToken jdes in code)
+                else foreach (JToken jdes in code) 
                         File.AppendAllText(mainroute, Setstring(jdes.ToString()) + '\n');  //System.IO.
-                break;
-            case "npc": //뼈대만 남은 코드..
-                NpcCall(code[idx++].ToString(), code[idx++].ToString(), code[idx++].ToString());
                 break;
             case "btl":
                 Battle(code[idx++].ToString(), code[idx++].ToString(), (int)code[idx++], (int)code[idx++]);
+                break;
+            case "mov": //call region. area. moment //버려진 명령어. 2024-07-09. ※폐기할것.
+                Region(code[idx++].ToString(), (int)code[idx++], (int)code[idx++]);   //Region(code[op][i++].ToString(), (int)code[op][i++], (int)code[op][i++]);
+                break;
+            case "npc": //뼈대만 남은 코드..
+                NpcCall(code[idx++].ToString(), code[idx++].ToString(), code[idx++].ToString());
                 break;
             default:
                 Debug.Log(op + " don't exist on Decodeing fucntion");
@@ -189,9 +213,7 @@ public class TextChanger : MonoBehaviour
         Debug.Log("DICE_RESULT : " + result);
 
         foreach (JToken code in info[result])
-        {
             GetOpcode(code[0].ToString(), code, 1);
-        }
 
     }
 
@@ -261,7 +283,12 @@ public class TextChanger : MonoBehaviour
     private string Setstring(string raw_string)
     {
         string[] divied = raw_string.Split('"');
-        return ReplaceS(divied[1]);
+        string sentence = "";
+        
+        for(int i = 1; i < divied.GetLength(0) - 1; i++)
+            sentence += divied[i].Replace('\\', '"'); // 대화문 살리기
+
+        return ReplaceS(sentence);
     }
 
     private string ReplaceS(string c_line)  // + Diction이용, key value값?

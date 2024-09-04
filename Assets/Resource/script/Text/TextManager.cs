@@ -44,8 +44,11 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     [SerializeField] private GameObject Selection;
     [SerializeField] private TextChanger textchanger;
     private EventInformer eventInformer = new EventInformer();
+    [SerializeField] private ScrollRect scroll;
+    [SerializeField] private RectTransform content;
 
     private float typing_speed = 0.2f;
+    //
     [SerializeField] private string[] contents;
 
     private void Start()
@@ -155,6 +158,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         reading = false;
         stop_read = false;
         m_TypingText.text = "";
+        content.offsetMin = new Vector2(0, -800);
 
         //새로 채우기
         contents = System.IO.File.ReadAllLines(real_main);
@@ -173,10 +177,22 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         
         if (!reading)   //normal reading
         {
-            string cur_text = "";
+            //배열 길이 오버 예외처리
+            if(current >= contents.Length) { Debug.Log("[ERROR][TEXT] Don't exist extra content"); return; }
+
+            //문단 기입
+            string cur_text = "  ";
+            int spacing = 0;
             while (!contents[current].Contains('#'))
+            {
                 cur_text += STyping(contents[current++] + '\n');
+                spacing++;
+            }
             cur_text += '\n';
+
+            //텍스트 오브젝트 이동 및 늘리기
+            ExtendContent(spacing);
+            spacing = 0;
 
             //타이핑 효과
             typing_speed = m_Speed;
@@ -196,6 +212,22 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         reading = false;
         stop_read = false;
         contents = System.IO.File.ReadAllLines(real_main);
+    }
+
+    private void ExtendContent(int space)
+    {
+        if (m_TypingText.text == "") return;
+
+        float height = content.rect.height;
+        float upheight = -1 * height + space * 100;
+        Vector2 previousPos = scroll.content.anchoredPosition;
+        //Debug.Log(height);
+
+
+        content.offsetMin = new Vector2(0, upheight);
+        //좀 더 부드럽게 움직였으면 하는데..
+        scroll.content.anchoredPosition = previousPos + new Vector2(0f, space * 100);
+        //Debug.Log(upheight);
     }
 
     

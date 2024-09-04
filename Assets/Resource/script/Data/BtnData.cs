@@ -23,6 +23,7 @@ public class BtnData : MonoBehaviour
         //내부 데이터 변경
         diceType = dicetype;
         difficulty = diff;
+        displayDescription = display;
 
         //뷰 변경
         displayText.text = display;
