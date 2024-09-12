@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Linq;
+using System;
 
 public class TextChanger : MonoBehaviour
 {
@@ -20,7 +22,7 @@ public class TextChanger : MonoBehaviour
     //private Dictionary<string, string> convert_hash = new Dictionary<string, string>(); // .Add(key, Value);
 
     //경로 설정
-    private string path = @"\Resource\Text\";  //this position is moved so... where..?
+    private string path = @"/Resource/Text/";  //this position is moved so... where..?
     private string mainroute, keyroute;
     private string curmain;
 
@@ -46,7 +48,7 @@ public class TextChanger : MonoBehaviour
     {
         // 시나리오 이름으로 추적. (폴더명(@Scenario))\파일명\시나리오명
         curmain = jmain;
-        string scnroute = Application.dataPath + path + @"Scenario\" + curmain + ".json";
+        string scnroute = Application.dataPath + path + @"Scenario/" + curmain + ".json";
         string str = convertJson.MakeJson(scnroute);
         string key_str = convertJson.MakeJson(keyroute);
 
@@ -63,19 +65,18 @@ public class TextChanger : MonoBehaviour
         jbase = JObject.Parse(str);
         key_jroot = JObject.Parse(key_str);
 
-        do
-        {
-            //Debug.Log("CHANGER : " + move);
-            JToken jnow = jbase["scenario"][move];
-            foreach (JToken jscript in jnow["script"]) //json 시나리오의 양상을 따라간다.
-            {
-                //정해진 code list를 읽고, key를 읽는다.
-                JToken jlist = jnow["scriptlist"][op_num++];
-                GetOpcode(jlist.ToString(), jscript[jlist.ToString()], 0); 
-                CheckKeys("::opcode here", jscript);
-            }
+        JToken jnow = jbase["scenario"][move];
 
-        } while (false);
+        //script문 따라가기
+        foreach (JToken jscript in jnow["script"]) //while (jnow["script"][i] != null) //i가 오버하면 결국 무리가 생김. length를 잘라낼 방식이 있으려나..
+        {
+                                                    //JToken jscript = jnow["script"][i];
+            JToken jlist = jnow["scriptlist"][op_num++]; //이것도 없애긴 해야하는데 op_num여기만 쓰임?
+
+            //정해진 code list를 읽고, key를 읽는다.
+            GetOpcode(jlist.ToString(), jscript[jlist.ToString()], 0);
+            CheckKeys("::opcode here", jscript);
+        }
 
         //Debug.Log("readParts end one");
         return 0;
@@ -149,7 +150,7 @@ public class TextChanger : MonoBehaviour
                 NpcCall(code[idx++].ToString(), code[idx++].ToString(), code[idx++].ToString());
                 break;
             default:
-                Debug.Log(op + " don't exist on Decodeing fucntion");
+                //Debug.Log(op + " don't exist on Decodeing fucntion");
                 break;
         }
 
@@ -204,7 +205,7 @@ public class TextChanger : MonoBehaviour
                 dice_up = (int)list[2];
             }
 
-        int roll_result = Random.Range(0, dice_type);
+        int roll_result = UnityEngine.Random.Range(0, dice_type);
         Debug.Log("DICE_ROLL : " + roll_result);
 
         // 대충 상승치.(player 값을 클래스에 따로 받아야할듯 한데...
@@ -219,7 +220,7 @@ public class TextChanger : MonoBehaviour
 
     private void Region(string spot, int chap, int detail)     //지역별 get
     {
-        string str = convertJson.MakeJson(Application.dataPath + @"\Resource\Text\Field\Region.json");
+        string str = convertJson.MakeJson(Application.dataPath + @"/Resource/Text/Field/Region.json");
         JObject jroot = JObject.Parse(str);
         JToken jregion = jroot["Region"];                                                                           //jroot["Forest", "sky", "cave", "beach", "sea", "city"] -> enum class로 문자열..?
 
@@ -234,7 +235,7 @@ public class TextChanger : MonoBehaviour
     private void NpcCall(string name, string situ, string num)
     {
         //해당 npc를 찾아서, situ를 맞추고, num에 있는 dia나 다른 것을 행함
-        string str = convertJson.MakeJson(Application.dataPath + @"\Resource\Text\Npc\Npc.json");
+        string str = convertJson.MakeJson(Application.dataPath + @"/Resource/Text/Npc/Npc.json");
         JObject jroot = JObject.Parse(str);
         JToken jnpc = jroot[name][situ][num];
         //convert_hash.Add("#" + name, jnpc["name"].ToString()); // ex) #edward : 에드워드
@@ -260,7 +261,7 @@ public class TextChanger : MonoBehaviour
         //File.AppendAllText(mainroute, "#battle " + name + num + '\n');
         //종류 : 몬스터, 인간형 등등?
         //이름, 숫자. 그리고 시츄는 발각, 기습, 상태이상 등?
-        Debug.Log("JSON[monster] : " + jbattle + "이 " + root + "발생.");
+        //Debug.Log("JSON[monster] : " + jbattle + "이 " + root + "발생.");
 
         //배틀 미리 세팅
         battlemanager.BattlePreset(jbattle, root, num, situ); //"goblin", "forest_goblin", 1, 0]},

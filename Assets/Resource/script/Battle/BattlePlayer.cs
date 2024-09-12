@@ -17,7 +17,6 @@ public class BattlePlayer : MonoBehaviour
 
     void Awake()
     {
-        playerUiManager = GameObject.Find("Stat").GetComponent<PlayerUiManager>();
         characterData = gameObject.GetComponent<CharacterData>();
 
 

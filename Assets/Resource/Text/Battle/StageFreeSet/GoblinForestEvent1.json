@@ -1,33 +1,44 @@
 ﻿{
   "set" : {
-    "background" : "goblin_forest_event1.png",
+    "background" : "river",
     "camera" : {
       "pos" : [0, 0],
       "script" : "non move ... 이런 느낌. 여기서 프리셋적인 동작을 시네마틱 지정.?"
     },
     "decoration" : [
       {
-        "name" : "grass1",
+        "name" : "grass",
         "pos" : [100, 20]
     },
     {
-      "name" : "grass2",
+      "name" : "grass",
       "pos" : [200, -10]
     }
   ],
   "obstacle" : [
     {
-      "name" : "orc_tree1",
+      "name" : "tree",
       "pos" : [0, 40]
     }
   ],
-  "charater" : [
+  "monster" : [
     {
       "type" : "enemy",
-      "name" : "goblin1",
+      "level" : 1,
+      "name" : "Enemy1",
       "state" : "awake",
       "pos" : [50, 100]
-    },
+    }
+  ],
+  "npc" : [
+    {
+      
+      "type" : "npc",
+      "name" : "none",
+      "pos" : [0, 0]
+    }
+  ],
+  "player" : [
     {
       "type" : "player",
       "name" : "player",
@@ -35,6 +46,17 @@
     }
   ]
 
+  },
+  "clear" : {
+    "type" : "kill",
+    "require" : "all"
+  },
+  "gameover" : {
+    "type" : "kill",
+    "require" : "player is passive"
+  },
+  "check" : {
+    "///" : "... 여러개 둘려면 어떻게 세팅해야하냐.. "
   }
 
 }

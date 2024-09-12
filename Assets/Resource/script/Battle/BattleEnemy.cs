@@ -80,6 +80,7 @@ public class BattleEnemy : MonoBehaviour
 
     private void Update()
     {
+       //이거 rect라서 anchoredposition으로 변경.
        Vector3 infoPos = new Vector3(transform.position.x, transform.position.y + 50, 0);
        myInfoTr.position = infoPos;
     }

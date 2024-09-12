@@ -4,30 +4,33 @@ using UnityEngine;
 using UnityEngine.UI;
 using Newtonsoft.Json.Linq;
 using UnityEngine.Serialization;
+using UnityEngine.Localization.SmartFormat.Utilities;
 
 public class BattleManager : MonoBehaviour
 {
     //[SerializeField] private Text battleField;
     [SerializeField] private Text battleText;
+    [SerializeField] private GameObject battleFieldView;
+    [SerializeField] private GameObject scrollView;
 
     [Header("PLAYERS")]
     [SerializeField] public GameObject player;
-    [SerializeField] public GameObject[] enemys;
+    [SerializeField] public BattleEnemy[] enemys;
     public GameObject adjacent_enemy;
 
 
     [Header("OBJ_INTERATION")]
     //[SerializeField] private int robj_i = 0;
     [SerializeField] private GameObject[] robj;
-
     [SerializeField] private GameObject clickobj;
 
 
-    [SerializeField] private GameObject battleFieldView;
-    [SerializeField] private GameObject scrollView;
+
+    [Header("OTHER_MANAGERS")]
     [SerializeField] private SelectionManager selectionManager;
     [SerializeField] private PlayerUiManager playerUiManager;
-    private Judgement judgement;
+    [SerializeField] private BattleStageSet battleStageSet;
+    [SerializeField] private Judgement judgement;
 
     //json route
     private string battlefield;
@@ -50,10 +53,9 @@ public class BattleManager : MonoBehaviour
         //battlefieldview = GameObject.Find("BattleField");
         //Debug.Log(battleFieldView.name);
         //scrollView = GameObject.Find("Scroll View");
-        selectionManager = FindObjectOfType<SelectionManager>();
+        //selectionManager = FindObjectOfType<SelectionManager>();
+        //playerUiManager = FindObjectOfType<PlayerUiManager>();
         judgement = FindObjectOfType<Judgement>();
-        playerUiManager = FindObjectOfType<PlayerUiManager>();
-        
     }
     
     //배틀 필드 세팅을 위한 프리셋
@@ -64,6 +66,8 @@ public class BattleManager : MonoBehaviour
         
         jroot = JObject.Parse(str);
         jfield = jroot[root];
+
+        battleStageSet.Setting("GoblinForestEvent1");
         //그리고 대충 num맞추고 situ때려 맞추면 될듯.
     }
 
@@ -71,24 +75,37 @@ public class BattleManager : MonoBehaviour
     //여기서 배틀 진입 시작 및 활성화
     public void BattleEntry()
     {
-        scrollView.SetActive(false);
+        //기본 텍스트 비활성화 + 나중에 추가로 위 ui도 날릴것.
+        scrollView.SetActive(false); 
 
-        battleFieldView.SetActive(true);
-        player = GameObject.Find("Player");
-        enemys[0] = GameObject.Find("Enemy1");
+        //player = GameObject.Find("Player");
+        //enemys[0] = GameObject.Find("Enemy1");
 
         selectionManager.ShowSelection("Action", 0, 1);
+        transform.position = new Vector3(400, 700, -1);
 
-        Debug.Log(jfield["name"].ToString());
+        //이걸로 충분히 탐색 가능. 다만, transform위치가 너무 먼게 아닌지 고민. content로 다이렉트? 해버려 말어.
+        enemys = transform.GetComponentsInChildren<BattleEnemy>();
+        /*
+        foreach (BattleEnemy enemy in tmp)
+        {
+            enemy.transform.position = new Vector3(100, 100, 0);
+            Debug.Log(enemy);
+        }
+        */
+
     }
+
+
+
 
     public void TurnStart()
     {
         player.GetComponent<BattlePlayer>().StartCoroutine("UpdateRun");
 
-        foreach (GameObject enemy in enemys)
+        foreach (BattleEnemy enemy in enemys)
         {
-            enemy.GetComponent<BattleEnemy>().StartCoroutine("UpdateRun");
+            enemy.StartCoroutine("UpdateRun");
         }
     }
 
@@ -100,9 +117,9 @@ public class BattleManager : MonoBehaviour
         //멈추기
         player.GetComponent<BattlePlayer>().StopCoroutine("UpdateRun");
 
-        foreach (GameObject enemy in enemys)
+        foreach (BattleEnemy enemy in enemys)
         {
-            enemy.GetComponent<BattleEnemy>().StopCoroutine("UpdateRun");
+            enemy.StopCoroutine("UpdateRun");
         }
     }
 
@@ -143,6 +160,7 @@ public class BattleManager : MonoBehaviour
         //전투 종료
         if (!enemy.activeSelf) { BattleIsEnd("ended"); return; }
 
+
         //다음 재시작
         selectionManager.ShowSelection("Action", 0, 1);
 
@@ -155,7 +173,8 @@ public class BattleManager : MonoBehaviour
         //kill any things... 아마 다른 배틀 시작할때 오류 발생할듯?
 
         //여기 desicion btn state도 추가할것.
-        battleFieldView.SetActive(false);
+        transform.position = new Vector3(-700, 700, -1);
+        //battleFieldView.SetActive(false);
         //selectionManager.BtnUnActive();
         scrollView.SetActive(true);
 
