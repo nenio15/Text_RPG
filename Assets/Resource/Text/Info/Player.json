@@ -21,51 +21,6 @@
     "Class": "Wariror",
     "Skill": "Scissors"
   },
-  "Eqip": {
-    "head": [
-      "item_head1"
-    ],
-    "bearst": [
-      "_2",
-      "NONE"
-    ],
-    "shoulder": [
-      "_3"
-    ],
-    "leg": [
-      "_4"
-    ],
-    "shoes": [
-      "_5"
-    ],
-    "hands": [
-      "_6"
-    ],
-    "weapon": [
-      "old_sword_1"
-    ],
-    "subweapon": [
-      "..."
-    ],
-    "braklet": [
-      "1",
-      "2"
-    ]
-  },
-  "Backpack": {
-    "active": [
-      "대충 물약1",
-      "대충 투척2"
-    ],
-    "eqip": [
-      "모자1",
-      "투구2"
-    ],
-    "etc": [
-      "잡템1",
-      "판매용2"
-    ]
-  },
   "Action": {
     "list": [
       "공격",
@@ -326,18 +281,7 @@
   },
   "Mana-skill": {},
   "Log": {
-    "quest": [
-      " "
-    ],
-    "cur_quest": [
-      " "
-    ],
-    "goal": [
-      " "
-    ],
-    "main_quest": [
-      " "
-    ],
+    "cur_place" : "fucking_town",
     "charma": [
       "chaos",
       10

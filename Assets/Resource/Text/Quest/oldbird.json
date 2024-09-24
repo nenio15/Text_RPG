@@ -1,0 +1,12 @@
+{
+  "quest" : [
+    {
+      "title" : "날지 못하는 새",
+      "entry" : ["산속숲", 200, 1],
+      "goal" : "새가 날 수 있게 하십시오.",
+      "content" : "노조는 오랜 세월 땅에서 살아왔습니다...",
+      "reward" : ["exp|100", "hide|item|미오라의깃털"],
+      "clear" : ["oldbird", "수락하다", 2, "else, get effect|quest|clear|oldbird|날지 못하는 새"]
+    }
+  ]
+}

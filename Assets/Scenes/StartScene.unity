@@ -2601,7 +2601,7 @@ MonoBehaviour:
     m_Options:
     - m_Text: forest
       m_Image: {fileID: 21300000, guid: 4ea96965ebe72a549a27f912124fc2a8, type: 3}
-    - m_Text: main_scenario
+    - m_Text: tutorial
       m_Image: {fileID: 0}
     - m_Text: red_dragon_for_revenge
       m_Image: {fileID: 0}
@@ -2610,12 +2610,6 @@ MonoBehaviour:
     - m_Text: scenario
       m_Image: {fileID: 0}
     - m_Text: town
-      m_Image: {fileID: 0}
-    - m_Text: trader
-      m_Image: {fileID: 0}
-    - m_Text: main_scenario1
-      m_Image: {fileID: 0}
-    - m_Text: main_scenario2
       m_Image: {fileID: 0}
     - m_Text: sunset
       m_Image: {fileID: 0}

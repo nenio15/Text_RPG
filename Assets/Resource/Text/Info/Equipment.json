@@ -1,0 +1,52 @@
+{
+  "get_stat": [
+    4,
+    3,
+    1,
+    1,
+    2,
+    3
+    ],
+  "equip" : [
+    {
+      "name" : "backet",
+      "type" : "Head",
+      "sort" : "head"
+    },
+    {
+      "name" : "plate armor",
+      "type" : "Clothes",
+      "sort" : "clothes"
+    },
+    {
+      "name" : "jacket_gloves",
+      "type" : "Gloves",
+      "sort" : "gloves"
+    },
+    {
+      "name" : "traveler",
+      "type" : "Shoes",
+      "sort" : "shoes"
+    },
+    {
+      "name" : "long sword",
+      "type" : "Sword",
+      "sort" : "main_weapon"
+    },
+    {
+      "name" : "old_sword...how can two-handed?",
+      "type" : "Sword",
+      "sort" : "sub_weapon"
+    },
+    {
+      "name" : "maura's_feather",
+      "type" : "Accessary",
+      "sort" : "accessary1"
+    },
+    {
+      "name" : "bracket",
+      "type" : "Accessary",
+      "sort" : "accessary2"
+    }
+  ]
+}

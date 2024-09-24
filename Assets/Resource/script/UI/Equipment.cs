@@ -1,0 +1,52 @@
+using Newtonsoft.Json.Linq;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Equipment : MonoBehaviour
+{
+    //public Equip equip;
+    [SerializeField] private ItemSlotUi[] equipments;
+
+    //Json 관련 선언
+    private string equipment_route;
+    private Dictionary dictionary = new Dictionary();
+    private ConvertJson convertJson = new ConvertJson();
+    private JObject jroot;
+
+
+    // Start is called before the first frame update
+    void Awake()
+    {
+        equipment_route = Application.dataPath + "/Resource/Text/Info/Equipment.json";
+        UpdateSet();
+    }
+
+    public void UpdateSet()
+    {
+        //이거... 어차피 고정인데 이렇게 써야하나.
+        for (int j = 0; j < equipments.Length; j++)
+            equipments[j].index = j;
+
+        int i = -1;
+        string str = convertJson.MakeJson(equipment_route);
+        jroot = JObject.Parse(str);
+
+        foreach (JToken part in jroot["equip"]) //얘는 8고정이라 foreach가 아니여도 되긴하는데.. 얘만 바꾸기도 그렇고.
+        {
+            i++;
+            ItemSlot tmp = new ItemSlot();
+            tmp.item = dictionary.SetItem(part["name"].ToString(), part["type"].ToString());
+            if (tmp.item == null) { Debug.Log(i + " : 해당 장비의 Dictionary가 참조되지 않습니다."); continue; }
+            tmp.isEquipment = true;
+            tmp.count = 1;
+
+            equipments[i].itemslot = tmp;
+            equipments[i].Set();
+            
+        }
+
+    }
+
+
+}

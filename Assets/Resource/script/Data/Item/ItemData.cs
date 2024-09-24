@@ -1,14 +1,38 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
+[Serializable]
+public class ItemDataEffect
+{
+    public string type; //함수?
+    public float value;
+}
 
-[CreateAssetMenu(fileName = "Itme", menuName = "New Item")]
-public class itemData : ScriptableObject
+//이거.. 흠.... ㅄ같은데? 같은 양식의 프리팹을 많이 만드는게 아닌이상... 굳이? 나는 유형이 많아질 예정이라..
+//[CreateAssetMenu(fileName = "Itme", menuName = "New Item")] : ScriptableObject
+[System.Serializable]
+public class itemData
 {
     [Header("INFO")]
-    public string displayName;
-    public string description;
-    
+    public string name;
+    public string detail;
+    public string img;
+    public string type;
+    //public bool isequipment = false;
+    public int sell;
+
+    //[Header("Stacking")]
+    //public bool stack = false;
+    //public int max_statck;
+
+    [Header("Effect")]
+    //public ItemDataEffect[] effects;
+    //public ItemDataEffect[] limits;
+    public string[] value;
+    public string[] limit;
+
+
     //... 이런식으로 만들어 놓아야하는게 맞는감..
 
 }

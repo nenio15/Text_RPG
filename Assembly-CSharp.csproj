@@ -62,6 +62,8 @@
   <ItemGroup>
     <Compile Include="Assets\Resource\Script\Text\EventInformer.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_UiFrameRateCounter.cs" />
+    <Compile Include="Assets\Resource\Script\UI\Equipment.cs" />
+    <Compile Include="Assets\Resource\Script\UI\DescribePanel.cs" />
     <Compile Include="Assets\Resource\Script\Text\texttest.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
@@ -81,6 +83,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_B.cs" />
     <Compile Include="Assets\Resource\Script\Text\SelectionManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
+    <Compile Include="Assets\Resource\Script\UI\QuestUi.cs" />
     <Compile Include="Assets\Resource\Script\VarManager.cs" />
     <Compile Include="Assets\Resource\Script\UI\PlayerUiManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
@@ -105,6 +108,7 @@
     <Compile Include="Assets\Resource\Script\UI\ScrollButton.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark04.cs" />
     <Compile Include="Assets\Resource\Script\DiceManager.cs" />
+    <Compile Include="Assets\Resource\Script\UI\QuestManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ChatController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
@@ -112,7 +116,9 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
     <Compile Include="Assets\Resource\Script\UI\ButtonManager.cs" />
     <Compile Include="Assets\Resource\Script\Battle\BattleEnemy.cs" />
+    <Compile Include="Assets\Resource\Script\UI\Inventory.cs" />
     <Compile Include="Assets\Resource\Script\UI\DesicionButton.cs" />
+    <Compile Include="Assets\Resource\Script\UI\ItemSlotUi.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
     <Compile Include="Assets\Resource\Script\Text\TextManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_DigitValidator.cs" />
@@ -120,6 +126,7 @@
     <Compile Include="Assets\Resource\Script\Return.cs" />
     <Compile Include="Assets\Resource\Script\Text\TextChanger.cs" />
     <Compile Include="Assets\Resource\Script\Data\ConvertJson.cs" />
+    <Compile Include="Assets\Resource\Script\Data\Dictionary.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextConsoleSimulator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TeleType.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextInfoDebugTool.cs" />
@@ -132,18 +139,14 @@
     <None Include="Assets\Resource\Text\Npc\downtown.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />
     <None Include="Assets\Resource\Text\Field\PlainTown.txt" />
-    <None Include="Assets\Resource\Text\Scenario\tutorial01.txt" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Oswald-Bold - OFL.txt" />
     <None Include="Assets\Resource\Text\Npc\goblin.txt" />
     <None Include="Assets\Resource\Text\Battle\Field\ForestBattle.txt" />
     <None Include="Assets\TextMesh Pro\Examples &amp; Extras\Fonts\Anton OFL.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMPro_Mobile.cginc" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF SSD.shader" />
-    <None Include="Assets\Resource\Text\Scenario\tutorial02.txt" />
     <None Include="Assets\Resource\Text\Npc\noble.txt" />
-    <None Include="Assets\Resource\Text\Scenario\tutorial01_select.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface-Mobile.shader" />
-    <None Include="Assets\Resource\Text\Scenario\goblintown.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Surface.shader" />
     <None Include="Assets\TextMesh Pro\Sprites\EmojiOne Attribution.txt" />
     <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap-Custom-Atlas.shader" />

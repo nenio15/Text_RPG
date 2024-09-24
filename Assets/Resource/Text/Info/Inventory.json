@@ -1,0 +1,19 @@
+{
+  "item" : [
+    {
+      "name" : "long sword",
+      "type" : "Sword",
+      "count" : 1
+    },
+    {
+      "name" : "plate armor",
+      "type" : "Clothes",
+      "count" : 1
+    },
+    {
+      "name" : "Hp potion",
+      "type" : "Consumption",
+      "count" : 10
+    }
+  ]
+}
