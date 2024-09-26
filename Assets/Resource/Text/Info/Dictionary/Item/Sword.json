@@ -4,8 +4,20 @@
       "name" : "long sword",
       "type" : "Sword",
       "img" : "sword",
-      "value" : ["str:+3", "dex:+1"],
-      "limit" : ["str:4"],
+      "effect" : [
+        {
+          "type" : "stat",
+          "name" : "str",
+          "value" : 1
+        }
+      ],
+      "limit" : [
+        {
+          "type" : "stat",
+          "name" : "str",
+          "value" : 3
+        }
+      ],
       "sell" : 100,
       "detail" : "보편적인 롱소드이다. 대개의 무기보다 긴 편이나, 무게중심이 의외로 잘 잡혀있다."
     },
