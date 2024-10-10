@@ -25,7 +25,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
 
     private int keyi = 0;
     private int sc_keyi = 0;
-
+    private int spacing = 1;
 
     [Header("RAYCASYER")]
     public Canvas m_canvas;
@@ -65,6 +65,8 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         //읽기 시작
         textchanger.ReadScenarioParts(idx++, cur_scenario);//, cur_subscenario);    //json
         contents = System.IO.File.ReadAllLines(real_main);
+
+        m_TypingText.text = "아무것도 없습니다ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ";
     }
 
     // text click
@@ -97,6 +99,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     //중단점 처리
     private bool MeetSign()
     {
+        //Debug.Log("[MEETSIGN] : " + contents[current]);
         stop_read = true;
         //switch로 바꿀 필요가 있다면 바꿀것.(#key말고 사용도가 있다면.)
         //# 있는 문장
@@ -105,8 +108,8 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         // 현재 읽는 페이지가 끝났음
         switch (contents[current])
         {
-            case "#jmp":
-            case "#rpl":
+            case "#move":
+            case "#over":
                 textchanger.ReadScenarioParts(textchanger.pre_move, textchanger.pre_main);
                 ClearText();
                 return true;
@@ -125,7 +128,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
                 contents = System.IO.File.ReadAllLines(real_main);
                 //stop_read = true;
                 return true;
-            case "#btl":
+            case "#btl": //battle로 변경.
                 //선택지한테 말하거나, 디시즌한테 말하거나.
                 current++; //복귀 시 다음 줄 읽기
                 GameObject.Find("Battle").GetComponent<BattleManager>().BattleEntry();
@@ -177,22 +180,21 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         
         if (!reading)   //normal reading
         {
+            //텍스트 오브젝트 이동 및 늘리기 (spacing은 전 text의 길이를 참조함)
+            ExtendContent(spacing);
+
             //배열 길이 오버 예외처리
-            if(current >= contents.Length) { Debug.Log("[ERROR][TEXT] Don't exist extra content"); return; }
+            if (current >= contents.Length) { Debug.Log("[ERROR][TEXT] Don't exist extra content"); return; }
 
             //문단 기입
             string cur_text = "  ";
-            int spacing = 0;
+            spacing = 1;
             while (!contents[current].Contains('#'))
             {
                 cur_text += STyping(contents[current++] + '\n');
                 spacing++;
             }
             cur_text += '\n';
-
-            //텍스트 오브젝트 이동 및 늘리기
-            ExtendContent(spacing);
-            spacing = 0;
 
             //타이핑 효과
             typing_speed = m_Speed;
@@ -218,16 +220,26 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     {
         if (m_TypingText.text == "") return;
 
-        float height = content.rect.height;
-        float upheight = -1 * height + space * 100;
+
+        //이거 개념이 잘못됨. space가 이전 줄을 받아서 그만큼 내려야 하는데, 지금 이거. 다음 줄의 갯수만큼 내림.
+        //애초에 잘못된 시스템이라 text도 아마 변경될듯... 이거는 보류해야할듯. 이거 이런식도 안 맞아
+        //왜냐. 스크롤을 한 상태로 클릭하면, 새로 시작하는 지점이 아니잖? 그리고 삽화도 넣으면 더 꼬일꺼야. 이거는 일단 폐기
+
+        //text font * 1.47.... -> fontsize를 받아둘게 필요. system에 넣고 파라미터를 get?
+        // 34 * 1.47 -> 50
+        int fontsize = 45;
+
+        float height = Mathf.Abs(content.rect.height); // 절대값
+        float upheight = height + space * fontsize;
         Vector2 previousPos = scroll.content.anchoredPosition;
-        //Debug.Log(height);
 
 
-        content.offsetMin = new Vector2(0, upheight);
+        //스크롤 이동.
+        //Debug.Log(height + " and " + upheight);
+        content.sizeDelta = new Vector2(0, upheight);
         //좀 더 부드럽게 움직였으면 하는데..
-        scroll.content.anchoredPosition = previousPos + new Vector2(0f, space * 100);
-        //Debug.Log(upheight);
+        //스크롤은 일단 없앨까..?
+        scroll.content.anchoredPosition = previousPos + new Vector2(0f, space * fontsize);
     }
 
     

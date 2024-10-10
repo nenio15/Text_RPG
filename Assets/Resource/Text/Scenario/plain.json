@@ -6,17 +6,29 @@
     {
       "situation" : 0,
       "type" : 1,
-      "scriptlist" : ["dia"],
       "script" : [
         {
+          "type" : "dia",
           "dia" : [
             ["평야이다."]
-          ],
-          "key" : {
+          ]
+        },
+        {
+          "type" : "choice",
+          "choice" : {
             "list" : ["평야마을", "숲", "언덕"],
-            "평야마을" : { "effect" : [["jmp", 0, "town", "plain_town"]]},
-            "숲" : { "effect" : [["jmp", 0, "forest", "Forest"]]},
-            "언덕" : { "effect" : [["jmp", 0, "hill", "Hill"]]}
+            "평야마을" : [{ 
+              "type" : "scene over",
+              "over" : [0, "town", "plain_town"]
+              }],
+            "숲" : [{ 
+              "type" : "scene over",
+              "over" : [0, "forest", "Forest"]
+              }],
+            "언덕" : [{ 
+              "type" : "scene over",
+              "over" : [0, "hill", "Hill"]
+              }]
           }
         }
       ]

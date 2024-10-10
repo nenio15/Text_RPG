@@ -6,9 +6,9 @@
     {
       "situation" : 0,
       "type" : 1,
-      "scriptlist" : ["dia", "dia", "dia"],
       "script" : [
         {
+          "type" : "dia",
           "dia" : [
             ["숲의 초입이다."],
             [ "푸른잎들이 무성한 숲의 경계면이다." ],
@@ -16,6 +16,7 @@
           ]
         },
         {
+          "type" : "dia",
           "dia" : [
             [ "하늘을 뒤덮는 나뭇잎들이 햇빛을 가린다." ],
             [ "바깥보다 어두워진 공간이다." ],
@@ -24,26 +25,35 @@
           ]
         },
         {
+          "type" : "dia",
           "dia" : [
             [ "습하고 축축한 공기에 신선함이 더해진다." ],
             [ "환하게 밝혀오는 태양이 #player를 반겨준다."]
-          ],
-          "key" : {
+          ]
+        },
+        {
+          "type" : "choice",
+          "choice" : {
             "list" : ["평지", "평원 마을"],
-            "평지" : { "effect" : [["jmp", 0, "plain", "Plain"]]},
-            "평원 마을" : { "effect" : [["jmp", 0, "town", "plain_town"]]}
-          }
-        }
-       ]
-    },
-    {
+            "평지" : [{ 
+              "type" : "scene over",
+              "over" : [0, "plain", "Plain"]
+                }],
+            "평원 마을" : [{ 
+              "type" : "scene over",
+              "over" : [0, "town", "plain_town"]
+              }]
+            }
+          }]
+        },
+        {
       "situation" : 1,
       "type" : 1,
-      "scriptlist" : ["dia"],
       "script" : [
         {
+          "type" : "dia",
           "dia" : [
-            [ "정체모를 울음소리가 울려퍼진다." ],
+            [ "[여기 쓰긴 씀? 없앤 부분 같은데.....] 정체모를 울음소리가 울려퍼진다." ],
             [ "메아리치는 소리가 몸을 긴장시킨다."],
             [ "노란 빛이 드문드문 떠다닌다."]
           ]
@@ -53,9 +63,9 @@
     {
       "situation" : 1,
       "type" : 0,
-      "scriptlist" : ["dia"],
       "script" : [
         {
+          "type" : "dia",
           "dia" : [
             [ "반딧불이들이 푸른 빛을 은은하게 내고있다." ],
             [ "서늘한 바람이 긴장한 몸을 식혀준다." ],
@@ -67,18 +77,24 @@
     {
       "situation" : 1,
       "type" : -1,
-      "scriptlist" : ["dia"],
       "script" : [
         {
+          "type" : "dia",
           "dia" : [
             [ "눈앞이 환해진다. 어둑어둑했던 시야에 빛이 가득 채워진다." ]
-          ],
-          "key" : {
+          ]
+        },
+        {
+          "type" : "choice",
+          "choice" : {
             "list" : ["언덕"],
-            "언덕" : { "effect" : [["jmp", 0, "hill", "Hill"]]}
-          }
+            "언덕" : [{ 
+              "type" : "scene over",
+              "over" : [0, "hill", "Hill"]
+              }]
+            }
+          }]
+
         }
       ]
-    }
-  ]
 }

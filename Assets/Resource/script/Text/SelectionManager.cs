@@ -6,9 +6,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine.UI;
 using System.ComponentModel;
-using UnityEditor.Experimental.GraphView;
-using UnityEngine.Timeline;
-using System.Globalization;
+//using UnityEditor.Experimental.GraphView;
+//using UnityEngine.Timeline;
+//using System.Globalization;
 
 public class SelectionManager : MonoBehaviour
 {
@@ -69,7 +69,7 @@ public class SelectionManager : MonoBehaviour
                 str = convertJson.MakeJson(jroute);
                 jroot = JObject.Parse(str);
                 jcur = jroot[option][idx];
-                Debug.Log("SELECT : " + option);
+                //Debug.Log("SELECT : " + option);
 
 
                 //destination = new Vector3(0.0f, -800.0f, -4.0f);
@@ -109,8 +109,9 @@ public class SelectionManager : MonoBehaviour
         switch (state)
         {
             case State.Scenario:
-                Debug.Log("CLICK_TEXT[Scenario] : " + btnData.displayDescription);
-                JToken jkey = jcur[btnData.displayDescription]["effect"];
+                //Debug.Log("CLICK_TEXT[Scenario] : " + btnData.displayDescription);
+                JToken jkey = jcur[btnData.displayDescription];
+                //JToken jkey = jcur[btnData.displayDescription]["effect"];
                 string result;
 
                 // 다이스롤 처리
@@ -121,10 +122,11 @@ public class SelectionManager : MonoBehaviour
                 }
 
                 // 효과들 처리
-                foreach (JToken code in jkey)
+                foreach (JToken block in jkey)
                 {
                     //Debug.Log("CLICK_code : " + code.ToString());
-                    textChanger.GetOpcode(code[0].ToString(), code, 1);
+                    textChanger.GetOpcode(block["type"].ToString(), block, 1);
+                    //textChanger.GetOpcode(code[0].ToString(), code, 1);
                 }
 
                 //이벤트 삽입 할거야?
@@ -198,16 +200,19 @@ public class SelectionManager : MonoBehaviour
     {
         foreach (string list in jcur["list"]) // string이 형변환 괜찮나?
         {
-            int idx = 0;
+            //int idx = 0;
             BtnData tmp = button[len].GetComponent<BtnData>();
 
+            /*
             //effect의 내용물이 없는 경우, 에러 반환
-            if (jcur[list]["effect"] == null) { Debug.LogError("[ERROR][JSON] : effect contain non contents"); return; }
-            JToken jtmp = jcur[list]["effect"][0];
+            //if (jcur[list]["effect"] == null) { Debug.LogError("[ERROR][JSON] : effect contain non contents"); return; }
+            //JToken jtmp = jcur[list]["effect"][0];
 
             //dice가 있는 경우
-            if (jtmp[idx].ToString().Equals("dice")) tmp.Active(list, jtmp[++idx].ToString(), (int)jtmp[++idx]);
-            else tmp.Active(list);
+            //if (jtmp[idx].ToString().Equals("dice")) tmp.Active(list, jtmp[++idx].ToString(), (int)jtmp[++idx]);
+            //else tmp.Active(list);
+            */
+            tmp.Active(list);
 
             //버튼 뷰 활성화
             button[len++].SetActive(true);

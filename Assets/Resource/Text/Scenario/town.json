@@ -5,9 +5,10 @@
     {
       "num" : 0,
       "chapter" : "entry",
-      "scriptlist" : ["dia", "dia"], 
       "script" : [
-      { "dia" : [
+      { 
+        "type" : "dia",
+        "dia" : [
         ["숲을 나와보자 설익은 풍경이 눈에 자리잡는다."],
         ["오래된 고목들이 잠자코 나란히 서있다."],
         ["마을을 동그래 감싸는 목책은 든든해보인다."],
@@ -15,24 +16,40 @@
         ["아무래도 대장간이 이른 아침부터 일을 하는 듯 하다."]
       ]
       },
-      { "dia" : [
+      {
+        "type" : "dia",
+        "dia" : [
         ["마을에 들어서자 아이들의 웃음소리가 들려온다."],
         ["밭일을 하는 어미들을 오리새끼마냥 쫄래쫄래 따라다닌다."],
         ["발치에 강아지풀이 떨어진다."],
         ["강아지풀은 빛이 바랬다."]
-      ],
-        "key" : {
+      ]
+      },
+      {
+        "type" : "choice",
+        "choice" : {
           "list" : ["떠나기", "촌장집", "대장간", "잡화점", "여관"],
-          "떠나기" : { "effect" : [ ["jmp", 0, "plain", "Plain"] ] },
-          "촌장집" : { "effect" : [ ["rpl", 1]]},
-          "대장간" : { "effect" : [ ["rpl", 2]]},
-          "잡화점" : { "effect" : [ ["rpl", 3]]},
-          "여관" : { "effect" : [ ["rpl", 4]]},
-          "비명소리" : { 
-            "effect" : [ [ "dice", "sen", 6, 1] ],
+          "떠나기" : [{ 
+            "type" : "scene over",
+            "over" : [ 0, "plain", "Plain"] }],
+          "촌장집" : [{ 
+            "type" : "script move",  
+            "move" : 1}],
+          "대장간" : [{ 
+            "type" : "script move",  
+            "move" : 2}],
+          "잡화점" : [{ 
+            "type" : "script move",  
+            "move" : 3}],
+          "여관" : [{ 
+            "type" : "script move",  
+            "move" : 4}],
+          "비명소리" : [{
+            "type" : "dice", 
+            "dice" : [ [ "dice", "sen", 6, 1] ],
             "succ" : [ ["dia", [["이 |<color=yellow>소리?</color>|는 아무래도 인간 남성의 목소리같다. 저쪽이다."]]] ],
             "fail" : [ ["dia", [["누구의 소리인지는 모르겠지만, 위급해보인다."]]] ]
-        }
+        }]
          }
       }
       ]
@@ -42,15 +59,26 @@
     "chapter" : "leader",
     "scriptlist" : ["dia"],
     "script" : [
-      { "dia" : [
+      {
+        "type" : "dia",
+         "dia" : [
         ["여기는 촌장집이다."],
         ["늙었지만 총맹한 눈빛을 한 노인이 #player를 반긴다."],
         ["마을의 우두머리의 집안은 다른 집보다 근엄이 느껴진다."]
-      ],
-      "key" : {
-        "list" : ["떠나기", "퀘스트"],
-        "떠나기" : { "effect" : [ ["rpl", 0]]},
-        "퀘스트" : { "effect" : [ ["dia", [["아쉽게도, 지금 급한 일은 없다네"], ["다른 일이라면 찾아주겠다만."]]]]}
+      ]
+      },
+      {
+        "type" : "choice",
+        "choice" : {
+        "list" : ["떠나기"],
+        "떠나기" : [{ 
+          "type" : "script move",  
+          "move" : 0}],
+        "퀘스트" : [{ 
+          "type" : "dia",  
+          "dia" : [["아쉽게도, 지금 급한 일은 없다네"], 
+                ["다른 일이라면 찾아주겠다만."]]
+        }]
       }
     }
     ]
@@ -60,12 +88,19 @@
     "chapter" : "blacksmith",
     "scriptlist" : ["dia"],
     "script" : [
-      { "dia" : [
+      { 
+        "type" : "dia",
+        "dia" : [
         ["여기는 대장간이다."]
-      ],
-      "key" : {
+      ]
+      },
+      {
+        "type" : "choice",
+        "choice" : {
         "list" : ["떠나기"],
-        "떠나기" : { "effect" : [ ["rpl", 0]]}
+        "떠나기" : [{ 
+          "type" : "script move",  
+          "move" : 0}]
       }
     }
     ]
@@ -76,12 +111,19 @@
     "chapter" : "shop",
     "scriptlist" : ["dia"],
     "script" : [
-      { "dia" : [
-        ["여기는 잡화점이다."]
-      ],
-      "key" : {
+      { 
+        "type" : "dia",  
+        "dia" : [
+         ["여기는 잡화점이다."]
+        ]
+      },
+      {
+        "type" : "choice",
+        "choice" : {
         "list" : ["떠나기"],
-        "떠나기" : { "effect" : [ ["rpl", 0]]}
+        "떠나기" : [{ 
+          "type" : "script move",  
+          "move" : 0}]
       }
     }
     ]
@@ -92,12 +134,19 @@
     "chapter" : "inn",
     "scriptlist" : ["dia"],
     "script" : [
-      { "dia" : [
+      { 
+        "type" : "dia",
+        "dia" : [
         ["여기는 여관이다."]
-      ],
-      "key" : {
+      ]
+      },
+      {
+        "type" : "choice",
+        "choice" : {
         "list" : ["떠나기"],
-        "떠나기" : { "effect" : [ ["rpl", 0]]}
+        "떠나기" : [{ 
+          "type" : "script move",  
+          "move" : 0}]
       }
     }
     ]

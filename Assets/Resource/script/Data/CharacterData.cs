@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine.UI;
 using System;
-using static UnityEditor.LightingExplorerTableColumn;
+//using static UnityEditor.LightingExplorerTableColumn;
 
 [System.Serializable]
 public class Character

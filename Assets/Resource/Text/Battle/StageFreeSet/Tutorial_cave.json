@@ -1,0 +1,62 @@
+﻿{
+  "set" : {
+    "background" : "ice_cave",
+    "camera" : {
+      "pos" : [0, 0],
+      "script" : "non move ... 이런 느낌. 여기서 프리셋적인 동작을 시네마틱 지정.?"
+    },
+    "decoration" : [
+      {
+        "name" : "grass",
+        "pos" : [140, 370]
+    },
+    {
+      "name" : "grass",
+      "pos" : [500, 200]
+    }
+  ],
+  "obstacle" : [
+    {
+      "name" : "tree",
+      "pos" : [200, 800]
+    }
+  ],
+  "monster" : [
+    {
+      "type" : "enemy",
+      "level" : 1,
+      "name" : "Enemy3",
+      "state" : "sleep",
+      "pos" : [500, 900]
+    }
+  ],
+  "npc" : [
+    {
+      
+      "type" : "npc",
+      "name" : "none",
+      "pos" : [0, 0]
+    }
+  ],
+  "player" : [
+    {
+      "type" : "player",
+      "name" : "player",
+      "pos" : [0, 0]
+    }
+  ]
+
+  },
+  "clear" : {
+    "type" : "kill",
+    "require" : "all"
+  },
+  "gameover" : {
+    "type" : "kill",
+    "require" : "player is passive"
+  },
+  "check" : {
+    "///" : "... 여러개 둘려면 어떻게 세팅해야하냐.. "
+  }
+
+}

@@ -68,14 +68,19 @@ public class TextChanger : MonoBehaviour
         JToken jnow = jbase["scenario"][move];
 
         //script문 따라가기
-        foreach (JToken jscript in jnow["script"]) //while (jnow["script"][i] != null) //i가 오버하면 결국 무리가 생김. length를 잘라낼 방식이 있으려나..
+        foreach (JToken jscript in jnow["script"])
         {
-                                                    //JToken jscript = jnow["script"][i];
-            JToken jlist = jnow["scriptlist"][op_num++]; //이것도 없애긴 해야하는데 op_num여기만 쓰임?
+            //JToken jscript = jnow["script"][i];
+            //JToken jlist = jnow["scriptlist"][op_num++]; //이것도 없애긴 해야하는데 op_num여기만 쓰임?
 
+            /*
+             * 1.종류를 분류한다.  type을 읽는다. script본문이 필요하다.
+             * 2.각 분류마다 정해진 처리를 진행한다.
+             * 3.그 값을 어딘가에 처리. .. 음.
+             */
             //정해진 code list를 읽고, key를 읽는다.
-            GetOpcode(jlist.ToString(), jscript[jlist.ToString()], 0);
-            CheckKeys("::opcode here", jscript);
+            GetOpcode(jscript["type"].ToString(), jscript, op_num);
+            //CheckKeys("::opcode here", jscript);
         }
 
         //Debug.Log("readParts end one");
@@ -83,46 +88,81 @@ public class TextChanger : MonoBehaviour
     }
 
     //아예 하위 스크립트로 빼버릴 것. 내지는 하위 함수를 하위 스크립트로
-    public int GetOpcode(string op, JToken code, int idx)  // idx == 1 -> effect code
+    public int GetOpcode(string script_type, JToken cur_blockcode, int idx)  // idx == 1 -> effect code
     {
-        //나중에... 바꿀것.
+        JToken cur_typecode = cur_blockcode;
+        string breakpoint = "#\n"; //모든 스크립트가 중단점을 필요로 하는가?
+
+        //이거... 하위 스크립트로 빼자 그냥.. 그게 났겠다.
+        //"type" : "dia" / "con dia" / "choice" / "sound" / "illust" / "effect" / "script move" / "scene over" / "wait/hold" / 
+        switch (script_type)
+        {
+            //본문 관련
+            case "dia": //본문
+                //cur_typecode = cur_blockcode["dia"];
+                Dialog(cur_blockcode["dia"], idx);
+                break;
+            case "con dia": //조건부 대화문. 여기서... 다이스 굴리는 형식으로, 그거 이펙트 따로 빼고, 
+                //condition을 확인하고, 참이면 dialog를 첨가한다. 아니면 그냥 안 한다.(혹은 '실패'로그 띄워준다던가)
+                //cur_typecode = cur_blockcode["con"];
+                Debug.Log("con is" + cur_blockcode["con"]);
+                //cur_typecode = cur_blockcode["dia"];
+                Debug.Log("con dia is" + cur_blockcode["dia"]);
+                Dialog(cur_blockcode["dia"], idx);
+                break;
+
+
+            //선택지 관련
+            case "choice": //선택지 key 추가
+                //cur_typecode = cur_blockcode["choice"];
+                Choice(cur_blockcode["choice"]);
+                breakpoint = "#key\n";
+                break;
+
+
+            //이동 관련
+            case "script move": 
+                //if ((int)code[idx] == -1) break; // 필요한지 ㅁ?ㄹ
+                cur_typecode = cur_blockcode["move"];
+                Movement((int)cur_typecode, curmain, "move");                
+                break;
+            case "scene over": //json 이동
+                cur_typecode = cur_blockcode["over"];
+                Movement((int)cur_typecode[0], cur_typecode[1].ToString(), "over");
+                break;
+
+            case "wait": //흠좀무.. 필요한 기능은 맞지. 그러면 이 코드 자체를 느리게 해야할텐데. 그게 구현이 쉽냐의 문제. 나중에 구현할것.
+
+
+            //이벤트 관련
+            case "battle": //배틀 소환
+                cur_typecode = cur_blockcode["battle"];
+                //좀 더러울지도...
+                Battle(cur_typecode[0].ToString(), cur_typecode[1].ToString(), (int)cur_typecode[2], (int)cur_typecode[3]);
+                break;
+            case "quest": //퀘스트 진행도 내지는 획득 류
+
+            case "effect": //player hp나 mp, exp등의 값을 추가, 제거하는 레벨. + 아이템, 서사 획득.
+
+
+            //이펙트 관련
+            case "sound": //소리효과 재생 (옵션 있)
+            case "img": //삽화추가
+                break;
+            //case "npc": //rpl과 같은? 대화로 들어가기.. 나중에 구현
+
+            default:
+                Debug.LogError(script_type + " is non type");
+                break;
+
+        }
+
+        //모든 지점에 breakpooint가 과연 필요할까? ex) sound와 dia의 합심
+        File.AppendAllText(mainroute, breakpoint);
+
+        return 0;
+
         /*
-         *  //... 이거를 사전해석시켜서 생기는 문제가 많은데(rpl, sound, img, move, condia)... 그냥 그때그때 읽는걸로 해버려 그냥?
-         *  //그러면 위의 ReadScenarioParts도 변경해서. page넘길때마다 실행되도록 바꿔야함. 추가로 값도 이리저리. 함수를 하나더 만들어야함.
-         *  
-         *  //이거... 하위 스크립트로 빼자 그냥.. 그게 났겠다.
-         * foreach (JProperty opcodes in cur_script){ 
-         *  switch(opcodes.Name)
-         *  {
-         *      case "rpl": //이동... 이것도 애매한게 발동 시점이.. key의 effect에 있는게 아닌 이상 코드가 꼬여.... 이것도 고민해봐야겠네.
-         *      
-         *      case "dia": //본문
-         *      
-         *      case "sound": //소리효과 재생 (옵션 있)
-         *      
-         *      case "img": //삽화추가
-         *      
-         *      case "move": //맵 상 이동. (이걸 여기 넣는게 맞겠지... 다른 조건에서 집어넣으려면 제약상황이 많아져. 결국 json에 넣는거는 필연이고.
-         *      
-         *      case "key": //선택지 key 추가
-         *      
-         *      case "condia": //조건부 대화문. 여기서... 다이스 굴리는 형식으로, 그거 이펙트 따로 빼고, 
-         *  
-         *      //case "wait": //흠좀무.. 필요한 기능은 맞지. 그러면 이 코드 자체를 느리게 해야할텐데. 그게 구현이 쉽냐의 문제. 나중에 구현할것.
-         * 
-         *      case "btl": //배틀 소환
-         *      
-         *      //case "npc": //rpl과 같은? 대화로 들어가기.. 나중에 구현
-         *      
-         *      case "quest": //퀘스트 진행도 내지는 획득 류
-         *      
-         *      case "value": //player hp나 mp, exp등의 값을 추가, 제거하는 레벨. + 아이템, 서사 획득.
-         *      
-         *  }
-         * }
-         */
-
-
         //Debug.Log("GETcode : " + op + " & "+ code);
         switch (op)
         {
@@ -155,8 +195,36 @@ public class TextChanger : MonoBehaviour
         }
 
         return 0;
+        */
     }
 
+    //main.txt에 text첨가
+    private void Dialog(JToken logue, int idx)
+    {
+        //idx 삭제할것.
+        foreach (JToken jdes in logue)
+            File.AppendAllText(mainroute, Setstring(jdes.ToString()) + '\n');  //System.IO.
+        return;
+    }
+    
+    private void Movement(int move, string main, string sign)
+    {
+        pre_move = move;
+        pre_main = main;
+        File.AppendAllText(mainroute, '#' + sign + '\n');
+
+    }
+
+    //key내용을 옮깁니다~~~.
+    private void Choice(JToken selection)
+    {
+        key_jarray.Add(selection.ToObject<JObject>());  // jobject만 add
+        key_jroot["key"] = key_jarray;
+
+        File.WriteAllText(keyroute, key_jroot.ToString());
+    }
+
+    //폐기 예정.
     // key, sc_key -> main.json to use for keywords
     private void CheckKeys(string k, JToken cur_script) // how to use k..?
     {

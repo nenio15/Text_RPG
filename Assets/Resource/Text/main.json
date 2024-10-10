@@ -4,16 +4,16 @@
       "list": [
         "평지"
       ],
-      "평지": {
-        "effect": [
-          [
-            "jmp",
+      "평지": [
+        {
+          "type": "scene over",
+          "over": [
             0,
             "plain",
             "Plain"
           ]
-        ]
-      }
+        }
+      ]
     }
   ],
   "sc_key": [

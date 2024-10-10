@@ -67,7 +67,9 @@ public class BattleManager : MonoBehaviour
         jroot = JObject.Parse(str);
         jfield = jroot[root];
 
-        battleStageSet.Setting("GoblinForestEvent1");
+        //ㅇㅁ니ㅏㅓㅓ리익ㄷ회ㅏ머ㅗ이ㅏ
+        battleStageSet.Setting(root);
+        //battleStageSet.Setting("GoblinForestEvent1"); //이거 왜 하드코딩이야 머저리야.
         //그리고 대충 num맞추고 situ때려 맞추면 될듯.
     }
 

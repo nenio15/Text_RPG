@@ -37,7 +37,7 @@ public class Equipment : MonoBehaviour
             i++;
             ItemSlot tmp = new ItemSlot();
             tmp.item = dictionary.SetItem(part["name"].ToString(), part["type"].ToString());
-            if (tmp.item == null) { Debug.Log(i + " : 해당 장비의 Dictionary가 참조되지 않습니다."); continue; }
+            if (tmp.item == null) {  continue; } //Debug.Log(i + " : 해당 장비의 Dictionary가 참조되지 않습니다.");
             tmp.isEquipment = true;
             tmp.count = 1;
 

@@ -29,10 +29,8 @@ public class BattleEnemy : MonoBehaviour
     private BattleManager battleManager;
 
     public float speed = 400.0f;
-    private Transform tr;
-
-    //목적지
-    private Vector3 target;
+    private RectTransform tr;
+    private RectTransform target;
     //NavMeshAgent agent;
 
     //몬스터 상단의 표기 세팅
@@ -52,6 +50,7 @@ public class BattleEnemy : MonoBehaviour
     //State state;
     string[] skills = { "Rock", "Scissors", "Paper" };
 
+    //세팅
     private void Awake()
     {
         Player = GameObject.Find("Player").gameObject;
@@ -61,8 +60,9 @@ public class BattleEnemy : MonoBehaviour
         //button[len].GetComponentInChildren<Text>().text = list.ToString();
 
         //state = State.Idle;
-        tr = GetComponent<Transform>();
-        target = Player.transform.position; //갱신도 잇어야함
+        tr = GetComponent<RectTransform>();
+        //target = Player.transform.position; //갱신도 잇어야함
+        target = Player.GetComponent<RectTransform>();
         //agent.destination = target.transform.position;
 
         //상호작용 첫 수 둡니다
@@ -85,12 +85,14 @@ public class BattleEnemy : MonoBehaviour
        myInfoTr.position = infoPos;
     }
 
+    //다음 스킬 준비
     private void ReadyNewSkill()
     {
         enemy.Skill = skills[Random.Range(0, 3)];
         Debug.Log(enemy.Skill + " : is [enemy] skill");
     }
 
+    //상호작용
     private void EnemyInteractive()
     {
         //state = State.Attack;
@@ -103,16 +105,19 @@ public class BattleEnemy : MonoBehaviour
         
     }
 
-
+    //어그로 대상에게 접근하기.
     IEnumerator UpdateRun()
     {
         float distance = float.MaxValue;
-
+        
         for (; distance >= 200;)
         {
-            distance = Vector3.Distance(transform.position, target);
+            //Debug.Log(tr + " " + target + " " + distance);
+
+            distance = Vector3.Distance(transform.position, target.position);
+            //근접시 행동
             if (distance < 200) EnemyInteractive();
-            Vector3 move = new Vector3(target.x - tr.position.x, target.y - tr.position.y, 0).normalized * speed * Time.deltaTime;
+            Vector3 move = new Vector3(target.position.x - tr.position.x, target.position.y - tr.position.y, 0).normalized * speed * Time.deltaTime;
             tr.position += move;
 
             yield return null;
@@ -121,6 +126,7 @@ public class BattleEnemy : MonoBehaviour
     }
 
     //여기서 hp+-같은거랑 이거저거.. 그러면 물론, 계수를 인수로 받아야겠지?
+    //턴 종료 -> IDamageable로 변경 필.
     public void EndTurn(bool lose)
     {
         if (lose) 
@@ -138,6 +144,7 @@ public class BattleEnemy : MonoBehaviour
         ReadyNewSkill();
     }
 
+    //사망판정
     private void CheckDead()
     {
         if(enemy.Hp[0] <= 0)
