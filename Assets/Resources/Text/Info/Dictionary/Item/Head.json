@@ -1,0 +1,25 @@
+{
+  "item" : [
+    {
+      "name" : "plate armor",
+      "type" : "Clothes",
+      "img" : "armor",
+      "effect" : [
+        {
+          "type" : "stat",
+          "name" : "hp",
+          "value" : 2.0
+        }
+      ],
+      "limit" : [
+        {
+          "type" : "stat",
+          "name" : "str",
+          "value" : 4
+        }
+      ],
+      "sell" : 80,
+      "detail" : "플레이트 아머. 무겁다. 단단하다."
+    }
+  ]
+}

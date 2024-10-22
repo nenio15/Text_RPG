@@ -26,13 +26,21 @@ public class Judgement : MonoBehaviour
     }
 
     //합 승부 //값 계산해서 돌려줘.
-    public void DesicionWinner(GameObject player, GameObject enemy, string strategy)
+    public void DesicionWinner(GameObject player, GameObject target, string strategy)
     {
-        Debug.Log(strategy);
+        //Debug.Log(strategy);
 
         //서로 기술 정의
-        string pSkill = player.GetComponent<CharacterData>().player_info.Skill;
-        string eSkill = enemy.GetComponent<BattleEnemy>().enemy.Skill;
+
+        string pSkill;
+        string eSkill;
+        if (player.GetComponent<PlayerHealth>() != null) {
+            pSkill = player.GetComponent<PlayerHealth>().player_info.Skill;
+            eSkill = target.GetComponent<BattleEnemy>().enemy.Skill;
+        } else {
+            pSkill = player.GetComponent<BattleEnemy>().enemy.Skill;
+            eSkill = target.GetComponent<PlayerHealth>().player_info.Skill;
+        }
 
         //모종의 방식(다이스로) 승리자를 결정짓는다.
         //그러면 승리판정이랑 각 계수의 혜택을 돌려준다.
@@ -62,7 +70,7 @@ public class Judgement : MonoBehaviour
         //playerUiManager.UploadToGame();
 
         //전투 종료 판정
-        battleManager.BattleEndCheck(player, enemy, player_win);
+        battleManager.BattleEndCheck(player, target, player_win);
     }
 
     //순간전략 활성화

@@ -26,13 +26,13 @@ public class DescribePanel : MonoBehaviour
         if(item == null) return;
 
 
-        nickname.text = item.item.name;
-        type.text = item.item.type;
-        detail.text = item.item.detail;
-        sell.text = item.item.sell.ToString();
+        nickname.text = item.itemData.name;
+        type.text = item.itemData.type;
+        detail.text = item.itemData.detail;
+        sell.text = item.itemData.sell.ToString();
 
-        value.text = item.item.value.ToString(); // 흠좀무
-        limit.text = item.item.limit.ToString();
+        //value.text = item.item.value.ToString(); // 흠좀무 class로 형식 바꿈. 나중에 추가시킬것.
+        //limit.text = item.item.limit.ToString();
 
         usebtn.text = (item.isEquipment) ? "착용한다" : "사용한다"; // 한글... 다국어 씨발.
     }

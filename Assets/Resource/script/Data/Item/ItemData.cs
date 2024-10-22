@@ -3,9 +3,10 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [Serializable]
-public class ItemDataEffect
+public class ItemAddition
 {
     public string type; //함수?
+    public string name;
     public float value;
 }
 
@@ -27,10 +28,8 @@ public class itemData
     //public int max_statck;
 
     [Header("Effect")]
-    //public ItemDataEffect[] effects;
-    //public ItemDataEffect[] limits;
-    public string[] value;
-    public string[] limit;
+    public ItemAddition[] effect;
+    public ItemAddition[] limit;
 
 
     //... 이런식으로 만들어 놓아야하는게 맞는감..

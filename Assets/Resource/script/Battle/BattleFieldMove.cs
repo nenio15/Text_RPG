@@ -79,6 +79,9 @@ public class BattleFieldMove : MonoBehaviour, IBeginDragHandler, IEndDragHandler
         Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, distance);
 
         ReserveMovement(mousePosition - CanvasPointer.position);
+
+        //¥Î√Ê ¡‡∫¡
+        FindObjectOfType<tmpMove>().Set(mousePosition - CanvasPointer.position);
     }
 
     public void ReserveMovement(Vector3 clickPosition)

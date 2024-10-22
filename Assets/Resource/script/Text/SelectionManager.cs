@@ -17,6 +17,7 @@ public class SelectionManager : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] private Judgement judgement;
     [SerializeField] private BattleManager battleManager;
+    [SerializeField] private ActionList actionList;
     public GameObject[] button;
     [SerializeField] private int len = 0;
 
@@ -45,15 +46,9 @@ public class SelectionManager : MonoBehaviour
 
     private void Start()
     {
-        //이거 싹다 지정으로 바꿀것 2024-07-30
-        textManager = FindObjectOfType<TextManager>();
-        textChanger = GameObject.FindObjectOfType<TextChanger>();
-        //player = GameObject.Find("Player");
-        judgement = FindObjectOfType<Judgement>();
-        battleManager = GameObject.FindObjectOfType<BattleManager>();
         diceManager = new DiceManager();
-
-        mainroute = Application.dataPath + @"\Resource\Text\main.txt";
+        mainroute = Application.persistentDataPath + "/main.txt";
+        //actionList = GetComponent<ActionList>();
     }
 
     //선택지 나열. 각 상황에 따른 다른 지점 참조
@@ -65,15 +60,11 @@ public class SelectionManager : MonoBehaviour
             //시나리오인 경우
             case (int)State.Scenario:
                 state = State.Scenario;
-                jroute = Application.dataPath + @"\Resource\Text\main.json";
+                jroute = Application.persistentDataPath + "/mainSet.json";
                 str = convertJson.MakeJson(jroute);
                 jroot = JObject.Parse(str);
                 jcur = jroot[option][idx];
-                //Debug.Log("SELECT : " + option);
 
-
-                //destination = new Vector3(0.0f, -800.0f, -4.0f);
-                //StartCoroutine(Moving(gameObject));
                 BtnScenarioActive(jcur);
                 return;
             //전투의 경우.
@@ -81,17 +72,7 @@ public class SelectionManager : MonoBehaviour
                 state = State.Battle;
                 player = GameObject.Find("Player");
 
-                jroute = Application.dataPath + @"\Resource\Text\Info\Skill.json";
-                str = convertJson.MakeJson(jroute);
-                jroot = JObject.Parse(str);
-                jcur = jroot[option];
-
-                BtnBattleActive(jcur);
-                return;
-            case (int)State.Strategy:
-                state = State.Strategy;
-                Debug.Log("INSTANT STRATEGY");
-                jroute = Application.dataPath + @"\Resource\Text\Battle\WeaponAction.json";
+                jroute = Application.persistentDataPath + "/Info/Skill.json";
                 str = convertJson.MakeJson(jroute);
                 jroot = JObject.Parse(str);
                 jcur = jroot[option];
@@ -135,57 +116,24 @@ public class SelectionManager : MonoBehaviour
                 //다음 문장 출력
                 //textManager.ReadStory(true);
                 textManager.Reread();
+
+                BtnUnActive();
                 break;
             case State.Battle:
                 //클릭한 버튼 내용을 player_info에 반영
-                player.GetComponent<CharacterData>().UpdateData(0, btnData.displayText.text);
+                player.GetComponent<PlayerHealth>().UpdateData(0, btnData.displayText.text);
+                //player_info.Skill = content;
+
+                player.GetComponent<PlayerAction>().SetAction(btnData.displayText.text);
+                actionList.UpdateSet();
                 break;
-            case State.Strategy:
-                Debug.Log("CLICK_TEXT[STATEGY]" + btnData.displayText.text);
-                //순서가 꼬여서 먼저 비활성화?
-                BtnUnActive();
 
-                judgement.DesicionWinner(battleManager.player, battleManager.adjacent_enemy, btnData.displayText.text);
-
-                return;
             default:
-
+                BtnUnActive();
                 break;
         }
-        //destination = new Vector3(0.0f, -2000.0f, -4.0f);
-        //StartCoroutine(Moving(gameObject));
 
-        BtnUnActive();
-    }
-
-    // sc_obj 클릭, 선택지가 갱신된다.
-    public void OnClickObj(GameObject keyword)
-    {
-        string word = keyword.GetComponent<Keyword>().keyword;
-        int idx = keyword.GetComponent<Keyword>().idx;
-        ShowSelection("sc_key", idx, 0);
-        Debug.Log("SC_OBJ : " + word);
-
-        //선택지를 누르면, 기존 main.txt에 내용이 추가된다. 그렇다. 가장 아래에 추가가 된다... 흠
-        // key, sc_key를 상관않고 현재 줄에다가 추가시키고 싶다.
-        // 1.m_text에만 갱신시킨다.
-        // 2.어찌 잘 타일러서, main.txt의 중간에 삽입을 시킨다. 
-        //  2-1. 이 경우, current를 아마 써야할거다. ( before = < current, after = >= current , append, main += after)
-
-        /*
-        JToken jkey = jcur[word];
         
-        foreach (JToken code in jkey["effect"])
-        {
-
-            if (code[0].ToString() == "dice")
-                textchanger.GetOpcode(code[0].ToString(), jkey, 1);
-            else
-                textchanger.GetOpcode(code[0].ToString(), code, 1);
-        }
-
-        TextManager.GetComponent<TextManager>().ReadStory(true);
-        */
     }
 
     IEnumerator Moving(GameObject obj)

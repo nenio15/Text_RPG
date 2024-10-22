@@ -4,7 +4,13 @@
       "name" : "Hp potion",
       "type" : "Consumption",
       "img" : "potion",
-      "value" : ["hp:+2"],
+      "effect" : [
+        {
+          "type" : "stat",
+          "name" : "hp",
+          "value" : 3.0
+        }
+      ],
       "limit" : [],
       "sell" : 50,
       "detail" : "모험가들이 즐겨 사용하는 회복 포션이다. 자양건강제라고도 불려, 농부들도 사용한다."

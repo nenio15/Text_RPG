@@ -37,23 +37,21 @@ public class BattleStageSet : MonoBehaviour
     public GameObject field_frame;
 
     //경로 세팅
-    private string path = @"/Resource/Text/Battle/StageFreeSet/";
-    private string field_free_set;
+    //private string path = @"/Resource/Text/Battle/StageFreeSet/";
+    //private string field_free_set;
     private JToken jbase;
 
     public void Setting(string freeset) //1.string Freeset name.json
     {
-        //foreach의 대용을 for? 아님 while
-
         //json로딩
-        field_free_set = Application.dataPath + path + freeset + ".json";
-        ConvertJson convertJson = new ConvertJson();
-        string str = convertJson.MakeJson(field_free_set);
+        
+        //디버깅..
+        if(Resources.Load<TextAsset>("Text/Battle/StageFreeSet/" + freeset) == null) { Debug.LogError("[BATTLESET] : " + freeset + " don't exist"); return; }
+        string str = Resources.Load<TextAsset>("Text/Battle/StageFreeSet/" + freeset).ToString();
         jbase = JObject.Parse(str);
         JToken jset = jbase["set"];
         
         //필드 배경 전환
-        //이거를.... 건물있는 지형은.... 흠 충돌 판정 먼저.
         field_base.sprite = Resources.Load<Sprite>("Picture/" + jset["background"].ToString());
 
         //enemy는 추가로, state라던가 그런게 추가될 예정. level이라던가. 물론 그 개체의 스크립트쪽으로
@@ -66,11 +64,11 @@ public class BattleStageSet : MonoBehaviour
 
         //npc 생성
         
-        //player배치 + 특수효과..?
+        //player배치
         Vector3 pos = new Vector3(700, 150, 0);
         player.GetComponent<RectTransform>().anchoredPosition = pos;
 
-        //시스템 ..?
+        //시스템
 
         //초기 카메라 세팅
         JToken jcamera = jset["camera"];
@@ -80,20 +78,6 @@ public class BattleStageSet : MonoBehaviour
     //프리팹 인스턴스 생성 함수
     private void Generate(int type, JToken jobj)
     {
-        //왜 만듦..?
-        switch (type)
-        {
-            case (int)ObjType.Monster:
-                //tmp.GetComponent<Enemy>().State = awake (jobj["state"].ToString());
-                //tmp.GetComponent<Enemy>().Set(jobj["state"].ToString(), //level);
-                break;
-            case (int)ObjType.Npc:
-                break;
-            case (int)ObjType.Decoration:
-            case (int)ObjType.Obstacle: // 따로 추가사항 없음.. 그럼 왜 만듦? ㅁ?ㄹ
-                break;
-        }
-
         //프리팹 지정
         GameObject prefab = Resources.Load<GameObject>(jobj["name"].ToString());
         Vector3 pos = new Vector3((int)jobj["pos"][0], (int)jobj["pos"][1], 0); // z좌표를 넣어 말어..
@@ -101,6 +85,7 @@ public class BattleStageSet : MonoBehaviour
         //인스턴트 생성
         GameObject tmp = Instantiate(prefab, field_frame.transform);
         tmp.GetComponent<RectTransform>().anchoredPosition = pos;
+        //tmp.GetComponet<BattleEnemy>().SetUp();
     }
 
 

@@ -82,7 +82,7 @@
               },
             { 
               "type" : "battle",
-              "battle" : ["goblin", "forest_goblin", 1, 0]},
+              "battle" : ["goblin", "GoblinForestEvent1", 1, 0]},
             {
               "type" : "dia",
                 "dia" : [["주변에 늑대시체가 즐비해있다."]]

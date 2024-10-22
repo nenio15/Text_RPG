@@ -7,7 +7,7 @@ using UnityEngine.UI;
 public class PlayerUiManager : MonoBehaviour
 {
     [SerializeField] private GameObject cur_class;  // 현재는 텍스트, 나중엔 이미지
-    [SerializeField] private CharacterData player_data; // 플레이어의 직접정보 참조
+    [SerializeField] private PlayerHealth player_data; // 플레이어의 직접정보 참조
 
     [Header("TEXT_LIST")]
     [SerializeField] private Text level;

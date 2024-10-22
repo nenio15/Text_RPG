@@ -19,18 +19,23 @@
             "dia" : [["야생의 고블린이 나타났다!!!"], ["그게 뭐 어때서"]]
           },
           { 
+            "type" : "dia",
+            "dia" : [["조금은 길게 써보겠다."], ["그거 이전에 클릭시 아예 내려가는게 중단점 전에는 멈춰야한다는 조건도 필요하다"]]
+          },
+          { 
             "type" : "battle",
             "battle" : ["goblin", "GoblinForestEvent1", 1, 0]
           },
           { 
             "type" : "choice",
             "choice" : {
-            "list" : ["평지"],
-            "평지" : [{
-              "type" : "scene over",
-              "over" : [0, "plain", "Plain"]
-            }]
-          }}
+              "list" : ["평지"],
+              "평지" : [{
+                "type" : "scene over",
+                "over" : [0, "plain", "Plain"]
+              }]
+            }
+          }
         ]
     }
   ]

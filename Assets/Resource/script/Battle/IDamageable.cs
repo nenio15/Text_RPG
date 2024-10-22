@@ -1,6 +1,6 @@
-﻿using System.Numerics;
+﻿using UnityEngine;
 
-internal interface IDamageable
+public interface IDamageable
 {
-    void OnDamage(float damage, Vector2 hitPos, Vector2 hitSurface);
+    void OnDamage(float damage, Vector3 hitPos, Vector3 hitSurface);
 }

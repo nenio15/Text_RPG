@@ -48,30 +48,32 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     [SerializeField] private RectTransform content;
 
     private float typing_speed = 0.2f;
-    //
+    
     [SerializeField] private string[] contents;
 
     private void Start()
     {
-        real_main = Application.dataPath + @"\Resource\Text\main.txt";
-        System.IO.File.WriteAllText(real_main, ""); //reset
+        real_main = Application.persistentDataPath + "/main.txt";
+
+        //초기화
         m_TypingText.text = "";
         m_ped = new PointerEventData(null);
         typing_speed = m_Speed;
 
-        //start scene에서 시나리오 받아오기
+        //start scene에서 선택 시나리오 받아오기 (디버깅용) -> 이거 나중에 바꿀것.
         cur_scenario = PlayerPrefs.GetString("Cur_scenario");
 
         //읽기 시작
         textchanger.ReadScenarioParts(idx++, cur_scenario);//, cur_subscenario);    //json
         contents = System.IO.File.ReadAllLines(real_main);
-
-        m_TypingText.text = "아무것도 없습니다ㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏㅏ";
+        
+        ReadStory(false);
     }
 
     // text click
     public void OnPointerClick(PointerEventData eventData)
     {
+        //m_TypingText.text = 
         // 읽는 것을 중단.
         if (stop_read) return;
 
@@ -83,8 +85,6 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         {
             //현재장 다 읽음                                      (#포함)
             //if (contents.Length == current) EndStoryPart(++page, "", "");
-
-            
 
             //#(중단점) 조우
             if (contents[current][0] == '#')
@@ -99,7 +99,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     //중단점 처리
     private bool MeetSign()
     {
-        //Debug.Log("[MEETSIGN] : " + contents[current]);
+        //Debug.Log("fladjfla"); //중단점 진입이 빠른듯하다
         stop_read = true;
         //switch로 바꿀 필요가 있다면 바꿀것.(#key말고 사용도가 있다면.)
         //# 있는 문장
@@ -110,7 +110,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         {
             case "#move":
             case "#over":
-                textchanger.ReadScenarioParts(textchanger.pre_move, textchanger.pre_main);
+                textchanger.ReadScenarioParts(textchanger.next_move, textchanger.next_main);
                 ClearText();
                 return true;
             case "#key":
@@ -125,7 +125,8 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
                 }
                 */
                 //내용물 변경 유무
-                contents = System.IO.File.ReadAllLines(real_main);
+                contents = System.IO.File.ReadAllLines(Application.persistentDataPath + "/main.txt");
+                //contents = System.IO.File.ReadAllLines(real_main);
                 //stop_read = true;
                 return true;
             case "#btl": //battle로 변경.
@@ -184,7 +185,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
             ExtendContent(spacing);
 
             //배열 길이 오버 예외처리
-            if (current >= contents.Length) { Debug.Log("[ERROR][TEXT] Don't exist extra content"); return; }
+            if (current >= contents.Length) { Debug.LogError("[TEXT] Don't exist extra content"); return; }
 
             //문단 기입
             string cur_text = "  ";

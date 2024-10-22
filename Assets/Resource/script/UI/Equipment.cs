@@ -15,10 +15,9 @@ public class Equipment : MonoBehaviour
     private JObject jroot;
 
 
-    // Start is called before the first frame update
     void Awake()
     {
-        equipment_route = Application.dataPath + "/Resource/Text/Info/Equipment.json";
+        equipment_route = Application.persistentDataPath + "/Info/Equipment.json";
         UpdateSet();
     }
 
@@ -36,8 +35,8 @@ public class Equipment : MonoBehaviour
         {
             i++;
             ItemSlot tmp = new ItemSlot();
-            tmp.item = dictionary.SetItem(part["name"].ToString(), part["type"].ToString());
-            if (tmp.item == null) {  continue; } //Debug.Log(i + " : 해당 장비의 Dictionary가 참조되지 않습니다.");
+            tmp.itemData = dictionary.SetItem(part["name"].ToString(), part["type"].ToString());
+            if (tmp.itemData == null) {  continue; } //Debug.Log(i + " : 해당 장비의 Dictionary가 참조되지 않습니다.");
             tmp.isEquipment = true;
             tmp.count = 1;
 

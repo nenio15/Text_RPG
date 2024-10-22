@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class ItemSlot
 {
-    public itemData item;
+    public itemData itemData;
     public int count = 1;
     public bool isEquipment = false;
 }
@@ -29,13 +29,11 @@ public class Inventory : MonoBehaviour
 
     public static Inventory Instance;
 
-
-    // Start is called before the first frame update
     private void Awake()
     {
         Instance = this;
-        inventory_route = Application.dataPath + "/Resource/Text/Info/Inventory.json";
-
+        inventory_route = Application.persistentDataPath + "/Info/Inventory.json";
+        //Debug.Log(inventory_route);
         UpdateList();
     }
 
@@ -48,9 +46,10 @@ public class Inventory : MonoBehaviour
          * 그렇게 한다.
          * 추가가 생기면.. 그건 슬롯에도 반영시키고, json에도 반영시킨다.
          * 
+         * update관련도 아직 미구현 상태.
          */
 
-        //번호 붙이기 ... 필요함? 흠.
+        //번호 붙이기
         for(int j = 0; j < itemslots.Length; j++)
             itemslots[j].index = j;
 
@@ -58,15 +57,14 @@ public class Inventory : MonoBehaviour
         int i = 0;
         string str = convertJson.MakeJson(inventory_route);
         jroot = JObject.Parse(str);
-        //jinventory = jroot[k];
 
         //인벤토리.json에서 아이템 읽어서 각 slot에 할당.
         foreach (JToken item in jroot[k])
         {
             ItemSlot tmp = new ItemSlot();
-            tmp.item = dictionary.SetItem(item["name"].ToString(), item["type"].ToString());
-            if (tmp.item == null) { Debug.LogError(i + " : 해당 ITEM의 Dictionary가 참조되지 않습니다."); continue; }
-            tmp.isEquipment = (tmp.item.type != "Consumption") ? true : false;
+            tmp.itemData = dictionary.SetItem(item["name"].ToString(), item["type"].ToString());
+            if (tmp.itemData == null) { Debug.LogError(i + " : 해당 ITEM의 Dictionary가 참조되지 않습니다."); continue; }
+            tmp.isEquipment = (tmp.itemData.type != "Consumption") ? true : false;
             tmp.count = (int)item["count"];
 
             itemslots[i].itemslot = tmp;

@@ -10,25 +10,22 @@ using System;
 
 public class TextChanger : MonoBehaviour
 {
-    [SerializeField] private TextManager textmanager;
-    [SerializeField] private BattleManager battlemanager;
+    [SerializeField] private TextManager textManager;
+    [SerializeField] private BattleManager battleManager;
     ConvertJson convertJson = new ConvertJson();
 
     //임의 설정. 캐릭터 스크립트 필요
     private string player = "플레이어";
     private string space = "숲";
 
-    //for #player & path + "\Scenario... \Npc...
-    //private Dictionary<string, string> convert_hash = new Dictionary<string, string>(); // .Add(key, Value);
-
     //경로 설정
-    private string path = @"/Resource/Text/";  //this position is moved so... where..?
-    private string mainroute, keyroute;
-    private string curmain;
+    //private string path = @"/Resource/Text/";  //this position is moved so... where..?
+    private string main_route, key_route;
+    private string cur_main;
 
     //미리 갈 경로 설정
-    public string pre_main;
-    public int pre_move;
+    public string next_main;
+    public int next_move;
 
     JArray key_jarray, sc_key_jarray;
     JObject key_jroot;
@@ -38,25 +35,28 @@ public class TextChanger : MonoBehaviour
     private void Start()
     {
         //실제 .txt 키 .json
-        mainroute = Application.dataPath + path + "main.txt";
-        keyroute = Application.dataPath + path + "main.json";
+        //main_route = Application.dataPath + path + "main.txt";
+        main_route = Application.persistentDataPath + "/main.txt";
+        key_route = Application.persistentDataPath + "/mainSet.json";
 
-        battlemanager = FindObjectOfType<BattleManager>();
+        battleManager = FindObjectOfType<BattleManager>();
+
+
     }
 
     public int ReadScenarioParts(int move, string jmain)
     {
         // 시나리오 이름으로 추적. (폴더명(@Scenario))\파일명\시나리오명
-        curmain = jmain;
-        string scnroute = Application.dataPath + path + @"Scenario/" + curmain + ".json";
-        string str = convertJson.MakeJson(scnroute);
-        string key_str = convertJson.MakeJson(keyroute);
+        cur_main = jmain;
+
+        string str = Resources.Load<TextAsset>("Text/Scenario/" + cur_main).ToString();
+        string key_str = convertJson.MakeJson(key_route);
 
         int op_num = 0;
 
         // read 할 부분 초기화
-        File.WriteAllText(keyroute, "{ \"key\" : [{}], \"sc_key\" : [{}] }");    // 초기화
-        File.WriteAllText(mainroute, "");                                       // main reset
+        File.WriteAllText(key_route, "{ \"key\" : [{}], \"sc_key\" : [{}] }");    // 초기화
+        File.WriteAllText(main_route, "");                                       // main reset
 
         key_jarray = new JArray(); 
         sc_key_jarray = new JArray();
@@ -70,43 +70,26 @@ public class TextChanger : MonoBehaviour
         //script문 따라가기
         foreach (JToken jscript in jnow["script"])
         {
-            //JToken jscript = jnow["script"][i];
-            //JToken jlist = jnow["scriptlist"][op_num++]; //이것도 없애긴 해야하는데 op_num여기만 쓰임?
-
-            /*
-             * 1.종류를 분류한다.  type을 읽는다. script본문이 필요하다.
-             * 2.각 분류마다 정해진 처리를 진행한다.
-             * 3.그 값을 어딘가에 처리. .. 음.
-             */
-            //정해진 code list를 읽고, key를 읽는다.
             GetOpcode(jscript["type"].ToString(), jscript, op_num);
-            //CheckKeys("::opcode here", jscript);
         }
 
-        //Debug.Log("readParts end one");
         return 0;
     }
 
-    //아예 하위 스크립트로 빼버릴 것. 내지는 하위 함수를 하위 스크립트로
     public int GetOpcode(string script_type, JToken cur_blockcode, int idx)  // idx == 1 -> effect code
     {
         JToken cur_typecode = cur_blockcode;
         string breakpoint = "#\n"; //모든 스크립트가 중단점을 필요로 하는가?
 
-        //이거... 하위 스크립트로 빼자 그냥.. 그게 났겠다.
-        //"type" : "dia" / "con dia" / "choice" / "sound" / "illust" / "effect" / "script move" / "scene over" / "wait/hold" / 
         switch (script_type)
         {
             //본문 관련
             case "dia": //본문
-                //cur_typecode = cur_blockcode["dia"];
                 Dialog(cur_blockcode["dia"], idx);
                 break;
             case "con dia": //조건부 대화문. 여기서... 다이스 굴리는 형식으로, 그거 이펙트 따로 빼고, 
                 //condition을 확인하고, 참이면 dialog를 첨가한다. 아니면 그냥 안 한다.(혹은 '실패'로그 띄워준다던가)
-                //cur_typecode = cur_blockcode["con"];
                 Debug.Log("con is" + cur_blockcode["con"]);
-                //cur_typecode = cur_blockcode["dia"];
                 Debug.Log("con dia is" + cur_blockcode["dia"]);
                 Dialog(cur_blockcode["dia"], idx);
                 break;
@@ -114,7 +97,6 @@ public class TextChanger : MonoBehaviour
 
             //선택지 관련
             case "choice": //선택지 key 추가
-                //cur_typecode = cur_blockcode["choice"];
                 Choice(cur_blockcode["choice"]);
                 breakpoint = "#key\n";
                 break;
@@ -124,7 +106,7 @@ public class TextChanger : MonoBehaviour
             case "script move": 
                 //if ((int)code[idx] == -1) break; // 필요한지 ㅁ?ㄹ
                 cur_typecode = cur_blockcode["move"];
-                Movement((int)cur_typecode, curmain, "move");                
+                Movement((int)cur_typecode, cur_main, "move");                
                 break;
             case "scene over": //json 이동
                 cur_typecode = cur_blockcode["over"];
@@ -137,7 +119,6 @@ public class TextChanger : MonoBehaviour
             //이벤트 관련
             case "battle": //배틀 소환
                 cur_typecode = cur_blockcode["battle"];
-                //좀 더러울지도...
                 Battle(cur_typecode[0].ToString(), cur_typecode[1].ToString(), (int)cur_typecode[2], (int)cur_typecode[3]);
                 break;
             case "quest": //퀘스트 진행도 내지는 획득 류
@@ -149,7 +130,7 @@ public class TextChanger : MonoBehaviour
             case "sound": //소리효과 재생 (옵션 있)
             case "img": //삽화추가
                 break;
-            //case "npc": //rpl과 같은? 대화로 들어가기.. 나중에 구현
+            //case "npc": //rpl과 같은? 대화로 들어가기..
 
             default:
                 Debug.LogError(script_type + " is non type");
@@ -157,74 +138,51 @@ public class TextChanger : MonoBehaviour
 
         }
 
-        //모든 지점에 breakpooint가 과연 필요할까? ex) sound와 dia의 합심
-        File.AppendAllText(mainroute, breakpoint);
+        //중단점 추가
+        File.AppendAllText(main_route, breakpoint);
 
         return 0;
-
-        /*
-        //Debug.Log("GETcode : " + op + " & "+ code);
-        switch (op)
-        {
-            case "jmp": //다른 시나리오로 이동  // jmp/0/plain/Plain | 0/plain/Plain
-            case "rpl": //같은 json(시나리오/마을)에서의 이동
-                if ((int)code[idx] == -1) break; // 필요한지 ㅁ?ㄹ
-                pre_move = (int)code[idx++];
-                pre_main = (op == "rpl") ? curmain : code[idx].ToString();
-
-                File.AppendAllText(mainroute, '#' + op + '\n');
-                break;
-            case "dia": //시나리오 show // effect : [ "dia", [ [1], [2] ] ]   // [1]은 2차원 배열이라 할 수 있겠지..
-                if (idx == 1) foreach (JToken jdes in code[1]) 
-                        File.AppendAllText(mainroute, Setstring(jdes.ToString()) + '\n');
-                else foreach (JToken jdes in code) 
-                        File.AppendAllText(mainroute, Setstring(jdes.ToString()) + '\n');  //System.IO.
-                break;
-            case "btl":
-                Battle(code[idx++].ToString(), code[idx++].ToString(), (int)code[idx++], (int)code[idx++]);
-                break;
-            case "mov": //call region. area. moment //버려진 명령어. 2024-07-09. ※폐기할것.
-                Region(code[idx++].ToString(), (int)code[idx++], (int)code[idx++]);   //Region(code[op][i++].ToString(), (int)code[op][i++], (int)code[op][i++]);
-                break;
-            case "npc": //뼈대만 남은 코드..
-                NpcCall(code[idx++].ToString(), code[idx++].ToString(), code[idx++].ToString());
-                break;
-            default:
-                //Debug.Log(op + " don't exist on Decodeing fucntion");
-                break;
-        }
-
-        return 0;
-        */
     }
 
     //main.txt에 text첨가
-    private void Dialog(JToken logue, int idx)
+    private void Dialog(JToken logue, int idx) //idx 삭제할것
     {
-        //idx 삭제할것.
         foreach (JToken jdes in logue)
-            File.AppendAllText(mainroute, Setstring(jdes.ToString()) + '\n');  //System.IO.
+            File.AppendAllText(main_route, Setstring(jdes.ToString()) + '\n');  //System.IO.
         return;
     }
     
+    //다음 스크립트 지정
     private void Movement(int move, string main, string sign)
     {
-        pre_move = move;
-        pre_main = main;
-        File.AppendAllText(mainroute, '#' + sign + '\n');
-
+        next_move = move;
+        next_main = main;
+        File.AppendAllText(main_route, '#' + sign + '\n');
     }
 
-    //key내용을 옮깁니다~~~.
+    //key를 mainSet으로 세팅
     private void Choice(JToken selection)
     {
         key_jarray.Add(selection.ToObject<JObject>());  // jobject만 add
         key_jroot["key"] = key_jarray;
 
-        File.WriteAllText(keyroute, key_jroot.ToString());
+        File.WriteAllText(key_route, key_jroot.ToString());
+    }
+
+    //전투 진입 중단코드 삽입
+    private void Battle(string jbattle, string root, int num, int situ)
+    {
+        //배틀 미리 세팅
+        battleManager.BattlePreset(jbattle, root, num, situ); //현재 매개변수 거의 의미없게 세팅되어있음.
+
+        //TextManager가 읽으면 배틀 진입
+        File.AppendAllText(main_route, "#btl\n");
+
+        return;
     }
 
     //폐기 예정.
+    /*
     // key, sc_key -> main.json to use for keywords
     private void CheckKeys(string k, JToken cur_script) // how to use k..?
     {
@@ -256,8 +214,8 @@ public class TextChanger : MonoBehaviour
         }
 
         if( k[0] == '#')
-            File.AppendAllText(mainroute, k);
-        File.WriteAllText(keyroute, key_jroot.ToString());
+            File.AppendAllText(main_route, k);
+        File.WriteAllText(key_route, key_jroot.ToString());
     }
 
     // *** dice의 succ, fail을 effect 안에다 넣을것!! *** 
@@ -288,13 +246,14 @@ public class TextChanger : MonoBehaviour
 
     private void Region(string spot, int chap, int detail)     //지역별 get
     {
-        string str = convertJson.MakeJson(Application.dataPath + @"/Resource/Text/Field/Region.json");
+        //string str = convertJson.MakeJson(Application.dataPath + @"/Resource/Text/Field/Region.json");
+        string str = Resources.Load<TextAsset>("Text/Field/Region").ToString();
         JObject jroot = JObject.Parse(str);
         JToken jregion = jroot["Region"];                                                                           //jroot["Forest", "sky", "cave", "beach", "sea", "city"] -> enum class로 문자열..?
 
         //if (jregion["name"].ToString() == spot)
         foreach (JToken des in jregion["Type"][chap]["description"]) //임시 for
-            File.AppendAllText(mainroute, Setstring(des.ToString()) + '\n');
+            File.AppendAllText(main_route, Setstring(des.ToString()) + '\n');
         //Debug.Log(des);
 
         return;
@@ -303,14 +262,15 @@ public class TextChanger : MonoBehaviour
     private void NpcCall(string name, string situ, string num)
     {
         //해당 npc를 찾아서, situ를 맞추고, num에 있는 dia나 다른 것을 행함
-        string str = convertJson.MakeJson(Application.dataPath + @"/Resource/Text/Npc/Npc.json");
+        //string str = convertJson.MakeJson(Application.dataPath + @"/Resource/Text/Npc/Npc.json");
+        string str = Resources.Load<TextAsset>("Text/Npc/Npc").ToString();
         JObject jroot = JObject.Parse(str);
         JToken jnpc = jroot[name][situ][num];
         //convert_hash.Add("#" + name, jnpc["name"].ToString()); // ex) #edward : 에드워드
         foreach (JToken dia in jnpc["dia"])
-            File.AppendAllText(mainroute, Setstring(dia.ToString()) + '\n');   //" "는 알아서 추가하던가.. 말던가,
+            File.AppendAllText(main_route, Setstring(dia.ToString()) + '\n');   //" "는 알아서 추가하던가.. 말던가,
 
-        CheckKeys("opcode..?", jnpc);
+        //CheckKeys("opcode..?", jnpc);
 
         foreach (JProperty others in jnpc)
             if (others.Name == "effect")
@@ -322,32 +282,7 @@ public class TextChanger : MonoBehaviour
         //CheckKeys("opcode..?", jnpc);
         return;
     }
-
-    private void Battle(string jbattle, string root, int num, int situ)
-    {
-        
-        //File.AppendAllText(mainroute, "#battle " + name + num + '\n');
-        //종류 : 몬스터, 인간형 등등?
-        //이름, 숫자. 그리고 시츄는 발각, 기습, 상태이상 등?
-        //Debug.Log("JSON[monster] : " + jbattle + "이 " + root + "발생.");
-
-        //배틀 미리 세팅
-        battlemanager.BattlePreset(jbattle, root, num, situ); //"goblin", "forest_goblin", 1, 0]},
-
-        //TextManager가 읽으면 배틀 진입
-        File.AppendAllText(mainroute, "#btl\n");
-
-        return;
-    }
-
-        /*
-         * sc_key에는 관측이 됨. key에서도 아마 필요할거같아보임
-         *  effect : { .., ["dice", "sen", 1, 1, 2] 형식 받고
-         *  dice : { "1", "2" : ... 로 따로 취급하자. dice는 좀 많이 복잡할거같네..
-         */
-
-        //System.IO.File.AppendAllText(mainroute, "\n"); // + final null line
-    
+    */
 
     private string Setstring(string raw_string)
     {

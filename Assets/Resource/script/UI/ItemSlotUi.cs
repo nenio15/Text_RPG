@@ -33,14 +33,12 @@ public class ItemSlotUi : MonoBehaviour
             text.text = itemslot.count.ToString();
         }
 
-        icon.sprite = Resources.Load<Sprite>("Picture/Item/" + itemslot.item.img);
+        icon.sprite = Resources.Load<Sprite>("Picture/Item/" + itemslot.itemData.img);
     }
 
     public void Clicked()
     {
-        //ItemSlotUI. 너... 생각보다 인기쟁이다? index말고, ui_type이라는 enum관련 함수 하나 더 얻지 않을래?
-        //switch문으로 어느 상위 스크립트.instance한테 selected되어야할지 말해줄게....
-        //대충 여기서 panel을 부르고 싶으나... 어차피 하위 모듈이라 inventory에게 부탁하십시오.
+        //switch문으로 어느 상위 스크립트.instance한테 selected되어야할지 필요함. 장비창에서도 인벤창 index로 검색하잖ㅇ..
         Inventory.Instance.Selected(index); //이렇게 하면 상위 모듈 참조가 되는구나...
     }
 

@@ -38,6 +38,7 @@ public class LineDraw : MonoBehaviour
 
     }
 
+    //맵 스크롤시 좌표 추적.
     private void Update()
     {
         Vector3 movement = Field.position - FieldFixPos;

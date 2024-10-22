@@ -34,32 +34,19 @@ public class QuestManager : MonoBehaviour
 
     public static Inventory Instance;
     */
-    // Start is called before the first frame update
+
     private void Awake()
     {
         //Instance = this;
-        questlist_route = Application.dataPath + "/Resource/Text/Info/Questlist.json";
-        
+        questlist_route = Application.persistentDataPath + "/Info/Questlist.json";
         UpdateList();
     }
 
 
     public void UpdateList()
     {
-        /*
-         * 
-         * 
-         * 1.json에서 parse한다.
-         * 해당 list는 foreach로 접근하여, 각 slots에 끼운다.
-         * null이 아닐때까지..? 아니야 foreach동안만 update시킨다.
-         * 그렇게 한다.
-         * 추가가 생기면.. 그건 슬롯에도 반영시키고, json에도 반영시킨다.
-         * 
-         */
-
         //각 리스트마다 참조해서 수정하기.
-        
-        //    questlists[j].GetComponentInChildren<TextMeshProUGUI>();
+        //questlists[j].GetComponentInChildren<TextMeshProUGUI>();
         
         
         int i = 0;
@@ -83,6 +70,4 @@ public class QuestManager : MonoBehaviour
         
 
     }
-
-
 }

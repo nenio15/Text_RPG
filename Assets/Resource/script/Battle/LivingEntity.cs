@@ -6,19 +6,31 @@ using System;
 public class LivingEntity : MonoBehaviour, IDamageable
 {
     public float startingHealth = 10f;
+    public float startingMana = 1f;
     public float health { get; protected set; }
+    public float maxHealth { get; protected set; }
+    public float mana { get; protected set; }
+    public float maxMana { get; protected set; }
     public bool dead {  get; protected set; }
+    public string state { get; protected set; }
+    //public bool turnEnd { get; protected set; }
     public event Action onDeath;
 
     protected virtual void OnEnable()
     {
         dead = false;
+        //turnEnd = true;
         health = startingHealth;
+        maxHealth = startingHealth;
+        mana = startingMana;
+        maxMana = startingMana;
+        state = "normal";
     }
 
-    public virtual void OnDamage(float damage, System.Numerics.Vector2 hitPos, System.Numerics.Vector2 hitSurface)
+    public virtual void OnDamage(float damage, Vector3 hitPos, Vector3 hitSurface)
     {
         health -= damage;
+        Debug.Log("damaged " + name + health);
 
         if (health <= 0 && !dead)
         {
@@ -30,7 +42,16 @@ public class LivingEntity : MonoBehaviour, IDamageable
     {
         if (dead) return;
 
-        health += newHealth;
+        float addedHealth = health + newHealth;
+        health = (addedHealth >= maxHealth ) ? maxHealth : addedHealth;
+    }
+
+    public virtual void Revive(float newHealth)
+    {
+        if (!dead) return;
+
+        health = newHealth;
+
     }
 
     public virtual void Die()
@@ -38,5 +59,7 @@ public class LivingEntity : MonoBehaviour, IDamageable
         if(onDeath != null) onDeath();
 
         dead = true;
+        //turnEnd = true;
+        Debug.Log("dead " + name);
     }
 }
