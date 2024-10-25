@@ -6,16 +6,13 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using UnityEngine.UI;
 using System.ComponentModel;
-//using UnityEditor.Experimental.GraphView;
-//using UnityEngine.Timeline;
-//using System.Globalization;
 
 public class SelectionManager : MonoBehaviour
 {
     [SerializeField] private TextManager textManager;
     [SerializeField] private TextChanger textChanger;
     [SerializeField] private GameObject player;
-    [SerializeField] private Judgement judgement;
+    [SerializeField] private CombatCalculator judgement;
     [SerializeField] private BattleManager battleManager;
     [SerializeField] private ActionList actionList;
     public GameObject[] button;
@@ -26,7 +23,7 @@ public class SelectionManager : MonoBehaviour
 
     private Vector3 destination = new Vector3(0.0f, -800.0f, -4.0f);
     private Vector2 speed = Vector2.zero;
-    private float time = 0.2f;
+    //private float time = 0.2f;
     private string mainroute, jroute, str;
 
     private JObject jroot;
@@ -121,11 +118,10 @@ public class SelectionManager : MonoBehaviour
                 break;
             case State.Battle:
                 //클릭한 버튼 내용을 player_info에 반영
-                player.GetComponent<PlayerHealth>().UpdateData(0, btnData.displayText.text);
-                //player_info.Skill = content;
+                //player.GetComponent<PlayerHealth>().UpdateData(0, btnData.displayText.text);
 
                 player.GetComponent<PlayerAction>().SetAction(btnData.displayText.text);
-                actionList.UpdateSet();
+                //actionList.UpdateSet(); // 이거 여기 있어야함..?
                 break;
 
             default:
@@ -136,12 +132,15 @@ public class SelectionManager : MonoBehaviour
         
     }
 
+    /*
+    //selection 자체 move
     IEnumerator Moving(GameObject obj)
     {
         //Debug.Log("moving");
         while (obj.transform.position != destination)
             yield return obj.transform.position = Vector2.SmoothDamp(obj.transform.position, destination, ref speed, time);
     }
+    */
 
     //버튼 텍스트와 활성화
     private void BtnScenarioActive(JToken jcur)
@@ -151,15 +150,6 @@ public class SelectionManager : MonoBehaviour
             //int idx = 0;
             BtnData tmp = button[len].GetComponent<BtnData>();
 
-            /*
-            //effect의 내용물이 없는 경우, 에러 반환
-            //if (jcur[list]["effect"] == null) { Debug.LogError("[ERROR][JSON] : effect contain non contents"); return; }
-            //JToken jtmp = jcur[list]["effect"][0];
-
-            //dice가 있는 경우
-            //if (jtmp[idx].ToString().Equals("dice")) tmp.Active(list, jtmp[++idx].ToString(), (int)jtmp[++idx]);
-            //else tmp.Active(list);
-            */
             tmp.Active(list);
 
             //버튼 뷰 활성화
@@ -182,9 +172,6 @@ public class SelectionManager : MonoBehaviour
 
 
     //버튼 비활성화
-    private void BtnUnActive()
-    {
-        for (; len > 0; len--) button[len - 1].SetActive(false);
-    }
+    public void BtnUnActive() { for (; len > 0; len--) button[len - 1].SetActive(false); }
 
 }

@@ -327,6 +327,7 @@ GameObject:
   - component: {fileID: 7265584465441819336}
   - component: {fileID: 938748009346003649}
   - component: {fileID: 9145939572271293770}
+  - component: {fileID: 4007538736322208054}
   - component: {fileID: 6560442227681395880}
   - component: {fileID: 2244353642445651044}
   - component: {fileID: 1732816111521783130}
@@ -429,8 +430,8 @@ MonoBehaviour:
   skill: {fileID: 1542159033194892237}
   enemy:
     Level: 1
-    Hp: 0100000001000000
-    Mp: 0100000001000000
+    Hp: 0300000003000000
+    Mp: 0000000000000000
     Stat: 010000000100000001000000010000000100000001000000
     Name: "\uD64D\uAE38\uB3D9"
     Class: Warrior
@@ -438,12 +439,29 @@ MonoBehaviour:
   speed: 300
   myInfo: {fileID: 6829731033989584129}
   anim: {fileID: 0}
+  hitEffect: {fileID: 0}
+  deathSound: {fileID: 8300000, guid: a7ccd1ca1d01fdc45b4e3087f1a55350, type: 3}
+  hitSound: {fileID: 8300000, guid: a922de740708e9541a8721168b8c1c12, type: 3}
+--- !u!114 &4007538736322208054
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2247802827559852375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b18d21c19450ad0438d63f309d1bc301, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  skill: {fileID: 1542159033194892237}
+  speed: 400
+  enemyHealth: {fileID: 0}
   whatIsTarget:
     serializedVersion: 2
     m_Bits: 0
   hitEffect: {fileID: 0}
-  deathSound: {fileID: 8300000, guid: a7ccd1ca1d01fdc45b4e3087f1a55350, type: 3}
-  hitSound: {fileID: 8300000, guid: a922de740708e9541a8721168b8c1c12, type: 3}
 --- !u!70 &6560442227681395880
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

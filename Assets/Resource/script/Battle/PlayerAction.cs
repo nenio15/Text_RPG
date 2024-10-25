@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,11 +6,14 @@ using UnityEngine;
 public class PlayerAction : InterAction
 {
     private int setTurn = 0;
+    public Action onActionReady;
+
+
     private BattleManager battleManager;
 
     public LayerMask whatIsTarget;
-
     private LivingEntity targetEntity;
+    public Transform target; // 임시 조치
     //private NavMeshAgent
 
     //public ParticleSystem hitEffect;
@@ -57,6 +61,7 @@ public class PlayerAction : InterAction
         action.percent = 0.7f;
 
         base.OnSetAction(action);
+        onActionReady();
     }
 
     //액션 취소
@@ -81,5 +86,25 @@ public class PlayerAction : InterAction
         setTurn--;
     }
 
-    
+    //턴 종료 후 리셋
+    public void ResetAction()
+    {
+        base.OnEnable();
+        setTurn = 0;
+        onActionReady();
+    }
+
+
+    //어그로 대상에게 접근하기.
+    IEnumerator UpdateRun()
+    {
+        float distance = Vector3.Distance(transform.position, target.position);
+        if (distance < 20) { StopCoroutine(UpdateRun()); }
+
+        while (distance >= 20)
+        {
+            transform.position = Vector3.MoveTowards(transform.position, target.position, 0.5f);
+            yield return new WaitForSeconds(0.001f);
+        }
+    }
 }

@@ -35,6 +35,7 @@ public class BattleStageSet : MonoBehaviour
     public Image field_base;
     public GameObject player;
     public GameObject field_frame;
+    public GameObject enemylist;
 
     //경로 세팅
     //private string path = @"/Resource/Text/Battle/StageFreeSet/";
@@ -83,8 +84,11 @@ public class BattleStageSet : MonoBehaviour
         Vector3 pos = new Vector3((int)jobj["pos"][0], (int)jobj["pos"][1], 0); // z좌표를 넣어 말어..
 
         //인스턴트 생성
-        GameObject tmp = Instantiate(prefab, field_frame.transform);
+        GameObject tmp;
+        if(type == 2) tmp = Instantiate(prefab, enemylist.transform);
+        else tmp = Instantiate(prefab, field_frame.transform);
         tmp.GetComponent<RectTransform>().anchoredPosition = pos;
+
         //tmp.GetComponet<BattleEnemy>().SetUp();
     }
 

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7265584465441819336}
   - component: {fileID: 938748009346003649}
   - component: {fileID: 9145939572271293770}
+  - component: {fileID: 5152322774771245371}
   - component: {fileID: 6560442227681395880}
   - component: {fileID: 2244353642445651044}
   m_Layer: 7
@@ -104,20 +105,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86f58976e6aa8da4f8b827d87c691d6e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Player: {fileID: 0}
+  startingHealth: 10
+  startingMana: 1
+  player: {fileID: 0}
   self: {fileID: 0}
+  skill: {fileID: 0}
   enemy:
     Level: 1
     Hp: 0100000001000000
     Mp: 0100000001000000
     Stat: 010000000100000001000000010000000100000001000000
-    Type: Goblin
+    Name: "\uD64D\uAE38\uB3D9"
     Class: Warrior
-    Weapon: Club
     Skill: Rock
   speed: 300
   myInfo: {fileID: 6829731033989584129}
   anim: {fileID: 0}
+  hitEffect: {fileID: 0}
+  deathSound: {fileID: 0}
+  hitSound: {fileID: 0}
+--- !u!114 &5152322774771245371
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2247802827559852375}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b18d21c19450ad0438d63f309d1bc301, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  whatIsTarget:
+    serializedVersion: 2
+    m_Bits: 0
+  hitEffect: {fileID: 0}
 --- !u!70 &6560442227681395880
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

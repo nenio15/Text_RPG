@@ -10,10 +10,13 @@ public class ActionList : MonoBehaviour
     [SerializeField] private PlayerAction playerAction;
     [SerializeField] private TextMeshProUGUI text;
     
+    
     private void Awake()
     {
         btn = GetComponentsInChildren<Image>();
         text.text = "describe something";
+        playerAction.onActionReady += UpdateSet;
+
     }
 
     public void UpdateSet()

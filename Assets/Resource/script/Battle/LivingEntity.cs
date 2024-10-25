@@ -13,7 +13,6 @@ public class LivingEntity : MonoBehaviour, IDamageable
     public float maxMana { get; protected set; }
     public bool dead {  get; protected set; }
     public string state { get; protected set; }
-    //public bool turnEnd { get; protected set; }
     public event Action onDeath;
 
     protected virtual void OnEnable()
@@ -30,7 +29,7 @@ public class LivingEntity : MonoBehaviour, IDamageable
     public virtual void OnDamage(float damage, Vector3 hitPos, Vector3 hitSurface)
     {
         health -= damage;
-        Debug.Log("damaged " + name + health);
+        //Debug.Log("damaged " + name + health);
 
         if (health <= 0 && !dead)
         {

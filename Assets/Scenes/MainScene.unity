@@ -16554,7 +16554,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1382573149}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 02c761ca51966864eb8227a0a8129e68, type: 3}
+  m_Script: {fileID: 11500000, guid: 96370f3c7b155204c8cfe218bedc30c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   player_win: 0
@@ -25442,35 +25442,17 @@ MonoBehaviour:
   battleText: {fileID: 0}
   battleFieldView: {fileID: 995571436}
   scrollView: {fileID: 378976260}
+  enemylist: {fileID: 1592937132}
   player: {fileID: 444904038}
-  enemys:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  adjacent_enemy: {fileID: 0}
+  enemyHealths: []
+  enemyActions: []
+  adjacent_target: {fileID: 0}
   robj: []
   clickobj: {fileID: 0}
   selectionManager: {fileID: 1311297210}
   playerUiManager: {fileID: 1715443054}
   battleStageSet: {fileID: 2103527943}
-  judgement: {fileID: 1382573151}
+  combatCalculator: {fileID: 1382573151}
   hitSound: {fileID: 8300000, guid: d8129391859f59643bb512e2ee8b941f, type: 3}
 --- !u!114 &2103527943
 MonoBehaviour:
@@ -25487,6 +25469,7 @@ MonoBehaviour:
   field_base: {fileID: 74179940}
   player: {fileID: 444904038}
   field_frame: {fileID: 1306302972}
+  enemylist: {fileID: 1592937132}
 --- !u!82 &2103527944
 AudioSource:
   m_ObjectHideFlags: 0

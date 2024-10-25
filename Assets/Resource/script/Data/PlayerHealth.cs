@@ -60,7 +60,9 @@ public class PlayerHealth : LivingEntity
 
     public override void OnDamage(float damage, Vector3 hitPos, Vector3 hitSurface)
     {
+        player_info.Hp[0] -= 1; // 중복. 임시 조치. ui바꾸면서 바꿀것.
         base.OnDamage(damage, hitPos, hitSurface);
+        transform.position = transform.position - new Vector3(-200, 200);
     }
 
     public override void Die()
@@ -77,17 +79,6 @@ public class PlayerHealth : LivingEntity
     public override void Revive(float newHealth)
     {
         base.Revive(newHealth);
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other == null) return;
-
-        if (!dead)
-        {
-            // 상대 컴포넌트 갖고와서 이모저모
-        }
-        
     }
 
     //json에 반영. 전투말고, 레벨업 따위에서 갱신. 

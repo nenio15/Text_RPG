@@ -48,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
 
     }
 
-    private void Move()
+    public void Move()
     {
         transform.position = Vector3.MoveTowards(transform.position, pos, speed);
         if(Vector3.Distance(transform.position, pos) < 100) run = false;
@@ -57,29 +57,14 @@ public class PlayerMovement : MonoBehaviour
         //playerRigidbody.MovePosition(transform.position + a);
     }
 
-    public void EndTurn(bool win)
-    {
-        //if (win) Debug.Log("I win");
-        if(!win)
-        {
-            
-            characterData.player_info.Hp[0] -= 1;
-            playerUiManager.UploadToGame();
-        }
-        //여기서 hp+-같은거랑 이거저거.. 그러면 물론, 계수를 인수로 받아야겠지?
-
-
-        StopCoroutine("UpdateRun");
-    }
-
     //어그로 대상에게 접근하기.
     IEnumerator UpdateRun(RectTransform target)
     {
-
+        Debug.Log("move");
         float distance = Vector3.Distance(transform.position, target.position);
         if(distance < 100) { StopCoroutine(UpdateRun(target)); }
 
-        while (true) //trigger is you now... hmm
+        while (distance >= 100) //trigger is you now... hmm
         {
             transform.position = Vector3.MoveTowards(transform.position, target.position, speed);
             yield return new WaitForSeconds(0.001f);
