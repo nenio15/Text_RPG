@@ -57,6 +57,17 @@
   },
   "check" : {
     "///" : "... 여러개 둘려면 어떻게 세팅해야하냐.. "
+  },
+  "reward" : {
+    "gold" : 500,
+    "exp" : 500,
+    "drop" : [
+      {
+        "name" : "Hp potion",
+        "type" : "Consumption",
+        "count" : 2
+      }
+    ]
   }
 
 }

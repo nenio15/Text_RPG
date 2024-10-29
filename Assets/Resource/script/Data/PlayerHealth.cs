@@ -82,10 +82,9 @@ public class PlayerHealth : LivingEntity
     }
 
     //json에 반영. 전투말고, 레벨업 따위에서 갱신. 
-    public void UpdateData(int type, string content)
+    public void UpdateData(string type, int count)
     {
-        player_info.Skill = content; //임시조치. 왜 변경이 안되냐..
-        //Debug.Log("player skill : " + player_info.Skill);
-        characterData.Upload(type, content, player, cha_route);
+        //player_info.Skill = content; //임시조치. 왜 변경이 안되냐..
+        characterData.Upload(type, count, player, cha_route);
     }
 }

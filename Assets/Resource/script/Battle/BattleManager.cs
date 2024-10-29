@@ -187,13 +187,16 @@ public class BattleManager : MonoBehaviour
     }
 
     //전투 종료
-    public void BattleShutdown(string detail) //아직 미구현
+    public void BattleShutdown(string detail) //승패 미구현. 
     {
-        //여기 desicion btn state도 추가할것.
+        //임시 조치
         Debug.Log("battle is ended");
+        player.GetComponent<PlayerAction>().StopCoroutine("UpdateRun");
         player.GetComponent<PlayerAction>().ResetAction(); // 혹시 모르니 임시조치
 
         //전투 보상.
+        battleStageSet.CalculateBattle(true, player);
+
 
         //전투에서 텍스트로
         transform.position = new Vector3(-700, 700, -1);

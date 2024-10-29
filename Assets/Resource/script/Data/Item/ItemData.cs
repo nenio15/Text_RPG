@@ -22,7 +22,7 @@ public class itemData
     public string type;
     //public bool isequipment = false;
     public int sell;
-
+    public int count;
     //[Header("Stacking")]
     //public bool stack = false;
     //public int max_statck;

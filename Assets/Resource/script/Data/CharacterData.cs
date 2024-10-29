@@ -12,12 +12,12 @@ public class Character
     public int[] Hp = { 3, 3 };
     public int[] Mp = { 0, 0 };
     public int[] Stat = { 1, 1, 1, 1, 1, 1 };
-    //int money;
-    //int exp;
+    
+    public int[] Exp = { 0, 100 };
+    public int Money = 0;
 
     public string Name = "홍길동";
     public string Class = "Warrior";
-    public string Skill = "Rock";
 }
 
 public class CharacterData
@@ -46,14 +46,23 @@ public class CharacterData
     */
 
     //json으로 정보 업데이트. player만 쓸수있는데. 흠..
-    public void Upload(int type, string content, JObject raw_data, string route)
+    public void Upload(string type, int count, JObject raw_data, string route)
     {
+        int i = 0;
+
         switch (type)
         {
-            case (int)DataType.Skill:
-                raw_data["Info"]["Skill"] = content; //json에 반영되나, 중복적인 선언이다. 다만 복잡도를 생각해 일단 이렇게 둔다.
+            case "skill":
+                //raw_data["Info"]["Skill"] = content; //json에 반영되나, 중복적인 선언이다. 다만 복잡도를 생각해 일단 이렇게 둔다.
                 break;
-            case 1:
+            case "gold":
+                //ㅋㅋㅋ 이거 초기화는 없네 스크립트 상 말이야. ㅋㅋ. 
+                i = (int)raw_data["Info"]["Money"] + count;
+                raw_data["Info"]["Money"] = i;
+                break;
+            case "exp":
+                i = (int)raw_data["Info"]["Exp"][0] + count;
+                raw_data["Info"]["Exp"][0] = i;
                 break;
             default:
                 break;

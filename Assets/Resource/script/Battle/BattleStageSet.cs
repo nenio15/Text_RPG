@@ -8,21 +8,11 @@ using UnityEngine.UI;
 public class BattleStageSet : MonoBehaviour
 {
     /*
-     * 4.환경구성(특수효과) - 나중에 구현
-     * 6.턴 제한 등의 시스템 반환(이거는... 여기다가 라기엔 btl 매니저한테 변수로 줘야하지 않을까? {get; set;} 이거면 될듯?
-     * 
-     * 추가 의문사항
-     * 1.enemy의 state나 level등의 추가
-     * 2.enemy의 parent설정. enemylist로? 왜 그래야하지? 그러면 deco, obs도 분류를 두는게 낫지 않는가?
-     * 3.배경 자체의 지형지물 
-     * -> 배경들 프리팹? 
-     * -> obstacle로 걍 대체? 
-     * -> 배경 자체를 갈아끼워? 
-     * -> box collider를 여럿 배치 시켜버려?
-     * 
-     * 아래 enum에 따른 type별 대응사항.
-     * deco랑 obstacle은 별로 필요없고, monster랑 npc는 미묘.. monster는 필요한게 맞긴한데...흠좀무
+     * 환경구성(특수효과)
+     * enemy의 state나 level등의 추가
+     * 지형지물 프리팹
      */
+
     private enum ObjType
     {
         Decoration,
@@ -32,10 +22,12 @@ public class BattleStageSet : MonoBehaviour
     }
 
     //고정 지정 개체들
-    public Image field_base;
+    public Sprite field_base;
     public GameObject player;
     public GameObject field_frame;
     public GameObject enemylist;
+
+    [SerializeField] private Inventory inventory;
 
     //경로 세팅
     //private string path = @"/Resource/Text/Battle/StageFreeSet/";
@@ -53,7 +45,7 @@ public class BattleStageSet : MonoBehaviour
         JToken jset = jbase["set"];
         
         //필드 배경 전환
-        field_base.sprite = Resources.Load<Sprite>("Picture/" + jset["background"].ToString());
+        field_base = Resources.Load<Sprite>("Picture/" + jset["background"].ToString());
 
         //enemy는 추가로, state라던가 그런게 추가될 예정. level이라던가. 물론 그 개체의 스크립트쪽으로
 
@@ -66,8 +58,8 @@ public class BattleStageSet : MonoBehaviour
         //npc 생성
         
         //player배치
-        Vector3 pos = new Vector3(700, 150, 0);
-        player.GetComponent<RectTransform>().anchoredPosition = pos;
+        //Vector3 pos = new Vector3(700, 150, 0);
+        //player.GetComponent<RectTransform>().position += pos;
 
         //시스템
 
@@ -90,6 +82,35 @@ public class BattleStageSet : MonoBehaviour
         tmp.GetComponent<RectTransform>().anchoredPosition = pos;
 
         //tmp.GetComponet<BattleEnemy>().SetUp();
+    }
+
+    //전투 승리 패배 조건 확인 - 대조.
+    public bool JudgeWinner() { return true; }
+
+    //전투 종료 후 결산
+    public void CalculateBattle(bool win, GameObject player)
+    {
+        JToken jget = jbase["reward"];
+        int i = 0;
+        //player.GetComponent<PlayerHealth>().UpdateData("gold", i);
+
+        //사실 이런거는 enemy의 드랍테이블을 비교해서 얻기는 하는데. 흠..
+        //win 무승부..? 몰라.
+        if (win)
+        {
+
+
+            //금화
+            i = (int)jget["gold"];
+            Debug.Log(i);
+            player.GetComponent<PlayerHealth>().UpdateData("gold", i);
+            //경험치
+            i = (int)jget["exp"];
+            player.GetComponent<PlayerHealth>().UpdateData("exp", i);
+            //드롭아이템
+            Debug.Log(jget["drop"]);
+        }
+
     }
 
 

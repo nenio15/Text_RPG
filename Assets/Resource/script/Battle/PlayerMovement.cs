@@ -9,11 +9,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private PlayerUiManager playerUiManager;
     [SerializeField] private PlayerHealth characterData;
 
-    [SerializeField] private GameObject Enemy;
+    //[SerializeField] private GameObject Enemy;
     public float speed = 0.5f;
 
     private RectTransform tr;
-    public RectTransform target;
+    //public RectTransform target;
 
     //private Transform tr;
     //public Vector3 target;
@@ -31,7 +31,7 @@ public class PlayerMovement : MonoBehaviour
 
 
         tr = GetComponent<RectTransform>();
-        target = Enemy.GetComponent<RectTransform>();
+        //target = Enemy.GetComponent<RectTransform>();
         //pos = target;
 
         playerRigidbody = GetComponent<Rigidbody>();
@@ -57,6 +57,7 @@ public class PlayerMovement : MonoBehaviour
         //playerRigidbody.MovePosition(transform.position + a);
     }
 
+    /*
     //어그로 대상에게 접근하기.
     IEnumerator UpdateRun(RectTransform target)
     {
@@ -74,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
             //yield return null;
         }
     }
+    */
 
     /*
     public void UpdateRun(Vector3 pos) //IEnumerator UpdateRun(Vector3 pos) //이거 왜 ienumerator로 했더라....
