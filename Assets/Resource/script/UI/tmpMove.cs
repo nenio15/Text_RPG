@@ -26,12 +26,16 @@ public class tmpMove : MonoBehaviour
 
         PlayerMovement battlePlayer = FindObjectOfType<PlayerMovement>();
         //if (battlePlayer != null) battlePlayer.StartCoroutine("UpdateRun", FieldFixPos);
-        //battlePlayer.UpdateRun(FieldFixPos);
+        PlayerAction playerAction = FindObjectOfType<PlayerAction>();
+        playerAction.target = FieldFixPos;
+        playerAction.SetAgentPosition();
+
+        /*
         battlePlayer.pos = FieldFixPos;
         battlePlayer.run = true;
+        */
+
         
-        //Debug.Log(FieldFixPos + " : " + battlePlayer.transform.position);
-        //move(pos - movedpos)
     }
 
 }

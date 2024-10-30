@@ -90,7 +90,7 @@ public class BattleManager : MonoBehaviour
         //player - movement는 나중에 변경 필.
         //PlayerMovement battlePlayer = player.GetComponent<PlayerMovement>();
         //battlePlayer.StartCoroutine("UpdateRun", battlePlayer.target);
-        player.GetComponent<PlayerAction>().target = enemyActions[0].gameObject.transform;
+        player.GetComponent<PlayerAction>().targetPos = enemyActions[0].gameObject.transform;
         player.GetComponent<PlayerAction>().StartCoroutine("UpdateRun");
 
         //npc

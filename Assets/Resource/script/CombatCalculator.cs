@@ -57,7 +57,7 @@ public class CombatCalculator : MonoBehaviour
         string executorSkill = executor.actions[turnStep].name;
         string targetSkill = target.actions[turnStep].name;
 
-        Debug.Log("executor : " + executorSkill + " , target : " +  targetSkill);
+        Debug.Log("executor : " + executorSkill + " , targetPos : " +  targetSkill);
 
         //합을 바꿔야겠지 방식을..
         if (executorSkill == targetSkill)

@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing.Printing;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerAction : InterAction
 {
@@ -13,8 +15,10 @@ public class PlayerAction : InterAction
 
     public LayerMask whatIsTarget;
     private LivingEntity targetEntity;
-    public Transform target; // 임시 조치
-    //private NavMeshAgent
+    public Transform targetPos; // 임시 조치
+
+    public Vector3 target;
+    private NavMeshAgent agent;
 
     //public ParticleSystem hitEffect;
     //public AudioClip deathSound;
@@ -23,6 +27,10 @@ public class PlayerAction : InterAction
     void Start()
     {
         battleManager = FindObjectOfType<BattleManager>();
+
+        agent = GetComponent<NavMeshAgent>();
+        agent.updateRotation = false;
+        agent.updateUpAxis = false;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -94,16 +102,27 @@ public class PlayerAction : InterAction
         onActionReady();
     }
 
+    private void SetTargetPosition()
+    {
+        //대충 클릭으로 위치. 이거는 필요없겠네
+        //target = 
+    }
+
+    public void SetAgentPosition()
+    {
+        //agent.speed =
+        agent.SetDestination(new Vector3(target.x, target.y, transform.position.z));
+    }
 
     //어그로 대상에게 접근하기.
     IEnumerator UpdateRun()
     {
-        float distance = Vector3.Distance(transform.position, target.position);
+        float distance = Vector3.Distance(transform.position, targetPos.position);
         if (distance < 20) { StopCoroutine(UpdateRun()); }
 
         while (distance >= 20)
         {
-            transform.position = Vector3.MoveTowards(transform.position, target.position, 0.5f);
+            transform.position = Vector3.MoveTowards(transform.position, targetPos.position, 0.5f);
             yield return new WaitForSeconds(0.001f);
         }
     }
