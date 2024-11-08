@@ -95,6 +95,7 @@
     <Compile Include="Assets\Resource\Script\Battle\InterAction.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
+    <Compile Include="Assets\Resource\Script\Data\SkillSlotUi.cs" />
     <Compile Include="Assets\Resource\Script\Town\townEntry.cs" />
     <Compile Include="Assets\Resource\Script\Data\Item\ItemData.cs" />
     <Compile Include="Assets\Resource\Script\Scene\StartScene_Event.cs" />
@@ -124,6 +125,7 @@
     <Compile Include="Assets\Resource\Script\Battle\PlayerAction.cs" />
     <Compile Include="Assets\Resource\Script\UI\DesicionButton.cs" />
     <Compile Include="Assets\Resource\Script\UI\ItemSlotUi.cs" />
+    <Compile Include="Assets\Resource\Script\Battle\SkillManager.cs" />
     <Compile Include="Assets\Resource\Script\UI\tmpMove.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
     <Compile Include="Assets\Resource\Script\UI\ActionList.cs" />

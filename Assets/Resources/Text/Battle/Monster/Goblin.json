@@ -1,0 +1,99 @@
+{
+  "Attack" : [
+      {
+        "name" : "기본공격",
+        "img" : "base_attack",
+        "describe" : "추잡한 공격이다.",
+        "type" : "base_attack",
+
+        "damage" : 3,
+        "accurate" : 70,
+        "criticalProbability" : 10,
+        "criticalRate" : 1.2,
+        "buff" : [ { } ],
+        "debuff" : [ { } ],
+
+        "need" : [ {
+        }],
+        "more" : [ {
+        }]
+      },
+      {
+        "name" : "강공격",
+        "img" : "strong_attack",
+        "describe" : "전력으로 휘두르는 강한 공격이다.",
+        "type" : "strong_attack",
+
+        "damage" : 4,
+        "accurate" : 55,
+        "criticalProbability" : 10,
+        "criticalRate" : 1.5,
+        "buff" : [ { } ],
+        "debuff" : [ { } ],
+
+        "need" : [ {
+          "type" : "str",
+          "level" : 4,
+          "turn" : 0
+        }],
+        "more" : [ {
+          "type" : "str",
+          "level" : 2,
+          "turn" : 0
+        }]
+      },
+      {
+        "name" : "회피",
+        "img" : "base_dodge",
+        "describe" : "공격을 회피한다.",
+        "type" : "base_dodge",
+
+        "damage" : 0,
+        "accurate" : 100,
+        "criticalProbability" : 0,
+        "criticalRate" : 1,
+        "buff" : [ { } ],
+        "debuff" : [ { } ],
+
+        "need" : [ {}],
+        "more" : [ {
+          "type" : "dex",
+          "level" : 5,
+          "turn" : 0
+        }]
+      },
+      {
+        "name" : "오물뱉기",
+        "img" : "splash",
+        "describe" : "체내의 오물을 뱉어낸다.",
+        "type" : "shortrange_attack",
+
+        "damage" : 1,
+        "accurate" : 70,
+        "criticalProbability" : 10,
+        "criticalRate" : 1.1,
+        "buff" : [ { } ],
+        "debuff" : [ { 
+          "type" : "poision", 
+          "level" : 1, 
+          "turn" : 2
+          },
+          {
+            "type" : "blind",
+            "level" : 1,
+            "turn" : 1
+          } ],
+
+        "need" : [ 
+        {
+          "type" : "mana",
+          "level" : 1,
+          "turn" : 0
+        }],
+        "more" : [ {        }]
+      }
+  ]
+
+
+
+}

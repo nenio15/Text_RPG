@@ -52,7 +52,7 @@ public class CharacterData
 
         switch (type)
         {
-            case "skill":
+            case "jskill":
                 //raw_data["Info"]["Skill"] = content; //json에 반영되나, 중복적인 선언이다. 다만 복잡도를 생각해 일단 이렇게 둔다.
                 break;
             case "gold":

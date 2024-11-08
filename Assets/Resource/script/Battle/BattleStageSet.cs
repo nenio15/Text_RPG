@@ -66,6 +66,10 @@ public class BattleStageSet : MonoBehaviour
         //초기 카메라 세팅
         JToken jcamera = jset["camera"];
         field_frame.transform.position = new Vector3((int)jcamera["pos"][0], (int)jcamera["pos"][1], 0);
+
+        //스킬셋 세팅 (로드)
+
+
     }
 
     //프리팹 인스턴스 생성 함수

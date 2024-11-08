@@ -97,8 +97,8 @@ public class EnemyHealth : LivingEntity
 
             enemyAudioPlayer.PlayOneShot(hitSound);
 
-            Debug.Log("pos : " + transform.position);
-            Debug.Log("hit : " + hitPos + hitSurface);
+            //Debug.Log("pos : " + transform.position);
+            //Debug.Log("hit : " + hitPos + hitSurface);
 
             //tr.position = tr.position - new Vector3(-200, 200);
             tr.position -= hitPos;

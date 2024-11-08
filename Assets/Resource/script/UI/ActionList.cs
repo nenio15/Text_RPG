@@ -24,8 +24,12 @@ public class ActionList : MonoBehaviour
         for (int i = 0; i < btn.Length; i++)
         {
             if (playerAction.actions[i].img != null)
-                btn[i].sprite = Resources.Load<Sprite>("Picture/" + playerAction.actions[i].img);
-            else 
+            {
+                btn[i].sprite = Resources.Load<Sprite>("Picture/Skill/" + playerAction.actions[i].img);
+                text.text = playerAction.actions[i].describe.ToString(); //임시 설명문.
+                //btn[i].sprite = Resources.Load<Sprite>("Picture/" + playerAction.actions[i].img);
+            }
+            else
                 btn[i].sprite = null;
         }
 

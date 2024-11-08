@@ -86,7 +86,7 @@ public class EnemyAction : InterAction
         string skill = skills[UnityEngine.Random.Range(0, 3)];
         //enemyHealth.enemy.Skill = skill;
         
-        battleAction tmp = new battleAction(skill, 0, "attack", skill, 1.0f, 1.0f);
+        BattleAction tmp = new BattleAction(skill, 0, "attack", skill, 1.0f, 1.0f);
         OnSetAction(tmp);
 
 
@@ -142,6 +142,7 @@ public class EnemyAction : InterAction
     {
         SwitchTurn(true);
         StopCoroutine("UpdateRun");
+        //Debug.Log(player.name);
         onSystemAction(gameObject, player); //µÉ·Á³ª.
 
 

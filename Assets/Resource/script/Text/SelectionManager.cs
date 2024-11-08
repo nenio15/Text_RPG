@@ -117,10 +117,12 @@ public class SelectionManager : MonoBehaviour
                 BtnUnActive();
                 break;
             case State.Battle:
+                //해당 내용은 skillslotui에게 전담. 삭제할것.
+
                 //클릭한 버튼 내용을 player_info에 반영
                 //player.GetComponent<PlayerHealth>().UpdateData(0, btnData.displayText.text);
 
-                player.GetComponent<PlayerAction>().SetAction(btnData.displayText.text);
+                //player.GetComponent<PlayerAction>().SetAction(btnData.displayText.text);
                 //actionList.UpdateSet(); // 이거 여기 있어야함..?
                 break;
 

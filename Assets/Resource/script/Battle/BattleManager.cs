@@ -70,8 +70,9 @@ public class BattleManager : MonoBehaviour
         scrollView.SetActive(false); 
 
         //배틀 무대 세팅
-        selectionManager.ShowSelection("Action", 0, 1);
-        transform.position = new Vector3(400, 700, -1);
+        //selectionManager.ShowSelection("Action", 0, 1);
+        //전투용 선택지 따로 소환.
+        transform.position = new Vector3(400, 630, -1);
 
         //enemys 지정
         //enemyHealths = enemylist.transform.GetComponentsInChildren<EnemyHealth>(); //이거 빼자.
@@ -110,7 +111,7 @@ public class BattleManager : MonoBehaviour
         reself = self;
         retarget = target;
 
-
+        //Debug.Log(self.name + target.name);
         //멈추기
         player.GetComponent<PlayerAction>().StopCoroutine("UpdateRun");
         foreach (EnemyAction enemy in enemyActions) enemy.StopCoroutine("UpdateRun");
@@ -165,7 +166,8 @@ public class BattleManager : MonoBehaviour
         //모두 사망 - 승리랑 패배 판정으로 다시 나눌것.
         foreach (EnemyAction enemy in enemyActions)
             if (!enemy.enemyHealth.dead) allDead = false;
-
+        if (enemyActions == null) Debug.Log("flajdlr");
+        //Debug.Log(enemyActions[0].enemyHealth.dead.ToString() + enemyActions[0].enemyHealth.health);
         //전투 종료
         if (allDead) BattleShutdown("ended");
 
@@ -200,6 +202,7 @@ public class BattleManager : MonoBehaviour
 
         //전투에서 텍스트로
         transform.position = new Vector3(-700, 700, -1);
+        //필요?
         selectionManager.BtnUnActive();
         scrollView.SetActive(true);
         //더럽.

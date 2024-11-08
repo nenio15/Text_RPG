@@ -48,17 +48,40 @@ public class CombatCalculator : MonoBehaviour
     //합 승부
     public bool MatchSwap(InterAction executor, InterAction target, int turnStep)
     {
-        //방어처리(의미있음?)
+        //예외처리
         if(executor == null || target == null) return false;
 
-        //target이 합을 맞출 수 없는 경우.
+        //한쪽이 아무 행동도 취하지 않는 경우
         if (target.actions[turnStep].name == null) return false;
+        else if (executor.actions[turnStep].name == null) return true;
 
         string executorSkill = executor.actions[turnStep].name;
         string targetSkill = target.actions[turnStep].name;
 
         Debug.Log("executor : " + executorSkill + " , targetPos : " +  targetSkill);
 
+        //다이스 - $애니 + img 생성.
+        int executorDice = UnityEngine.Random.Range(0, 20);
+        int targetDice = UnityEngine.Random.Range(0, 20);
+
+        //합 우월성
+
+        //스킬 스탯 - 1.요구치 확인 2.스텝 업 확인
+
+        //무기 보정치 - 장비
+
+
+        Debug.Log("Total dice : " + executorDice + " and target : " + targetDice);
+        
+        //1대실패, 20대성공의 처리. 취급.
+
+
+        //동일한 경우는 어떻게 취급하냐...
+        //20다이스 + 보정치 합산 비교 - $애니 + img 생성
+        if (executorDice >= targetDice) return false;
+        else return true;
+
+        /*
         //합을 바꿔야겠지 방식을..
         if (executorSkill == targetSkill)
         {
@@ -73,6 +96,7 @@ public class CombatCalculator : MonoBehaviour
         else {
             return true;
         }
+        */
     }
 
 }

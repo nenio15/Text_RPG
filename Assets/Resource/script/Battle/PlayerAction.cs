@@ -8,6 +8,7 @@ using UnityEngine.AI;
 public class PlayerAction : InterAction
 {
     private int setTurn = 0;
+    //ActionList에서 참조.
     public Action onActionReady;
 
 
@@ -24,10 +25,14 @@ public class PlayerAction : InterAction
     //public AudioClip deathSound;
     //public AudioClip hitSound;
 
+    //skillslotui의 접근을 위한 instance
+    public static PlayerAction Instance;
+
     void Start()
     {
         battleManager = FindObjectOfType<BattleManager>();
 
+        Instance = this;
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
         agent.updateUpAxis = false;
@@ -54,19 +59,21 @@ public class PlayerAction : InterAction
     }
 
     //액션 세팅
-    public void SetAction(string name)
+    public void SetAction(BattleAction action)
     {
         if(setTurn >= 3) { Debug.Log("turn over. remove before action"); return; }
 
         //이거 세팅을 여기서 해야할까.. 굳이..?
         //json리딩도 있어.. 그건 나중에 구현.
-        battleAction action = new battleAction();
+        /*
+        BattleAction action = new BattleAction();
         action.name = name;
-        action.index = setTurn++;
         action.img = name; //변경 필...
         action.type = "normal";
         action.damage = 1.0f;
-        action.percent = 0.7f;
+        action.accurate = 0.7f;
+        */
+        action.index = setTurn++;
 
         base.OnSetAction(action);
         onActionReady();
@@ -82,12 +89,12 @@ public class PlayerAction : InterAction
             for (int i = index; i < 2; i++)
                 actions[i] = actions[i + 1];
 
-            actions[2] = new battleAction();
+            actions[2] = new BattleAction();
             actions[2].index = 2;
         }
         else // 3. 마지막 액션 삭제.
         {
-            actions[index] = new battleAction();
+            actions[index] = new BattleAction();
             actions[index].index = 0;
         }
 

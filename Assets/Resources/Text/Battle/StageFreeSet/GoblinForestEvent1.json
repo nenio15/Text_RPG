@@ -8,17 +8,17 @@
     "decoration" : [
       {
         "name" : "grass",
-        "pos" : [100, 20]
+        "pos" : [10, 2]
     },
     {
       "name" : "grass",
-      "pos" : [200, -10]
+      "pos" : [20, -1]
     }
   ],
   "obstacle" : [
     {
       "name" : "tree",
-      "pos" : [0, 40]
+      "pos" : [0, 4]
     }
   ],
   "monster" : [
@@ -27,7 +27,7 @@
       "level" : 1,
       "name" : "Enemy1",
       "state" : "awake",
-      "pos" : [50, 100]
+      "pos" : [-5, 5]
     }
   ],
   "npc" : [

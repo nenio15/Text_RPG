@@ -9,7 +9,7 @@ public class ItemSlotUi : MonoBehaviour
     public Button button;
     public Image icon;
     public TextMeshProUGUI text;
-    public ItemSlot itemslot; //이거 형태는 아직도 모르겠네. 한번 만들고. 부셔봐야 알듯?
+    public ItemSlot itemslot;
     private Outline outline;
 
     public int index;
