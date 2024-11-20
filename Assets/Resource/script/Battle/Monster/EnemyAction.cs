@@ -29,7 +29,7 @@ public class EnemyAction : InterAction
 
 
     //State state;
-    string[] skills = { "Rock", "Scissors", "Paper" };
+    string[] skills = { "base_attack", "base_dodge", "strong_attack" };
 
     void Start()
     {
@@ -86,7 +86,7 @@ public class EnemyAction : InterAction
         string skill = skills[UnityEngine.Random.Range(0, 3)];
         //enemyHealth.enemy.Skill = skill;
         
-        BattleAction tmp = new BattleAction(skill, 0, "attack", skill, 1.0f, 1.0f);
+        BattleAction tmp = new BattleAction(skill, 0, skill, skill, 1.0f, 1.0f);
         OnSetAction(tmp);
 
 
@@ -153,7 +153,7 @@ public class EnemyAction : InterAction
     public void UpdateUi()
     {
         //Ω∫≈≥
-        UiImage[0].sprite = Resources.Load<Sprite>("Picture/" + actions[turnSequence].img);
+        UiImage[0].sprite = Resources.Load<Sprite>("Picture/Skill/" + actions[turnSequence].img);
 
         //≈œ
         string[] num = { "One", "Two", "Three" };

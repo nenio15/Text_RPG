@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using TMPro;
 
 public class TextManager : MonoBehaviour, IPointerClickHandler
 {
     [Header("TEXTER INFO")]
-    public Text m_TypingText;
+    //public Text m_TypingText;
+    public TextMeshProUGUI m_TypingText;
     public float m_Speed = 0.2f;
     private int idx = 0;
     private string m_Message;
@@ -245,7 +247,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
 
     
     //타이핑 효과
-    IEnumerator Showing(Text typingText, string message)
+    IEnumerator Showing(TextMeshProUGUI typingText, string message)
     {
         for (int i = 0; i < message.Length; i++)
         {

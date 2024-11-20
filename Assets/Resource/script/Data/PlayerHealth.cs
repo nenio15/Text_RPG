@@ -60,7 +60,7 @@ public class PlayerHealth : LivingEntity
 
     public override void OnDamage(float damage, Vector3 hitPos, Vector3 hitSurface)
     {
-        player_info.Hp[0] -= 1; // 중복. 임시 조치. ui바꾸면서 바꿀것.
+        //player_info.Hp[0] -= 1; // 중복. 임시 조치. ui바꾸면서 바꿀것.
         base.OnDamage(damage, hitPos, hitSurface);
         transform.position = transform.position - new Vector3(-200, 200);
     }

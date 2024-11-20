@@ -4,6 +4,35 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
+public class Narrative //서사
+{
+    [Header("INFO")]
+    public string name;
+    public string img;
+    public string describe;
+    public string type; // 4. 3. 흠
+
+    //조건
+    //효과
+    //발동여부 - 이번턴. - 이거를 어떻게 잴까..
+    //스택여부
+    //스택.
+
+    [Header("EFFECT")]
+    public BattleEffect[] buff;
+    public BattleEffect[] debuff;
+
+    [Header("CORRECTION")]
+    public BattleEffect[] need;
+    public BattleEffect[] more;
+
+    //좀 더 나은 방식이 있을거 같은데.
+    public bool stacked = false;
+    public int stack = 0;
+    public int max_stack = 0;
+}
+
+[System.Serializable]
 public class BattleEffect
 {
     public string type;
@@ -54,7 +83,8 @@ public class BattleAction
 
 public class InterAction : MonoBehaviour
 {
-    public BattleAction[] actions { get; protected set; }
+    public BattleAction[] actions { get; protected set; } // 3으로 고정.
+    public List<Narrative> narratives { get; protected set; } // 얘는 늘어나는데.. list어떰?
     public int turnSequence {  get; protected set; }
     public bool turnEnd {  get; protected set; }
 

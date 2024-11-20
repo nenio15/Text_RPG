@@ -96,6 +96,8 @@ public class BattleStageSet : MonoBehaviour
     {
         JToken jget = jbase["reward"];
         int i = 0;
+
+        NarrativeManager.instance.CallByStageSet(); // 대충호출.
         //player.GetComponent<PlayerHealth>().UpdateData("gold", i);
 
         //사실 이런거는 enemy의 드랍테이블을 비교해서 얻기는 하는데. 흠..

@@ -42,8 +42,8 @@ public class BattleManager : MonoBehaviour
     private AudioSource battleAudioPlayer;
     public AudioClip hitSound;
 
-    private int turnSequence = 0;
-
+    public int turnSequence = 0;
+    public int turnWave = 1;
 
     private void Start()
     {
@@ -174,12 +174,18 @@ public class BattleManager : MonoBehaviour
         //마지막 턴이 끝남
         if (turnSequence == 3)
         {
+            turnWave++;
             turnSequence = 0;
             player.GetComponent<PlayerAction>().ResetAction();
 
-            //멈추기
+            //캐릭터 정지 후, 서사 확인.
             player.GetComponent<PlayerAction>().StopCoroutine("UpdateRun");
-            foreach (EnemyAction enemy in enemyActions) enemy.StopCoroutine("UpdateRun");
+            CallNarrative(player);
+
+            foreach (EnemyAction enemy in enemyActions) { enemy.StopCoroutine("UpdateRun"); CallNarrative(enemy.gameObject); }
+
+            //npc도 포함. CallNarrative(npc);
+
         }
         else
         {
@@ -210,5 +216,7 @@ public class BattleManager : MonoBehaviour
         text.stop_read = false;
 
     }
+
+    public void CallNarrative(GameObject target) { NarrativeManager.instance.CallByManager(target); }
     
 }

@@ -1,0 +1,42 @@
+{ 
+  "narrative" : [
+    {
+      "name" : "이리드의 얼음송곳", 
+      "type" : "active",
+      "grade" : "설화급",
+      "img" : "icepick_of_irid",
+      "comment" : "그녀가 다듬은 마법이다.",
+      "describe" : "얼음을 송곳마냥 다듬어 내뿜는다.",
+      "effect" : [
+        {
+          "type" : "skill set to skill.json from dictionary. skill.json to added ?",
+          "name" : "hp",
+          "state" : "none",
+          "value" : 5
+        },
+        {
+          "type" : "stat",
+          "name" : "mp",
+          "state" : "none",
+          "value" : -1
+        }
+      ],
+      "condition" : [
+        {
+          "type" : "stat",
+          "name" : "mp",
+          "state" : "more",
+          "value" : 1
+        }
+      ]
+    },
+    {
+      "name" : "깨우침",
+      "type" : "액티브 스킬형",
+      "img" : "armor",
+      "value" : ["그러면 양식이 바뀌겠네? 스킬 형식으로. 넣어서. 아님 여기다가 발현 : 스킬[....]이라 쓰던지."],
+      "limit" : ["클래스 제한? 무기제한?"],
+      "detail" : ""
+    }
+  ]
+}

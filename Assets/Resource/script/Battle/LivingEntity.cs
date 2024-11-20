@@ -28,8 +28,9 @@ public class LivingEntity : MonoBehaviour, IDamageable
 
     public virtual void OnDamage(float damage, Vector3 hitPos, Vector3 hitSurface)
     {
+        //이거 안 줄어드는데요?
         health -= damage;
-        //Debug.Log("damaged " + name + health);
+        Debug.Log("damaged " + damage + health);
 
         if (health <= 0 && !dead)
         {

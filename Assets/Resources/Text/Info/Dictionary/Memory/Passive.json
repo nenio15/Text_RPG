@@ -1,0 +1,55 @@
+{ 
+  "item" : [
+    {
+      "name" : "장인 정신", 
+      "type" : "passive",
+      "img" : "장인",
+      "effect" : [
+        {
+          "type" : "stat",
+          "name" : "dex",
+          "value" : 3
+        },
+        {
+          "type" : "stat",
+          "name" : "mp",
+          "value" : -1
+        }
+      ],
+      "limit" : [
+        {
+          "type" : "stat",
+          "name" : "dex",
+          "value" : 12
+        }
+      ],
+      "detail" : ""
+    },
+    {
+      "name" : "애도",
+      "type" : "선택지 옵션형",
+      "img" : "armor",
+      "value" : ["자애를 배푼다. cha 관련 굴림보정 +10"],
+      "limit" : ["이 옵션이라는게, 그 옵션이 아님. 선택지 추가 보정치임"],
+      "detail" : ""
+    }
+  ],
+  "items" : [
+    {
+      "name" : "깨우침",
+      "type" : "액티브 스킬형",
+      "img" : "armor",
+      "value" : ["그러면 양식이 바뀌겠네? 스킬 형식으로. 넣어서. 아님 여기다가 발현 : 스킬[....]이라 쓰던지."],
+      "limit" : ["클래스 제한? 무기제한?"],
+      "detail" : ""
+    },
+    {
+      "name" : "노조의 첫 비행",
+      "type" : "전투 패시브형",
+      "img" : "armor",
+      "value" : ["공포관련 디버프 저항 : +10%"],
+      "limit" : ["그런거 없다!"],
+      "detail" : ""
+    }
+  ]
+}

@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
     //물리 갱신 주기에 맞춘 실행
     private void FixedUpdate()
     {
-        if (run) Move();
+        //if (run) Move();
 
         //playerAnimator.SetFloat("Move", speed);
 

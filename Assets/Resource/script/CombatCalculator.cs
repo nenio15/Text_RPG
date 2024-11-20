@@ -1,7 +1,9 @@
 using System;
+using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
+using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;
 
 public class CombatCalculator : MonoBehaviour
@@ -10,9 +12,11 @@ public class CombatCalculator : MonoBehaviour
     [SerializeField] private SelectionManager selectionManager;
     [SerializeField] private BattleManager battleManager;
 
+    CombatAdventage combatAdventage;
 
     private void Start()
     {
+        combatAdventage = new CombatAdventage();
         playerUiManager = FindObjectOfType<PlayerUiManager>();
         selectionManager = FindObjectOfType<SelectionManager>();
         battleManager = FindObjectOfType<BattleManager>();
@@ -30,19 +34,17 @@ public class CombatCalculator : MonoBehaviour
         }
 
         //명중
+        string hitting = Hit(executor, turnStep);
+        //JudgeNarrative(executor.gameObject);
 
         //닷지
+        hitting = Dodge(target, hitting);
+        //JudgeNarrative(executor.gameObject);
+        
+        //적용
+        ApplyResult(hitting, executor, target);
 
-        //적용. living에서 통일.. 은 안될테고.
-        Vector3 hitPos = target.GetComponent<Collider2D>().ClosestPoint(executor.transform.position);
-        Vector3 hitSurface = executor.transform.position - target.transform.position;
-
-        if (target.GetComponent<EnemyHealth>() != null) target.GetComponent<EnemyHealth>().OnDamage(1, hitPos, hitSurface);
-        if (target.GetComponent<PlayerHealth>() != null) target.GetComponent<PlayerHealth>().OnDamage(1, hitPos, hitSurface);
-        // npc
-
-        //임시 적용 - 이래도 되지 않는가..
-        //battleManager.IsTurnEnd();
+        //Time.timeScale = 0;
     }
 
     //합 승부
@@ -55,8 +57,8 @@ public class CombatCalculator : MonoBehaviour
         if (target.actions[turnStep].name == null) return false;
         else if (executor.actions[turnStep].name == null) return true;
 
-        string executorSkill = executor.actions[turnStep].name;
-        string targetSkill = target.actions[turnStep].name;
+        string executorSkill = executor.actions[turnStep].type;
+        string targetSkill = target.actions[turnStep].type;
 
         Debug.Log("executor : " + executorSkill + " , targetPos : " +  targetSkill);
 
@@ -64,7 +66,34 @@ public class CombatCalculator : MonoBehaviour
         int executorDice = UnityEngine.Random.Range(0, 20);
         int targetDice = UnityEngine.Random.Range(0, 20);
 
+        Debug.Log("Base dice : " + executorDice + " and target : " + targetDice);
+
         //합 우월성
+        if (combatAdventage.Adventages.ContainsKey(executorSkill))
+        {
+            string[] tmp = combatAdventage.Adventages[executorSkill];
+            foreach (string s in tmp)
+            {
+                if(s == targetSkill)
+                {
+                    Debug.Log(executorSkill + " vs " + s + " is executor adventage");
+                    executorDice++;
+                }
+            }
+
+        }
+        else if (combatAdventage.Adventages.ContainsKey(targetSkill)) // 타겟이 우위인 경우.
+        {
+            string[] tmp = combatAdventage.Adventages[targetSkill];
+            foreach (string s in tmp)
+            {
+                if (s == executorSkill)
+                {
+                    Debug.Log(targetSkill + " vs " + s + " is target adventage");
+                    targetDice++;
+                }
+            }
+        }
 
         //스킬 스탯 - 1.요구치 확인 2.스텝 업 확인
 
@@ -72,31 +101,103 @@ public class CombatCalculator : MonoBehaviour
 
 
         Debug.Log("Total dice : " + executorDice + " and target : " + targetDice);
-        
+
         //1대실패, 20대성공의 처리. 취급.
 
+        //서사판정.
+        JudgeNarrative(executor.gameObject);
 
         //동일한 경우는 어떻게 취급하냐...
         //20다이스 + 보정치 합산 비교 - $애니 + img 생성
         if (executorDice >= targetDice) return false;
         else return true;
+    }
 
-        /*
-        //합을 바꿔야겠지 방식을..
-        if (executorSkill == targetSkill)
+    private string Hit(GameObject executor, int turnStep)
+    {
+        //스킬 명중률
+        //executor의 명중 보조들 추가 (장비. 서사. 그리고 ?)
+        float accurate = executor.GetComponent<InterAction>().actions[turnStep].accurate;
+        float critical = executor.GetComponent<InterAction>().actions[turnStep].criticalProbability;
+
+        float rate = UnityEngine.Random.Range(0, 100); //대충 이런데.. 확률 range이거 int? 흠. 
+        Debug.Log("hit rate : " + rate);
+
+
+        //명중보다 낮으면
+        if (rate >= accurate) { return "miss"; }
+        else if (rate < critical) //크리가 터지면
         {
-            return false;
+            return "critical";
         }
-        else if ((executorSkill == "Scissors" && targetSkill == "Paper") ||
-                     (executorSkill == "Rock" && targetSkill == "Scissors") ||
-                     (executorSkill == "Paper" && targetSkill == "Rock"))
+        else
         {
-            return false;
+            return "hit";
+        }        
+    }
+
+    private string Dodge(GameObject target, string hit)
+    {
+        //1.크리 -> 회피 -> 명중
+        //2.명중 -> 회피/찰과상
+        //3.미스 -> 그냥 미스.
+
+        //회피율은 타겟의 기본 회피율 + 방어구 + 서사 + ?
+        //기본 회피율도 써야겠네..
+
+        float rate = UnityEngine.Random.Range(0, 100); 
+
+        if (hit == "miss") return hit;
+
+        if (rate < 70)
+        {
+            return hit;
         }
-        else {
-            return true;
+        else
+        {
+            return "dodge";
         }
-        */
+        //return "abrasion"; // 찰과상 기준은 일단 버리자.
+    }
+
+    private void ApplyResult(string type, GameObject executor, GameObject target)
+    {
+        int damage = 1;
+        //크리티컬, 명중, 찰과상, 회피, 미스. - 를 표시하는 스타일이 다르겠네요~?
+        switch (type)
+        {
+            case "abrasion":
+                damage = (damage > 2) ? damage-- : damage;
+                break;
+            case "critical":
+                damage++;
+                break;
+            case "hit":
+                break;
+            case "dodge":
+                damage = 1;
+                break;
+            case "miss":
+                damage = 1; //임시조치
+                break;
+
+        }
+        Debug.Log("HITTYPE : " + type);
+        
+        Vector3 hitPos = target.GetComponent<Collider2D>().ClosestPoint(executor.transform.position);
+        Vector3 hitSurface = executor.transform.position - target.transform.position;
+
+        if (target.GetComponent<EnemyHealth>() != null) target.GetComponent<EnemyHealth>().OnDamage(damage, hitPos, hitSurface);
+        if (target.GetComponent<PlayerHealth>() != null) target.GetComponent<PlayerHealth>().OnDamage(damage, hitPos, hitSurface);
+        //npc인 경우도 추가.
+    }
+
+    private float JudgeNarrative(GameObject target)
+    {
+        NarrativeManager.instance.CallByCombat(target);
+        float tmp = NarrativeManager.instance.MeddleInCombat(target);
+        Debug.Log(tmp);
+        return tmp;
     }
 
 }

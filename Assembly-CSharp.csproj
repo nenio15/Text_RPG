@@ -68,6 +68,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
+    <Compile Include="Assets\Resource\Script\UI\NarrativeList.cs" />
     <Compile Include="Assets\Resource\Script\Battle\LineDraw.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\WarpTextExample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshProFloatingText.cs" />
     <Compile Include="Assets\Resource\Script\Data\SkillSlotUi.cs" />
+    <Compile Include="Assets\Resource\Script\Data\CombatAdventage.cs" />
     <Compile Include="Assets\Resource\Script\Town\townEntry.cs" />
     <Compile Include="Assets\Resource\Script\Data\Item\ItemData.cs" />
     <Compile Include="Assets\Resource\Script\Scene\StartScene_Event.cs" />
@@ -118,6 +120,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ChatController.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ObjectSpin.cs" />
+    <Compile Include="Assets\Resource\Script\UI\NarrativeSlotUi.cs" />
     <Compile Include="Assets\Resource\Script\Text\TouchEvent.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
     <Compile Include="Assets\Resource\Script\UI\ButtonManager.cs" />
@@ -135,6 +138,7 @@
     <Compile Include="Assets\Resource\Script\Return.cs" />
     <Compile Include="Assets\Resource\Script\Text\TextChanger.cs" />
     <Compile Include="Assets\Resource\Script\Data\ConvertJson.cs" />
+    <Compile Include="Assets\Resource\Script\Data\NarrativeManager.cs" />
     <Compile Include="Assets\Resource\Script\Data\Dictionary.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextConsoleSimulator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TeleType.cs" />

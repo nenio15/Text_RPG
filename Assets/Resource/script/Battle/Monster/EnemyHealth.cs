@@ -29,6 +29,8 @@ public class EnemyHealth : LivingEntity
     private LivingEntity targetEntity;
     //private NavMeshAgent
 
+    public Slider healthSlider;
+
     public ParticleSystem hitEffect;
     public AudioClip deathSound;
     public AudioClip hitSound;
@@ -58,7 +60,7 @@ public class EnemyHealth : LivingEntity
 
         //hp bar text setting
         myTextMeshPro = myInfo.GetComponent<TextMeshPro>();
-        myInfoTr = myInfo.GetComponent<RectTransform>();
+        //myInfoTr = myInfo.GetComponent<RectTransform>();
 
         enemyAnimator = GetComponent<Animator>();
         enemyAudioPlayer = GetComponent<AudioSource>();
@@ -73,8 +75,10 @@ public class EnemyHealth : LivingEntity
 
     protected override void OnEnable()
     {
-        startingHealth = 4f; // enemy.Hp[0];
+        startingHealth = 4f; // enemy.Hp[0]; //임의 설정이지. 이것도 건들여야겠네.
         startingMana = 1f;  // enemy.Mp[0];
+        healthSlider.maxValue = startingHealth;
+        healthSlider.value = startingHealth;
 
         base.OnEnable();
         
@@ -105,6 +109,7 @@ public class EnemyHealth : LivingEntity
         }
 
         base.OnDamage(damage, hitPos, hitSurface);
+        healthSlider.value = health;
     }
 
     public override void Die()
@@ -132,8 +137,7 @@ public class EnemyHealth : LivingEntity
 
     private void Update()
     {
-       Vector3 infoPos = new Vector3(transform.position.x, transform.position.y + 50, 0);
-       myInfoTr.position = infoPos;
+
     }
 
 

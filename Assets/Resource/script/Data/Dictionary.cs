@@ -20,5 +20,18 @@ public class Dictionary
         return null;
     }
 
+    //반환값 변경할 것.
+    public NarrativeSlot SetNarrative(string name, string category)
+    {
+        string str = Resources.Load<TextAsset>("Text/Info/Dictionary/Memory/" + category).ToString();
+
+        JObject jitemdata = JObject.Parse(str);
+        foreach (JToken narrative in jitemdata["narrative"])
+            if (narrative["name"].ToString() == name)
+                return JsonUtility.FromJson<NarrativeSlot>(narrative.ToString());
+
+        return null;
+    }
+
     //player_info = JsonUtility.FromJson<Character>(info.ToString());
 }

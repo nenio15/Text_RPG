@@ -1,0 +1,104 @@
+{ 
+  "narrative" : [
+    {
+      "name" : "쓰러져도 다시한번", 
+      "type" : "battle",
+      "grade" : "플래티넘 / 영웅급",
+      "img" : "one_more_again",
+      "comment" : "그럼에도 다시한번 일어선다.",
+      "describe" : "사망 시, 한 번 부활한다.",
+      "effect" : [
+        {
+          "type" : "stat",
+          "name" : "hp",
+          "state" : "rate",
+          "value" : 10
+        }
+      ],
+      "condition" : [
+        {
+          "type" : "stat",
+          "name" : "hp",
+          "state" : "equal",
+          "value" : 0
+        },
+        {
+          "type" : "limit",
+          "name" : "use",
+          "state" : "battle",
+          "value" : 1
+        }
+      ]
+    },
+    {
+      "name" : "오래가는 것이 좋다", 
+      "type" : "battle",
+      "grade" : "회고록",
+      "img" : "long_thing_is_good",
+      "comment" : "길고 얇은 삶이야 말로 진리 아니겠더냐.",
+      "describe" : "전투 웨이브 5마다 체력을 일정량 회복한다.",
+      "effect" : [
+        {
+          "type" : "stat",
+          "name" : "hp",
+          "value" : 2
+        }
+      ],
+      "condition" : [
+        {
+          "type" : "wave",
+          "name" : "turn",
+          "state" : "each",
+          "value" : 5
+        }
+      ]
+    },
+    {
+      "name" : "하늘은 언제나 맑음", 
+      "type" : "battle",
+      "grade" : "동화",
+      "img" : "sky_clean",
+      "comment" : "맑은 하늘은 언제봐도 기분이 좋아요.",
+      "describe" : "밝은 장소에서 명중률이 상승한다.",
+      "effect" : [
+        {
+          "type" : "stat",
+          "name" : "accurate",
+          "state" : "none",
+          "value" : 10
+        }
+      ],
+      "condition" : [
+        {
+          "type" : "field",
+          "name" : "bright",
+          "value" : 100
+        }
+      ]
+    },
+    {
+      "name" : "신의 보살핌", 
+      "type" : "battle",
+      "grade" : "신화",
+      "img" : "touch_of_god",
+      "comment" : "신의 총애는 항상 고난을 이겨내게 한다.",
+      "describe" : "합 실패시, 일정확률로 다이스를 다시 굴린다.",
+      "effect" : [
+        {
+          "type" : "combat",
+          "name" : "reroll",
+          "state" : "rate",
+          "value" : 10
+        }
+      ],
+      "condition" : [
+        {
+          "type" : "combat",
+          "name" : "compete",
+          "state" : "fail",
+          "value" : 1
+        }
+      ]
+    }
+  ]
+}
