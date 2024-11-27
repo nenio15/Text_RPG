@@ -39,6 +39,10 @@ public class EnemyHealth : LivingEntity
     private AudioSource enemyAudioPlayer;
     //private Renderer enemyRenderer; // 흠좀무.
 
+
+    //타 스크립트에서 몬스터 종류 구분을 위한 변수
+    public string nickname = "Goblin";
+
     enum State
     {
         Idle,

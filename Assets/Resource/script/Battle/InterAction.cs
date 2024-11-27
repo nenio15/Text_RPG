@@ -4,35 +4,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public class Narrative //서사
-{
-    [Header("INFO")]
-    public string name;
-    public string img;
-    public string describe;
-    public string type; // 4. 3. 흠
-
-    //조건
-    //효과
-    //발동여부 - 이번턴. - 이거를 어떻게 잴까..
-    //스택여부
-    //스택.
-
-    [Header("EFFECT")]
-    public BattleEffect[] buff;
-    public BattleEffect[] debuff;
-
-    [Header("CORRECTION")]
-    public BattleEffect[] need;
-    public BattleEffect[] more;
-
-    //좀 더 나은 방식이 있을거 같은데.
-    public bool stacked = false;
-    public int stack = 0;
-    public int max_stack = 0;
-}
-
-[System.Serializable]
 public class BattleEffect
 {
     public string type;
@@ -84,7 +55,7 @@ public class BattleAction
 public class InterAction : MonoBehaviour
 {
     public BattleAction[] actions { get; protected set; } // 3으로 고정.
-    public List<Narrative> narratives { get; protected set; } // 얘는 늘어나는데.. list어떰?
+    public List<NarrativeSlot> narratives; // 얘는 늘어나는데.. list어떰?
     public int turnSequence {  get; protected set; }
     public bool turnEnd {  get; protected set; }
 
@@ -107,5 +78,41 @@ public class InterAction : MonoBehaviour
     {
         turnEnd = turnE;
     }
+
+    public virtual void SetNarrative(NarrativeSlot narrative)
+    {
+        if (!narratives.Contains(narrative) && narrative.name != "") //왜 공백이 들어오는지 의문..
+        {
+            narratives.Add(narrative);
+            //Debug.Log(narrative.name);
+        }
+    }
+
+    //tmp
+    public virtual void OnNumericalAdjust(string name, float value, string state)
+    {
+        int index = 0;
+
+        switch (name)
+        {
+            case "damage": Calculate(actions[index].damage, value, state); break;
+            case "accurate": Calculate(actions[index].accurate, value, state); break;
+            case "critical": Calculate(actions[index].criticalRate, value, state); break;
+        }
+    }
+
+    private void Calculate(float v, float value, string state)
+    {
+        switch (state)
+        {
+            case "none": v += value; break;
+            case "rate": v += v * value; break;
+            default: break;
+        }
+
+        return;
+    }
+    
+
 
 }

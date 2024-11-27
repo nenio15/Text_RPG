@@ -82,12 +82,12 @@ public class Inventory : MonoBehaviour
         if (itemslots[index] == null) return;
 
         ItemSlot cur_item = itemslots[index].itemslot;
-        
-        
+
+
         //대충... panel한테서 이거저거를 주어야하는데. 각 요소를 내가 받아? 그냥?
         //panel을 관리하는 놈이 따로 있는게 편하지 않을까... 고민 좀 해볼게
 
-        //Debug.Log(cur_item.item.name);
+        //Debug.Log(cur_item.itemData.effect[0].name);
 
     }
 

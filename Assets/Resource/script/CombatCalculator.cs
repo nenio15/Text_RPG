@@ -8,18 +8,20 @@ using UnityEngine;
 
 public class CombatCalculator : MonoBehaviour
 {
-    [SerializeField] private PlayerUiManager playerUiManager;
-    [SerializeField] private SelectionManager selectionManager;
-    [SerializeField] private BattleManager battleManager;
+    //[SerializeField] private PlayerUiManager playerUiManager;
+    //[SerializeField] private SelectionManager selectionManager;
+    //[SerializeField] private BattleManager battleManager;
 
     CombatAdventage combatAdventage;
+
+    public bool compete;
 
     private void Start()
     {
         combatAdventage = new CombatAdventage();
-        playerUiManager = FindObjectOfType<PlayerUiManager>();
-        selectionManager = FindObjectOfType<SelectionManager>();
-        battleManager = FindObjectOfType<BattleManager>();
+        //playerUiManager = FindObjectOfType<PlayerUiManager>();
+        //selectionManager = FindObjectOfType<SelectionManager>();
+        //battleManager = FindObjectOfType<BattleManager>();
     }
 
     //경합
@@ -101,18 +103,21 @@ public class CombatCalculator : MonoBehaviour
 
 
         Debug.Log("Total dice : " + executorDice + " and target : " + targetDice);
+        if (executorDice >= targetDice) compete = true;
 
         //1대실패, 20대성공의 처리. 취급.
 
-        //서사판정.
-        JudgeNarrative(executor.gameObject);
+        //서사판정. 재굴림.
+        float reroll = JudgeNarrative(executor.gameObject, target.gameObject, compete);
+        if (reroll == 100.0f) return MatchSwap(executor, target, turnStep);
 
         //동일한 경우는 어떻게 취급하냐...
         //20다이스 + 보정치 합산 비교 - $애니 + img 생성
-        if (executorDice >= targetDice) return false;
+        if (compete) return false;
         else return true;
     }
 
+    //명중 판정
     private string Hit(GameObject executor, int turnStep)
     {
         //스킬 명중률
@@ -136,6 +141,7 @@ public class CombatCalculator : MonoBehaviour
         }        
     }
 
+    //회피 판정
     private string Dodge(GameObject target, string hit)
     {
         //1.크리 -> 회피 -> 명중
@@ -160,6 +166,7 @@ public class CombatCalculator : MonoBehaviour
         //return "abrasion"; // 찰과상 기준은 일단 버리자.
     }
 
+    //최종 히트 결과값 송출
     private void ApplyResult(string type, GameObject executor, GameObject target)
     {
         int damage = 1;
@@ -187,16 +194,49 @@ public class CombatCalculator : MonoBehaviour
         Vector3 hitPos = target.GetComponent<Collider2D>().ClosestPoint(executor.transform.position);
         Vector3 hitSurface = executor.transform.position - target.transform.position;
 
-        if (target.GetComponent<EnemyHealth>() != null) target.GetComponent<EnemyHealth>().OnDamage(damage, hitPos, hitSurface);
-        if (target.GetComponent<PlayerHealth>() != null) target.GetComponent<PlayerHealth>().OnDamage(damage, hitPos, hitSurface);
-        //npc인 경우도 추가.
+        if(target.GetComponent<IEntityEffect>() != null ) target.GetComponent<IEntityEffect>().OnDamage(damage, hitPos, hitSurface);
     }
 
-    private float JudgeNarrative(GameObject target)
+    //서사 적용
+    public void ApplyNarrative(GameObject target, NarrativeSetting effect)
     {
-        NarrativeManager.instance.CallByCombat(target);
-        float tmp = NarrativeManager.instance.MeddleInCombat(target);
-        Debug.Log(tmp);
+        if(target.GetComponent<IEntityEffect>() == null) return;
+
+        //혼자 다른놈이 있다. 코드를 합쳐버려야 하나..
+        IEntityEffect entityEffect = target.GetComponent<IEntityEffect>();
+        switch (effect.type)
+        {
+            case "stat": entityEffect.OnStat(effect.name, effect.value, effect.state); break;
+            case "buff": entityEffect.OnBuff(effect.name, effect.value, effect.state); break;
+            case "adjust": if (target.GetComponent<InterAction>() != null) target.GetComponent<InterAction>().OnNumericalAdjust(effect.name, effect.value, effect.state); break;  //entityEffect.OnNumericalAdjust(effect.name, effect.value, effect.state); break;
+        }
+        /*
+        effectActions = new Dictionary<string, System.Action<IEntityEffect, float>>
+            { "hp", (entity, value) => entity.health += value }
+        if (effectActions.TryGetValue(effect.name, out var action))
+         */
+    }
+
+    private float SumValue(string state, float value)
+    {
+        switch (state)
+        {
+            case "none": return value;
+            case "rate": return value;
+        }
+        return value;
+    }
+
+    //서로 서사가 간섭하는데, 그의 우위는 무엇이 먼저인가.. executor에게 우선순위를 부여한다. 그리고 다음 타겟에게 묻는다... 대충?
+    private float JudgeNarrative(GameObject executor, GameObject target, bool compete)
+    {
+        NarrativeManager.instance.CallByCombat(executor, compete);
+        float tmp = NarrativeManager.instance.MeddleInCombat(executor, compete);
+        if (tmp > 0) { return tmp; }
+
+        NarrativeManager.instance.CallByCombat(target, !compete);
+        tmp = NarrativeManager.instance.MeddleInCombat(target, !compete);
+
         return tmp;
     }
 

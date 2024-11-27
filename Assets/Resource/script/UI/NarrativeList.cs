@@ -10,8 +10,9 @@ public class NarrativeList : MonoBehaviour
 
     //why this is divided?
     //[SerializeField] private NarrativeSlot[] narratives;
-    [SerializeField] private List<NarrativeSlotUi> narrativeslots;
+    [SerializeField] public List<NarrativeSlotUi> narrativeslots;
     [SerializeField] private GameObject desPanel;
+    [SerializeField] private PlayerAction playerAction;
 
     //Json 관련 선언
     private string narrative_route;
@@ -34,6 +35,7 @@ public class NarrativeList : MonoBehaviour
 
     public void UpdateList()
     {
+        
 
         //번호 붙이기
         for (int j = 0; j < narrativeslots.Count; j++)
@@ -48,7 +50,7 @@ public class NarrativeList : MonoBehaviour
         foreach (JToken narrative in jroot[k])
         {
             NarrativeSlot tmp = new NarrativeSlot();
-            tmp = dictionary.SetNarrative(narrative["name"].ToString(), narrative["type"].ToString());
+            tmp = dictionary.SetNarrative(narrative["name"].ToString(), narrative["category"].ToString());
             if (tmp == null) { Debug.LogError(i + " : 해당 narrative의 Dictionary가 참조되지 않습니다."); continue; }
             //tmp.isEquipment = (tmp.itemData.type != "Consumption") ? true : false;
             //tmp.count = (int)item["count"];
@@ -57,6 +59,11 @@ public class NarrativeList : MonoBehaviour
             narrativeslots[i].Set();
             i++;
         }
+
+        //이게 이렇게 있는게 맞는걸까... narrative를 획득하면 갱신해야하는거는 맞긴한데.... +한번만 쓸수 있는거는 껏다키면 리셋 아님?
+        //PlayerAction.Instance.UpdateNarrative();
+        playerAction.UpdateNarrative(narrativeslots);
+
     }
 
     //임시 세팅.

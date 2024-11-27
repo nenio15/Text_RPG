@@ -60,15 +60,31 @@ public class PlayerHealth : LivingEntity
 
     public override void OnDamage(float damage, Vector3 hitPos, Vector3 hitSurface)
     {
+        //miss dodge시의 변동? 흠좀무. 애초에 이게 이렇게 가면 안되는데... 흠.
+        playerAudioPlayer.PlayOneShot(hitClip);
         //player_info.Hp[0] -= 1; // 중복. 임시 조치. ui바꾸면서 바꿀것.
         base.OnDamage(damage, hitPos, hitSurface);
         transform.position = transform.position - new Vector3(-200, 200);
     }
+    /*
+    public override void OnBuff()
+    {
 
+    }
+
+    public override void OnStat()
+    {
+
+    }
+
+    public override void OnNumericalAdjust()
+    {
+
+    }
+    */
     public override void Die()
     {
         base.Die();
-
 
 
         //playerAudioPlayer.PlayOneShot(deathClip);

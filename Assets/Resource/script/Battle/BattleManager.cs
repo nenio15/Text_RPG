@@ -10,7 +10,7 @@ using System.Drawing.Drawing2D;
 
 public class BattleManager : MonoBehaviour
 {
-    //사전 오브제 정의
+    //사전 오브제 정의 -> 오브제 무브를 매니저가 가지고 있어야할까..?
     [SerializeField] private Text battleText;
     [SerializeField] private GameObject battleFieldView;
     [SerializeField] private GameObject scrollView;
@@ -22,14 +22,6 @@ public class BattleManager : MonoBehaviour
     [SerializeField] public EnemyAction[] enemyActions;
     [SerializeField] public GameObject[] Npcs; // 미구현
     private GameObject reself, retarget;
-
-    /*
-    // 시크릿 키 관련. 폐기.
-    [Header("OBJ_INTERATION")]
-    //[SerializeField] private int robj_i = 0;
-    [SerializeField] private GameObject[] robj;
-    [SerializeField] private GameObject clickobj;
-    */
 
     //사전 스크립트 정의
     [Header("OTHER_MANAGERS")]
@@ -61,6 +53,7 @@ public class BattleManager : MonoBehaviour
     {
         //Action 기능 활용 모색.
         battleStageSet.Setting(root);
+
     }
 
     //배틀 진입
@@ -70,9 +63,11 @@ public class BattleManager : MonoBehaviour
         scrollView.SetActive(false); 
 
         //배틀 무대 세팅
-        //selectionManager.ShowSelection("Action", 0, 1);
+        transform.position = new Vector3(400, 630, -1); //selectionManager.ShowSelection("Action", 0, 1);
         //전투용 선택지 따로 소환.
-        transform.position = new Vector3(400, 630, -1);
+
+        //임의 첫 세팅
+        turnWave = 1;
 
         //enemys 지정
         //enemyHealths = enemylist.transform.GetComponentsInChildren<EnemyHealth>(); //이거 빼자.
@@ -161,17 +156,24 @@ public class BattleManager : MonoBehaviour
         turnSequence++;
 
         
-
+        //전투 종료 판정
         bool allDead = true;
+        
         //모두 사망 - 승리랑 패배 판정으로 다시 나눌것.
         foreach (EnemyAction enemy in enemyActions)
             if (!enemy.enemyHealth.dead) allDead = false;
         if (enemyActions == null) Debug.Log("flajdlr");
         //Debug.Log(enemyActions[0].enemyHealth.dead.ToString() + enemyActions[0].enemyHealth.health);
-        //전투 종료
+        
         if (allDead) BattleShutdown("ended");
 
-        //마지막 턴이 끝남
+
+        //턴 서사 정리용 (이거 이렇게 넣어도 될지 모르겠네..)
+        CallNarrative(player);
+        foreach (EnemyAction enemy in enemyActions) CallNarrative(enemy.gameObject);
+
+
+        //마지막 턴이 종료
         if (turnSequence == 3)
         {
             turnWave++;
@@ -217,6 +219,6 @@ public class BattleManager : MonoBehaviour
 
     }
 
-    public void CallNarrative(GameObject target) { NarrativeManager.instance.CallByManager(target); }
+    public void CallNarrative(GameObject target) { NarrativeManager.instance.CallByManager(target, this); }
     
 }

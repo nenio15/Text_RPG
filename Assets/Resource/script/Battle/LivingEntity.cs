@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public class LivingEntity : MonoBehaviour, IDamageable
+public class LivingEntity : MonoBehaviour, IEntityEffect
 {
     public float startingHealth = 10f;
     public float startingMana = 1f;
@@ -28,7 +28,6 @@ public class LivingEntity : MonoBehaviour, IDamageable
 
     public virtual void OnDamage(float damage, Vector3 hitPos, Vector3 hitSurface)
     {
-        //이거 안 줄어드는데요?
         health -= damage;
         Debug.Log("damaged " + damage + health);
 
@@ -37,6 +36,23 @@ public class LivingEntity : MonoBehaviour, IDamageable
             Die();
         }
     }
+
+    public virtual void OnBuff(string name, float value, string state)
+    {
+
+    }
+
+    public virtual void OnStat(string name, float value, string state)
+    {
+        switch (name)
+        {
+            case "hp": health += Calculate(health, value, state); break;
+            case "mp": mana += Calculate(mana, value, state); break;
+            //case "exp": exp += value; break;
+            //case "money": money += value; break;
+        }
+    }
+
 
     public virtual void RestoreHealth(float newHealth)
     {
@@ -61,5 +77,15 @@ public class LivingEntity : MonoBehaviour, IDamageable
         dead = true;
         //turnEnd = true;
         Debug.Log("dead " + name);
+    }
+
+    private float Calculate(float v, float value, string state)
+    {
+        switch (state)
+        {
+            case "none": return value;
+            case "rate": return v * value;
+            default: return value;
+        }
     }
 }

@@ -36,6 +36,9 @@ public class PlayerAction : InterAction
         agent = GetComponent<NavMeshAgent>();
         agent.updateRotation = false;
         agent.updateUpAxis = false;
+
+        //이거 업데이트는 어쩌냐.,..
+        //UpdateNarrative();
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -132,5 +135,13 @@ public class PlayerAction : InterAction
             transform.position = Vector3.MoveTowards(transform.position, targetPos.position, 0.5f);
             yield return new WaitForSeconds(0.001f);
         }
+    }
+
+    public void UpdateNarrative(List<NarrativeSlotUi> nar)
+    {
+        for (int i = 0; i < nar.Count; i++)
+            SetNarrative(nar[i].narrativeSlot);
+        //for (int i = 0; i < NarrativeList.Instance.narrativeslots.Count; i++)
+        //    SetNarrative(NarrativeList.Instance.narrativeslots[i].narrativeSlot);
     }
 }

@@ -7346,7 +7346,7 @@ GameObject:
   m_Component:
   - component: {fileID: 440627412}
   m_Layer: 5
-  m_Name: InfoDetail
+  m_Name: SkillSet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -7509,7 +7509,7 @@ MonoBehaviour:
     Name: "\uD64D\uAE38\uB3D9"
     Class: Warrior
   deathClip: {fileID: 0}
-  hitClip: {fileID: 0}
+  hitClip: {fileID: 8300000, guid: d8129391859f59643bb512e2ee8b941f, type: 3}
 --- !u!50 &444904043
 Rigidbody2D:
   serializedVersion: 4
@@ -7701,6 +7701,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 500a26d03780bbc4fbd43dda32caa67e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  narratives: []
   whatIsTarget:
     serializedVersion: 2
     m_Bits: 0
@@ -22484,9 +22485,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 96370f3c7b155204c8cfe218bedc30c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerUiManager: {fileID: 1715443054}
-  selectionManager: {fileID: 1311297210}
-  battleManager: {fileID: 2103527942}
+  compete: 0
 --- !u!1 &1387600305
 GameObject:
   m_ObjectHideFlags: 0
@@ -24297,6 +24296,7 @@ MonoBehaviour:
   - {fileID: 1315167601}
   - {fileID: 842430850}
   desPanel: {fileID: 2026980153}
+  playerAction: {fileID: 444904047}
 --- !u!1 &1530618971
 GameObject:
   m_ObjectHideFlags: 0
