@@ -69,6 +69,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
     <Compile Include="Assets\Resource\Script\UI\NarrativeList.cs" />
+    <Compile Include="Assets\Resource\Script\Battle\DamagePopup.cs" />
     <Compile Include="Assets\Resource\Script\Battle\LineDraw.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextEventHandler.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
@@ -88,6 +89,7 @@
     <Compile Include="Assets\Resource\Script\Text\SelectionManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
     <Compile Include="Assets\Resource\Script\UI\QuestUi.cs" />
+    <Compile Include="Assets\Resource\Script\Battle\Effect.cs" />
     <Compile Include="Assets\Resource\Script\UI\PlayerUiManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexColorCycler.cs" />

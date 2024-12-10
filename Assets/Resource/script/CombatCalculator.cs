@@ -2,15 +2,20 @@ using System;
 using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor.Experimental.GraphView;
 using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class CombatCalculator : MonoBehaviour
 {
-    //[SerializeField] private PlayerUiManager playerUiManager;
-    //[SerializeField] private SelectionManager selectionManager;
-    //[SerializeField] private BattleManager battleManager;
+
+    //[SerializeField] private GameObject attackEffect;
+    [SerializeField] private GameObject targetDiceFrame;
+    [SerializeField] private GameObject executorDiceFrame;
+    [SerializeField] private Animator attackAnimator;
+
 
     CombatAdventage combatAdventage;
 
@@ -19,9 +24,6 @@ public class CombatCalculator : MonoBehaviour
     private void Start()
     {
         combatAdventage = new CombatAdventage();
-        //playerUiManager = FindObjectOfType<PlayerUiManager>();
-        //selectionManager = FindObjectOfType<SelectionManager>();
-        //battleManager = FindObjectOfType<BattleManager>();
     }
 
     //경합
@@ -34,6 +36,13 @@ public class CombatCalculator : MonoBehaviour
             executor = target; 
             target = tmp;
         }
+
+        /*
+         * MatchSwap - 첫 시전.
+         * MatchAdventage - 서사 + 합 우월성
+         * 
+         */
+
 
         //명중
         string hitting = Hit(executor, turnStep);
@@ -62,13 +71,25 @@ public class CombatCalculator : MonoBehaviour
         string executorSkill = executor.actions[turnStep].type;
         string targetSkill = target.actions[turnStep].type;
 
-        Debug.Log("executor : " + executorSkill + " , targetPos : " +  targetSkill);
+        //Debug.Log("executor : " + executorSkill + " , targetPos : " +  targetSkill);
 
         //다이스 - $애니 + img 생성.
         int executorDice = UnityEngine.Random.Range(0, 20);
         int targetDice = UnityEngine.Random.Range(0, 20);
 
-        Debug.Log("Base dice : " + executorDice + " and target : " + targetDice);
+        //Debug.Log("Base dice : " + executorDice + " and target : " + targetDice);
+        //안 겹치게 어케둠....
+        Vector3 move = new Vector3(3, 3, 0);
+        executorDiceFrame.transform.position = executor.transform.position + move;
+        targetDiceFrame.transform.position = target.transform.position + move;
+        Debug.Log(executor.transform.position + " " + target.transform.position);
+
+        //animator 시동. 결과값 송출. 그리고 다음.
+        Debug.Log("dice roll");
+        executorDiceFrame.GetComponentInChildren<TextMeshProUGUI>().text = executorDice.ToString();
+        targetDiceFrame.GetComponentInChildren<TextMeshProUGUI>().text = targetDice.ToString();
+
+        //중간 프리징이 되나.. 이게.... 흠
 
         //합 우월성
         if (combatAdventage.Adventages.ContainsKey(executorSkill))
@@ -78,7 +99,7 @@ public class CombatCalculator : MonoBehaviour
             {
                 if(s == targetSkill)
                 {
-                    Debug.Log(executorSkill + " vs " + s + " is executor adventage");
+                    //Debug.Log(executorSkill + " vs " + s + " is executor adventage");
                     executorDice++;
                 }
             }
@@ -91,7 +112,7 @@ public class CombatCalculator : MonoBehaviour
             {
                 if (s == executorSkill)
                 {
-                    Debug.Log(targetSkill + " vs " + s + " is target adventage");
+                    //Debug.Log(targetSkill + " vs " + s + " is target adventage");
                     targetDice++;
                 }
             }
@@ -101,8 +122,14 @@ public class CombatCalculator : MonoBehaviour
 
         //무기 보정치 - 장비
 
+        executorDiceFrame.GetComponentInChildren<TextMeshProUGUI>().text = executorDice.ToString();
+        targetDiceFrame.GetComponentInChildren<TextMeshProUGUI>().text = targetDice.ToString();
 
-        Debug.Log("Total dice : " + executorDice + " and target : " + targetDice);
+        //animator 시동.
+        //executorDiceFrame.GetComponent<Animator>().enabled = true;
+        //targetDiceFrame.GetComponent<Animator>().enabled = true;
+
+        //Debug.Log("Total dice : " + executorDice + " and target : " + targetDice);
         if (executorDice >= targetDice) compete = true;
 
         //1대실패, 20대성공의 처리. 취급.
@@ -110,6 +137,7 @@ public class CombatCalculator : MonoBehaviour
         //서사판정. 재굴림.
         float reroll = JudgeNarrative(executor.gameObject, target.gameObject, compete);
         if (reroll == 100.0f) return MatchSwap(executor, target, turnStep);
+
 
         //동일한 경우는 어떻게 취급하냐...
         //20다이스 + 보정치 합산 비교 - $애니 + img 생성
@@ -126,7 +154,7 @@ public class CombatCalculator : MonoBehaviour
         float critical = executor.GetComponent<InterAction>().actions[turnStep].criticalProbability;
 
         float rate = UnityEngine.Random.Range(0, 100); //대충 이런데.. 확률 range이거 int? 흠. 
-        Debug.Log("hit rate : " + rate);
+        //Debug.Log("hit rate : " + rate);
 
 
         //명중보다 낮으면
@@ -195,26 +223,52 @@ public class CombatCalculator : MonoBehaviour
         Vector3 hitSurface = executor.transform.position - target.transform.position;
 
         if(target.GetComponent<IEntityEffect>() != null ) target.GetComponent<IEntityEffect>().OnDamage(damage, hitPos, hitSurface);
+
+
+        attackAnimator.gameObject.transform.position = hitPos;
+        attackAnimator.SetTrigger("slash");
+
+        //데미지 스킨
+        ShowDamage(damage, target);
+
+        //임의 세팅 1초
+        Invoke(nameof(DiceMove), 1.0f);
+
+    }
+
+
+    public void ShowDamage(float damage, GameObject target)
+    {
+        GameObject prefab = Resources.Load<GameObject>("damageSkin");
+        GameObject popup = Instantiate(prefab, target.transform);
+        
+        Vector3 pos = new Vector3(UnityEngine.Random.Range(-0.5f, 0.5f), UnityEngine.Random.Range(-0.5f, 0.0f), 0);
+        popup.GetComponent<RectTransform>().anchoredPosition = pos;
+        popup.GetComponent<DamagePopup>().Setup(damage);
+    }
+
+    private void DiceMove()
+    {
+        Debug.Log("dice moved");
+        executorDiceFrame.transform.position = new Vector3(-10, -10, -10);
+        targetDiceFrame.transform.position = new Vector3(-10, -10, -10);
     }
 
     //서사 적용
     public void ApplyNarrative(GameObject target, NarrativeSetting effect)
     {
-        if(target.GetComponent<IEntityEffect>() == null) return;
+        if (target.GetComponent<IEntityEffect>() == null) return;
+        if (target.GetComponent<InterAction>() == null) return;
 
-        //혼자 다른놈이 있다. 코드를 합쳐버려야 하나..
         IEntityEffect entityEffect = target.GetComponent<IEntityEffect>();
+        InterAction action = target.GetComponent<InterAction>();
+
         switch (effect.type)
         {
             case "stat": entityEffect.OnStat(effect.name, effect.value, effect.state); break;
             case "buff": entityEffect.OnBuff(effect.name, effect.value, effect.state); break;
-            case "adjust": if (target.GetComponent<InterAction>() != null) target.GetComponent<InterAction>().OnNumericalAdjust(effect.name, effect.value, effect.state); break;  //entityEffect.OnNumericalAdjust(effect.name, effect.value, effect.state); break;
+            case "adjust": action.OnNumericalAdjust(effect.name, effect.value, effect.state); break;
         }
-        /*
-        effectActions = new Dictionary<string, System.Action<IEntityEffect, float>>
-            { "hp", (entity, value) => entity.health += value }
-        if (effectActions.TryGetValue(effect.name, out var action))
-         */
     }
 
     private float SumValue(string state, float value)
@@ -227,7 +281,7 @@ public class CombatCalculator : MonoBehaviour
         return value;
     }
 
-    //서로 서사가 간섭하는데, 그의 우위는 무엇이 먼저인가.. executor에게 우선순위를 부여한다. 그리고 다음 타겟에게 묻는다... 대충?
+    //서로 서사가 간섭 우위 executor 우선순위. 다음 타겟
     private float JudgeNarrative(GameObject executor, GameObject target, bool compete)
     {
         NarrativeManager.instance.CallByCombat(executor, compete);

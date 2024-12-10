@@ -173,6 +173,8 @@ public class BattleManager : MonoBehaviour
         foreach (EnemyAction enemy in enemyActions) CallNarrative(enemy.gameObject);
 
 
+        //이거 삭제할 듯.
+
         //마지막 턴이 종료
         if (turnSequence == 3)
         {
@@ -191,7 +193,7 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
-            TurnStart();
+            //TurnStart();
         }
 
     }
@@ -205,7 +207,7 @@ public class BattleManager : MonoBehaviour
         player.GetComponent<PlayerAction>().ResetAction(); // 혹시 모르니 임시조치
 
         //전투 보상.
-        battleStageSet.CalculateBattle(true, player);
+        battleStageSet.EndBattle(true, player);
 
 
         //전투에서 텍스트로

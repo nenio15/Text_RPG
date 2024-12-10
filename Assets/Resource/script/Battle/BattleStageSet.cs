@@ -1,6 +1,7 @@
 using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,6 +29,14 @@ public class BattleStageSet : MonoBehaviour
     public GameObject enemylist;
 
     [SerializeField] private Inventory inventory;
+
+
+    [Header("REWARD")]
+    [SerializeField] private GameObject reward;
+    [SerializeField] private GameObject itemGrid;
+    [SerializeField] private TextMeshProUGUI gold;
+    [SerializeField] private TextMeshProUGUI exp;
+    
 
     //경로 세팅
     //private string path = @"/Resource/Text/Battle/StageFreeSet/";
@@ -91,33 +100,49 @@ public class BattleStageSet : MonoBehaviour
     //전투 승리 패배 조건 확인 - 대조.
     public bool JudgeWinner() { return true; }
 
+
+    public void EndBattle(bool win, GameObject player)
+    {
+
+        JToken jget = jbase["reward"];
+        //int i = 0;
+
+        NarrativeManager.instance.CallByStageSet();
+
+        //보상화면 출력
+        reward.SetActive(true);
+
+        gold.text = jget["gold"].ToString() + "G";
+        exp.text = jget["exp"].ToString();
+
+        //획득아이템이 있을시, 아이템 리스트 추가.
+        //GameObject prefab = Resources.Load<GameObject>("itemslot"); 
+        //if() Instantiate(prefab, itemGrid.transform);
+    }
+
     //전투 종료 후 결산
-    public void CalculateBattle(bool win, GameObject player)
+    public void CalculateBattle()
     {
         JToken jget = jbase["reward"];
         int i = 0;
 
-        NarrativeManager.instance.CallByStageSet(); // 대충호출.
-        //player.GetComponent<PlayerHealth>().UpdateData("gold", i);
+         // 대충호출.
+                                                    //player.GetComponent<PlayerHealth>().UpdateData("gold", i);
 
         //사실 이런거는 enemy의 드랍테이블을 비교해서 얻기는 하는데. 흠..
         //win 무승부..? 몰라.
-        if (win)
-        {
 
+        //금화
+        i = (int)jget["gold"];
+        Debug.Log(i);
+        player.GetComponent<PlayerHealth>().UpdateData("gold", i);
+        //경험치
+        i = (int)jget["exp"];
+        player.GetComponent<PlayerHealth>().UpdateData("exp", i);
+        //드롭아이템
+        Debug.Log(jget["drop"]);
 
-            //금화
-            i = (int)jget["gold"];
-            Debug.Log(i);
-            player.GetComponent<PlayerHealth>().UpdateData("gold", i);
-            //경험치
-            i = (int)jget["exp"];
-            player.GetComponent<PlayerHealth>().UpdateData("exp", i);
-            //드롭아이템
-            Debug.Log(jget["drop"]);
-        }
 
     }
-
 
 }

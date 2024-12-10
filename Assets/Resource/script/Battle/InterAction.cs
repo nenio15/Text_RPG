@@ -88,31 +88,27 @@ public class InterAction : MonoBehaviour
         }
     }
 
-    //tmp
+    //여기 두는게 맞다.
     public virtual void OnNumericalAdjust(string name, float value, string state)
     {
         int index = 0;
 
         switch (name)
         {
-            case "damage": Calculate(actions[index].damage, value, state); break;
-            case "accurate": Calculate(actions[index].accurate, value, state); break;
-            case "critical": Calculate(actions[index].criticalRate, value, state); break;
+            case "damage": actions[index].damage += Calculate(actions[index].damage, value, state); break;
+            case "accurate": actions[index].accurate += Calculate(actions[index].accurate, value, state); break;
+            case "critical": actions[index].criticalRate += Calculate(actions[index].criticalRate, value, state); break;
         }
     }
 
-    private void Calculate(float v, float value, string state)
+    private float Calculate(float v, float value, string state)
     {
         switch (state)
         {
-            case "none": v += value; break;
-            case "rate": v += v * value; break;
-            default: break;
+            case "none": return value;
+            case "rate": return v * value;
+            default: return value;
         }
-
-        return;
     }
-    
-
 
 }

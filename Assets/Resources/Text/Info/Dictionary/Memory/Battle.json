@@ -21,7 +21,7 @@
           "type" : "stat",
           "name" : "hp",
           "state" : "rate",
-          "value" : 10.0
+          "value" : 0.1
         }
       ],
       "condition" : [
@@ -124,7 +124,7 @@
         {
           "type" : "combat",
           "name" : "reroll",
-          "state" : "rate",
+          "state" : "none",
           "value" : 10.0
         }
       ],

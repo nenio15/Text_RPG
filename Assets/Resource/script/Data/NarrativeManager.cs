@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using TMPro;
 using UnityEngine;
 
 public class NarrativeManager : MonoBehaviour
@@ -34,8 +35,6 @@ public class NarrativeManager : MonoBehaviour
     }
 
     //서사의 종류. 1.패시브 2.전투옵션 3.선택지옵션 4.액티브
-
-
 
 
     //2.전투 옵션 함수들
@@ -93,6 +92,7 @@ public class NarrativeManager : MonoBehaviour
 
     }
 
+
     //type : battle. 한 웨이브 종료/시작 시 물음
     public void CallByManager(GameObject target, BattleManager battleManager)
     {
@@ -125,14 +125,18 @@ public class NarrativeManager : MonoBehaviour
                 //웨이브 조건
                 if (con.name == "turn" && con.type == "wave")
                     if ((battleManager.turnWave % con.value) != 0) { condition_clear = false; }
-                Debug.Log("checkingg");
+                //Debug.Log("checkingg");
             }
             //이거는 유효적임.
             if (condition_clear && !LimitUse(narrative))
             {
-                foreach(NarrativeSetting effect in narrative.effect) 
+                if (narrative.effect == null || target == null) return;
+
+                PopupNarrative(target, narrative);
+                foreach (NarrativeSetting effect in narrative.effect) 
                     combatCalculator.ApplyNarrative(target, effect);
-                Debug.Log("active : " + narrative.name);
+                //Debug.Log("active : " + narrative.name);
+                
             }
         }
         
@@ -167,7 +171,7 @@ public class NarrativeManager : MonoBehaviour
                 //실패조건에서 이겼으면 조건 미달성.
                 if (con.name == "compete")
                     if (con.state == "fail" && compete) condition_clear = false;
-                Debug.Log("checkingg");
+                //Debug.Log("checkingg");
             }
 
             //10퍼 확률로 100.0f 반환. 아니면 0.0f 반환.
@@ -176,9 +180,9 @@ public class NarrativeManager : MonoBehaviour
                 //Debug.Log(narrative.battle_use + narrative.overlap_use.ToString());
                 //Debug.Log(target.GetComponent<InterAction>().narratives[i].stack + " or " + narrative.stack);
 
-                //스택을 쌓아서 관리... 흠좀무. 으갸갸갸갸
-                //narrative["count"] = 1 + (int)narrative["count"]; // 스택문제때문에 일단 10. 스택 해결하고서 100.
-                Debug.Log("active : " + narrative.name); return 100.0f;
+                PopupNarrative(target, narrative);
+                //Debug.Log("active : " + narrative.name); 
+                return 100.0f;
             }
 
         }
@@ -189,6 +193,27 @@ public class NarrativeManager : MonoBehaviour
         return 0.0f;
     }
 
+    //서사 팝업 임시 생성 후 파괴
+    private void PopupNarrative(GameObject target, NarrativeSlot narrative)
+    {
+        Debug.Log("ldajfljrlk");
+        //프리팹 지정
+        GameObject prefab = Resources.Load<GameObject>("ribbon");
+        Vector3 pos = new Vector3(1, 0.5f, 0); // z좌표를 넣어 말어..
+
+        //인스턴트 생성
+        GameObject tmp;
+        tmp = Instantiate(prefab, target.transform);
+        //player 따로는 일단 미구현 tmp = Instantiate(prefab, new Vector3(x, x, 0);
+        tmp.GetComponent<RectTransform>().anchoredPosition = pos;
+
+        TextMeshProUGUI[] text = tmp.GetComponentsInChildren<TextMeshProUGUI>();
+        text[0].text = narrative.name;
+        text[1].text = narrative.describe;
+
+        //파괴/
+        Destroy(tmp, 5f);
+    }
     private void SetOwnNarrativeRoute(GameObject target)
     {
         //narrative_route = Application.persistentDataPath + "/Info/NarrativeList.json";

@@ -39,15 +39,15 @@ public class LivingEntity : MonoBehaviour, IEntityEffect
 
     public virtual void OnBuff(string name, float value, string state)
     {
-
+        //어떻게 넣을까...
     }
 
     public virtual void OnStat(string name, float value, string state)
     {
         switch (name)
         {
-            case "hp": health += Calculate(health, value, state); break;
-            case "mp": mana += Calculate(mana, value, state); break;
+            case "hp": health += Calculate(maxHealth, value, state); break;
+            case "mp": mana += Calculate(maxMana, value, state); break;
             //case "exp": exp += value; break;
             //case "money": money += value; break;
         }
