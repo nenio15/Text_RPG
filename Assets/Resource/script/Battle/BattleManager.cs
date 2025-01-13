@@ -5,7 +5,7 @@ using UnityEngine.UI;
 using Newtonsoft.Json.Linq;
 using UnityEngine.Serialization;
 using UnityEngine.Localization.SmartFormat.Utilities;
-using UnityEditor.Experimental.GraphView;
+//using UnityEditor.Experimental.GraphView;
 using System.Drawing.Drawing2D;
 
 public class BattleManager : MonoBehaviour
@@ -15,6 +15,7 @@ public class BattleManager : MonoBehaviour
     [SerializeField] private GameObject battleFieldView;
     [SerializeField] private GameObject scrollView;
     [SerializeField] private GameObject enemylist;
+    [SerializeField] private GameObject battlePanel;
 
     //필드 캐릭터들 정의
     [Header("PLAYERS")]
@@ -61,6 +62,7 @@ public class BattleManager : MonoBehaviour
     {
         //기본 텍스트 비활성화
         scrollView.SetActive(false); 
+        battlePanel.SetActive(true);
 
         //배틀 무대 세팅
         transform.position = new Vector3(400, 630, -1); //selectionManager.ShowSelection("Action", 0, 1);
@@ -207,6 +209,7 @@ public class BattleManager : MonoBehaviour
         player.GetComponent<PlayerAction>().ResetAction(); // 혹시 모르니 임시조치
 
         //전투 보상.
+        battlePanel.SetActive(false);
         battleStageSet.EndBattle(true, player);
 
 

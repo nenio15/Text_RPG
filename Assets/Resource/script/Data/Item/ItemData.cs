@@ -18,7 +18,7 @@ public class itemData
     [Header("INFO")]
     public string name;
     public string detail;
-    public string img;
+    public string img = "";
     public string type;
     //public bool isequipment = false;
     public int sell;
@@ -34,4 +34,11 @@ public class itemData
 
     //... 이런식으로 만들어 놓아야하는게 맞는감..
 
+}
+
+public class ItemSlot
+{
+    public itemData itemData;
+    public int count = 1;
+    public bool isEquipment = false;
 }

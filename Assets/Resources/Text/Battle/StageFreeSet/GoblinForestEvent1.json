@@ -38,13 +38,11 @@
       "pos" : [0, 0]
     }
   ],
-  "player" : [
-    {
+  "player" : {
       "type" : "player",
       "name" : "player",
-      "pos" : [0, 0]
+      "pos" : [0, 2]
     }
-  ]
 
   },
   "clear" : {
@@ -61,7 +59,7 @@
   "reward" : {
     "gold" : 500,
     "exp" : 500,
-    "drop" : [
+    "get" : [
       {
         "name" : "Hp potion",
         "type" : "Consumption",

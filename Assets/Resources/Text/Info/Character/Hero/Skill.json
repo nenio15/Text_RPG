@@ -1,0 +1,128 @@
+{
+  "Action" : {
+    "list" : ["Scissors", "Rock", "Paper"]
+  },
+  "Attack" : [
+      {
+        "name" : "기본공격",
+        "img" : "base_attack",
+        "describe" : "일반적인 공격이다.",
+        "type" : "base_attack",
+        "category" : "base", 
+        
+        "damage" : 3,
+        "accurate" : 80,
+        "criticalProbability" : 10,
+        "criticalRate" : 1.2,
+        "buff" : [ { } ],
+        "debuff" : [ { } ],
+
+        "need" : [ {
+          "type" : "str",
+          "level" : 4,
+          "turn" : 0
+        }],
+        "more" : [ {
+          "type" : "str",
+          "level" : 2,
+          "turn" : 0
+        }]
+      },
+      {
+        "name" : "강공격",
+        "img" : "strong_attack",
+        "describe" : "전력으로 휘두르는 강한 공격이다.",
+        "type" : "strong_attack",
+
+        "damage" : 5,
+        "accurate" : 60,
+        "criticalProbability" : 10,
+        "criticalRate" : 1.5,
+        "buff" : [ { } ],
+        "debuff" : [ { } ],
+
+        "need" : [ {
+          "type" : "str",
+          "level" : 4,
+          "turn" : 0
+        }],
+        "more" : [ {
+          "type" : "str",
+          "level" : 2,
+          "turn" : 0
+        }]
+      },
+      {
+        "name" : "방어",
+        "img" : "base_defense",
+        "describe" : "일반적인 방어다.",
+        "type" : "base_defense",
+
+        "damage" : 0,
+        "accurate" : 100,
+        "criticalProbability" : 0,
+        "criticalRate" : 1,
+        "buff" : [ { } ],
+        "debuff" : [ { } ],
+
+        "need" : [ {} ],
+        "more" : [ {} ]
+      },
+      {
+        "name" : "회피",
+        "img" : "base_dodge",
+        "describe" : "공격을 회피한다.",
+        "type" : "base_dodge",
+
+        "damage" : 0,
+        "accurate" : 100,
+        "criticalProbability" : 0,
+        "criticalRate" : 1,
+        "buff" : [ { } ],
+        "debuff" : [ { } ],
+
+        "need" : [ {}],
+        "more" : [ {
+          "type" : "dex",
+          "level" : 5,
+          "turn" : 0
+        }]
+      },
+      {
+        "name" : "스매쉬",
+        "img" : "smash",
+        "describe" : "상대의 방어를 일부 무시하고 있는힘껏 공격한다.",
+        "type" : "smash",
+
+        "damage" : 6,
+        "accurate" : 75,
+        "criticalProbability" : 15,
+        "criticalRate" : 1.5,
+        "buff" : [ { 
+          "type" : "defense resistance",
+          "level" : 15,
+          "turn" : 0
+          } ],
+        "debuff" : [ { } ],
+
+        "need" : [ {
+          "type" : "str",
+          "level" : 4,
+          "turn" : 0
+        },
+        {
+          "type" : "mana",
+          "level" : 2,
+          "turn" : 0
+        }],
+        "more" : [ {
+          "type" : "str",
+          "level" : 2,
+          "turn" : 0
+        }]
+      }
+  ]
+
+
+
+}

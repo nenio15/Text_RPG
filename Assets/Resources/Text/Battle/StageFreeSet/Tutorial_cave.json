@@ -27,7 +27,7 @@
       "level" : 1,
       "name" : "Enemy3",
       "state" : "sleep",
-      "pos" : [5, 9]
+      "pos" : [0, 7]
     }
   ],
   "npc" : [
@@ -38,13 +38,12 @@
       "pos" : [0, 0]
     }
   ],
-  "player" : [
-    {
+  "player" : {
       "type" : "player",
       "name" : "player",
-      "pos" : [0, 0]
+      "pos" : [0, -4]
     }
-  ]
+  
 
   },
   "clear" : {
@@ -57,6 +56,15 @@
   },
   "check" : {
     "///" : "... 여러개 둘려면 어떻게 세팅해야하냐.. "
-  }
+  },
+  "reward" : {
+    "gold" : 0,
+    "exp" : 999,
+    "get" : [
+      {
 
+      }
+    ]
+
+}
 }

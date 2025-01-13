@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class DescribePanel : MonoBehaviour
@@ -35,6 +36,12 @@ public class DescribePanel : MonoBehaviour
         //limit.text = item.item.limit.ToString();
 
         usebtn.text = (item.isEquipment) ? "착용한다" : "사용한다"; // 한글... 다국어 씨발.
+    }
+
+    //tmp 기능
+    public void LoadScene()
+    {
+        SceneManager.LoadScene("StartScene");
     }
 
 }

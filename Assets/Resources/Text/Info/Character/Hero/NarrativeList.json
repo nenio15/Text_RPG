@@ -1,0 +1,38 @@
+{
+  "narrative" : [
+    {
+      "name" : "구원의 손길",
+      "category" : "Battle",
+      "type" : "battle"
+    },
+    {
+      "name" : "역전의 용사",
+      "category" : "Battle",
+      "type" : "battle"
+    },{
+      "name" : "절대적인 악의에 맞서다",
+      "category" : "Battle",
+      "type" : "battle"
+    },{
+      "name" : "불의를 무시할 수 없는",
+      "category" : "Battle",
+      "type" : "battle"
+    },{
+      "name" : "고결한 의지",
+      "category" : "Battle",
+      "type" : "battle"
+    },{
+      "name" : "종족통합자",
+      "category" : "Battle",
+      "type" : "battle"
+    },{
+      "name" : "신의 보살핌",
+      "category" : "Battle",
+      "type" : "battle"
+    },{
+      "name" : "언브레이커블",
+      "category" : "Battle",
+      "type" : "battle"
+    }
+  ]
+}

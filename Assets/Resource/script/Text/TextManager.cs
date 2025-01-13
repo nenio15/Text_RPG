@@ -10,6 +10,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     [Header("TEXTER INFO")]
     //public Text m_TypingText;
     public TextMeshProUGUI m_TypingText;
+    public int m_Fontsize;
     public float m_Speed = 0.2f;
     private int idx = 0;
     private string m_Message;
@@ -55,9 +56,10 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
 
     private void Start()
     {
-        real_main = Application.persistentDataPath + "/main.txt";
+        real_main = UnityEngine.Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/main.txt";
 
         //초기화
+        m_TypingText.fontSize = m_Fontsize;
         m_TypingText.text = "";
         m_ped = new PointerEventData(null);
         typing_speed = m_Speed;
@@ -72,8 +74,18 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         ReadStory(false);
     }
 
+    //모바일 터치
+    void Update()
+    {
+        if (Input.touchCount > 0)
+            if (Input.GetTouch(0).phase == TouchPhase.Ended)
+                ReadPage();
+    }
+
     // text click
-    public void OnPointerClick(PointerEventData eventData)
+    public void OnPointerClick(PointerEventData eventData) { ReadPage(); }
+
+    public void ReadPage()
     {
         //m_TypingText.text = 
         // 읽는 것을 중단.
@@ -90,7 +102,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
 
             //#(중단점) 조우
             if (contents[current][0] == '#')
-                if (MeetSign()) return; 
+                if (MeetSign()) return;
 
         }
 
@@ -221,28 +233,21 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
 
     private void ExtendContent(int space)
     {
+        //확장은 넣되, 스크롤 이동은 일단 제외.
+
         if (m_TypingText.text == "") return;
-
-
-        //이거 개념이 잘못됨. space가 이전 줄을 받아서 그만큼 내려야 하는데, 지금 이거. 다음 줄의 갯수만큼 내림.
-        //애초에 잘못된 시스템이라 text도 아마 변경될듯... 이거는 보류해야할듯. 이거 이런식도 안 맞아
-        //왜냐. 스크롤을 한 상태로 클릭하면, 새로 시작하는 지점이 아니잖? 그리고 삽화도 넣으면 더 꼬일꺼야. 이거는 일단 폐기
 
         //text font * 1.47.... -> fontsize를 받아둘게 필요. system에 넣고 파라미터를 get?
         // 34 * 1.47 -> 50
-        int fontsize = 45;
-
         float height = Mathf.Abs(content.rect.height); // 절대값
-        float upheight = height + space * fontsize;
+        float upheight = height + space * m_Fontsize;
+        //Debug.Log("height" + height + " space " + space + "font " + m_Fontsize);
         Vector2 previousPos = scroll.content.anchoredPosition;
-
 
         //스크롤 이동.
         //Debug.Log(height + " and " + upheight);
         content.sizeDelta = new Vector2(0, upheight);
-        //좀 더 부드럽게 움직였으면 하는데..
-        //스크롤은 일단 없앨까..?
-        scroll.content.anchoredPosition = previousPos + new Vector2(0f, space * fontsize);
+        //scroll.content.anchoredPosition = previousPos + new Vector2(0f, space * m_Fontsize);
     }
 
     

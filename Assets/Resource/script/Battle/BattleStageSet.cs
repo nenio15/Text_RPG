@@ -1,6 +1,7 @@
 using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using TMPro;
 using UnityEditor;
 using UnityEngine;
@@ -23,10 +24,12 @@ public class BattleStageSet : MonoBehaviour
     }
 
     //고정 지정 개체들
-    public Sprite field_base;
+    public SpriteRenderer field_base;
     public GameObject player;
     public GameObject field_frame;
     public GameObject enemylist;
+    private Dictionary dictionary;
+
 
     [SerializeField] private Inventory inventory;
 
@@ -54,8 +57,8 @@ public class BattleStageSet : MonoBehaviour
         JToken jset = jbase["set"];
         
         //필드 배경 전환
-        field_base = Resources.Load<Sprite>("Picture/" + jset["background"].ToString());
-
+        field_base.sprite = Resources.Load<Sprite>("Picture/" + jset["background"].ToString());
+        //Debug.Log(jset["background"].ToString());
         //enemy는 추가로, state라던가 그런게 추가될 예정. level이라던가. 물론 그 개체의 스크립트쪽으로
 
         //데코, 옵스, 캐릭터 생성 밑 배치
@@ -65,16 +68,17 @@ public class BattleStageSet : MonoBehaviour
                 Generate(i, jtmp);
 
         //npc 생성
-        
+
         //player배치
         //Vector3 pos = new Vector3(700, 150, 0);
-        //player.GetComponent<RectTransform>().position += pos;
+        JToken jplayer = jset["player"];
+        player.GetComponent<RectTransform>().anchoredPosition = new Vector3((int)jplayer["pos"][0], (int)jplayer["pos"][1] ,0);
 
         //시스템
 
         //초기 카메라 세팅
         JToken jcamera = jset["camera"];
-        field_frame.transform.position = new Vector3((int)jcamera["pos"][0], (int)jcamera["pos"][1], 0);
+        //field_frame.transform.position = new Vector3((int)jcamera["pos"][0], (int)jcamera["pos"][1], 0);
 
         //스킬셋 세팅 (로드)
 
@@ -116,8 +120,20 @@ public class BattleStageSet : MonoBehaviour
         exp.text = jget["exp"].ToString();
 
         //획득아이템이 있을시, 아이템 리스트 추가.
-        //GameObject prefab = Resources.Load<GameObject>("itemslot"); 
-        //if() Instantiate(prefab, itemGrid.transform);
+        foreach (JToken drop in jget["get"])
+        {
+            Itemlist dropItem = JsonUtility.FromJson<Itemlist>(drop.ToString());
+
+            //보상화면에 추가.
+            GameObject prefab = Resources.Load<GameObject>("itemslot");
+            GameObject tmp = Instantiate(prefab, itemGrid.transform);
+            //prefab.GetComponent<ItemSlotUi>().itemslot.itemData = dictionary.SetItem(dropItem.name, dropItem.type);
+            tmp.GetComponent<ItemSlotUi>().Set(dropItem); //= Resources.Load<Sprite>("Picture/Item/" + drop["name"].ToString());
+            Debug.Log(tmp.GetComponent<ItemSlotUi>().itemslot.itemData.img);
+            Inventory.Instance.AddItem(dropItem);
+        }
+        
+        
     }
 
     //전투 종료 후 결산
@@ -140,7 +156,7 @@ public class BattleStageSet : MonoBehaviour
         i = (int)jget["exp"];
         player.GetComponent<PlayerHealth>().UpdateData("exp", i);
         //드롭아이템
-        Debug.Log(jget["drop"]);
+        //Debug.Log(jget["drop"]);
 
 
     }

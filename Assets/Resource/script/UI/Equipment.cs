@@ -17,7 +17,7 @@ public class Equipment : MonoBehaviour
 
     void Awake()
     {
-        equipment_route = Application.persistentDataPath + "/Info/Equipment.json";
+        equipment_route = Application.persistentDataPath + "/"+ PlayerPrefs.GetString("Char_route") + "/Info/Equipment.json";
         UpdateSet();
     }
 
@@ -33,6 +33,7 @@ public class Equipment : MonoBehaviour
 
         foreach (JToken part in jroot["equip"]) //얘는 8고정이라 foreach가 아니여도 되긴하는데.. 얘만 바꾸기도 그렇고.
         {
+            /*
             i++;
             ItemSlot tmp = new ItemSlot();
             tmp.itemData = dictionary.SetItem(part["name"].ToString(), part["type"].ToString());
@@ -41,7 +42,11 @@ public class Equipment : MonoBehaviour
             tmp.count = 1;
 
             equipments[i].itemslot = tmp;
-            equipments[i].Set();
+            */
+            i++;
+            Itemlist tmp = JsonUtility.FromJson<Itemlist>(part.ToString());
+            if(tmp.name != null)
+                equipments[i].Set(tmp);
             
         }
 

@@ -36,8 +36,8 @@ public class TextChanger : MonoBehaviour
     {
         //½ÇÁ¦ .txt Å° .json
         //main_route = Application.dataPath + path + "main.txt";
-        main_route = Application.persistentDataPath + "/main.txt";
-        key_route = Application.persistentDataPath + "/mainSet.json";
+        main_route = Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/main.txt";
+        key_route = Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/mainSet.json";
 
         battleManager = FindObjectOfType<BattleManager>();
 

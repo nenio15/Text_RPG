@@ -1,0 +1,35 @@
+{
+  "Info": {
+    "Level": 20,
+    "Hp": [
+      99,
+      99
+    ],
+    "Mp": [
+      99,
+      99
+    ],
+    "Stat": [
+      99,
+      99,
+      99,
+      99,
+      99,
+      99
+    ],
+    "Exp": [
+      99999,
+      99999
+    ],
+    "Money": 99999,
+    "Name": "[ ]",
+    "Class": "Champion"
+  },
+  "Log": {
+    "cur_place": "fucking_town",
+    "charma": [
+      "justice",
+      99
+    ]
+  }
+}

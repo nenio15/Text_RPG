@@ -3,10 +3,7 @@ using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Experimental.GraphView;
-using UnityEditor.Localization.Plugins.XLIFF.V20;
 using UnityEngine;
-using static UnityEditor.PlayerSettings;
 
 public class CombatCalculator : MonoBehaviour
 {

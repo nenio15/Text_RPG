@@ -57,9 +57,6 @@ public class BattleFieldMove : MonoBehaviour, IBeginDragHandler, IEndDragHandler
 
     void IDragHandler.OnDrag(PointerEventData eventData)
     {
-
-        
-        
         /*
         이거는 스크롤뷰가 아니고, mask일때 쓴것.
         Vector3 mousePosition = new Vector3(Input.mousePosition.x, Input.mousePosition.y, distance);
@@ -68,10 +65,6 @@ public class BattleFieldMove : MonoBehaviour, IBeginDragHandler, IEndDragHandler
 
         */
         //throw new System.NotImplementedException();
-
-        
-
-        
     }
 
     public void OnPointerClick(PointerEventData eventData)

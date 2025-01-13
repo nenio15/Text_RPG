@@ -16,7 +16,32 @@ MonoBehaviour:
   m_Data:
     m_SerializedData: []
   m_GUID: f9905bd412e4c6946b4bd1be4d8f1cc2
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 6048072f5a39f2b4499501a26a114dbc
+    m_Address: Picture/Item/armor
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 8a9c74cd35fa06940988f1ae42575190
+    m_Address: Picture/Item/potion
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 638191e66f7ad684c834b36996a035f6
+    m_Address: Picture/Item/sword
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1e061ec8f79abc2418bb841123a03167
+    m_Address: Picture/Item/old_sword
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1bc796f5f684a144d8d9b89dd4fe2117
+    m_Address: Picture/Item/none
+    m_ReadOnly: 0
+    m_SerializedLabels: []
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 08d698db25a43a444a1e4da1f44f3840, type: 2}
   m_SchemaSet:

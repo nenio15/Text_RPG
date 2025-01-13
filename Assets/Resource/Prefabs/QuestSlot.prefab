@@ -225,8 +225,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Test 1. for the bug
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2af4701b30eac7c48862e7940204d452, type: 2}
-  m_sharedMaterial: {fileID: 3822794995551163302, guid: 2af4701b30eac7c48862e7940204d452, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: ef25a8cca7ded364fab321d6b2c85fde, type: 2}
+  m_sharedMaterial: {fileID: -8386597089996958230, guid: ef25a8cca7ded364fab321d6b2c85fde, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

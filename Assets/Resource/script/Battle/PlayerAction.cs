@@ -43,7 +43,7 @@ public class PlayerAction : InterAction
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (true)
+        if (!turnEnd)
         {
             LivingEntity attactTarget = other.GetComponent<LivingEntity>();
 

@@ -29,7 +29,7 @@ public class NarrativeManager : MonoBehaviour
     private void Awake()
     {
         if(instance != this) Destroy(gameObject);
-        narrative_route = Application.persistentDataPath + "/Info/NarrativeList.json";
+        narrative_route = Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/Info/NarrativeList.json";
         narrative_list = convertJson.MakeJson(narrative_route);
         jroot = JObject.Parse(narrative_list);
     }

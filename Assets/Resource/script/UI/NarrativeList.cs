@@ -29,7 +29,7 @@ public class NarrativeList : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        narrative_route = Application.persistentDataPath + "/Info/NarrativeList.json";
+        narrative_route = Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/Info/NarrativeList.json";
         UpdateList();
     }
 

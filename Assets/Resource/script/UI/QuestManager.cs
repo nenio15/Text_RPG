@@ -38,7 +38,7 @@ public class QuestManager : MonoBehaviour
     private void Awake()
     {
         //Instance = this;
-        questlist_route = Application.persistentDataPath + "/Info/Questlist.json";
+        questlist_route = Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/Info/Questlist.json";
         UpdateList();
     }
 

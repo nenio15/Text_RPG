@@ -30,7 +30,7 @@ public class PlayerHealth : LivingEntity
     private void Awake()
     {
         //player info json 가져오기
-        cha_route = Application.persistentDataPath + "/Info/Player.json";
+        cha_route = Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/Info/Player.json";
         player = characterData.SetJson(cha_route);
         JToken info = player["Info"];
         if(info != null) player_info = JsonUtility.FromJson<Character>(info.ToString());

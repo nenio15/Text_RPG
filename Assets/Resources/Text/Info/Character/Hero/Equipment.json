@@ -1,0 +1,52 @@
+{
+  "get_stat": [
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+    ],
+  "equip" : [
+    {
+      "name" : "hero's_head",
+      "type" : "Head",
+      "sort" : "head"
+    },
+    {
+      "name" : "hero's_armor",
+      "type" : "Clothes",
+      "sort" : "clothes"
+    },
+    {
+      "name" : "hero's_gloves",
+      "type" : "Gloves",
+      "sort" : "gloves"
+    },
+    {
+      "name" : "hero's_shoes",
+      "type" : "Shoes",
+      "sort" : "shoes"
+    },
+    {
+      "name" : "hero's_sword",
+      "type" : "Sword",
+      "sort" : "main_weapon"
+    },
+    {
+      "name" : "none",
+      "type" : "None",
+      "sort" : "sub_weapon"
+    },
+    {
+      "name" : "hero's_obb",
+      "type" : "Accessary",
+      "sort" : "accessary1"
+    },
+    {
+      "name" : "hero's_bracket",
+      "type" : "Accessary",
+      "sort" : "accessary2"
+    }
+  ]
+}
