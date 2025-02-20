@@ -17,7 +17,7 @@ public class SkillManager : MonoBehaviour
 
     private void Start()
     {
-        skill_route = Application.persistentDataPath + "/Info/Skill.json";
+        skill_route = Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/Info/Skill.json";
         string skill_str = new ConvertJson().MakeJson(skill_route);
         
         jskill = JObject.Parse(skill_str);

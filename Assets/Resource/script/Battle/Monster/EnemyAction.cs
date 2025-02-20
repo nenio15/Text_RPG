@@ -140,7 +140,7 @@ public class EnemyAction : InterAction
         SwitchTurn(true);
         StopCoroutine("UpdateRun");
         //Debug.Log(player.name);
-        onSystemAction(gameObject, player); //µÉ·Á³ª.
+        onSystemAction(gameObject, player); //call BattleManager.Interaction
 
 
         //tr.position = new Vector3(-300, 300);

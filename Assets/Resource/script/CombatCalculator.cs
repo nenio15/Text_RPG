@@ -70,6 +70,7 @@ public class CombatCalculator : MonoBehaviour
 
         //Debug.Log("executor : " + executorSkill + " , targetPos : " +  targetSkill);
 
+
         //다이스 - $애니 + img 생성.
         int executorDice = UnityEngine.Random.Range(0, 20);
         int targetDice = UnityEngine.Random.Range(0, 20);
@@ -88,7 +89,8 @@ public class CombatCalculator : MonoBehaviour
 
         //중간 프리징이 되나.. 이게.... 흠
 
-        //합 우월성
+
+        //합 우월성 매커니즘
         if (combatAdventage.Adventages.ContainsKey(executorSkill))
         {
             string[] tmp = combatAdventage.Adventages[executorSkill];
@@ -127,7 +129,9 @@ public class CombatCalculator : MonoBehaviour
         //targetDiceFrame.GetComponent<Animator>().enabled = true;
 
         //Debug.Log("Total dice : " + executorDice + " and target : " + targetDice);
+        //최종 합 판정
         if (executorDice >= targetDice) compete = true;
+
 
         //1대실패, 20대성공의 처리. 취급.
 
@@ -136,7 +140,7 @@ public class CombatCalculator : MonoBehaviour
         if (reroll == 100.0f) return MatchSwap(executor, target, turnStep);
 
 
-        //동일한 경우는 어떻게 취급하냐...
+        //동일한 경우는 어떻게 취급하냐... -> 재굴림이 제일이지. 구현해둘것.
         //20다이스 + 보정치 합산 비교 - $애니 + img 생성
         if (compete) return false;
         else return true;

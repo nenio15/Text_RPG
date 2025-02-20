@@ -54,6 +54,9 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     
     [SerializeField] private string[] contents;
 
+
+    public TextMeshProUGUI debugging;
+
     private void Start()
     {
         real_main = UnityEngine.Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/main.txt";
@@ -77,9 +80,13 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     //모바일 터치
     void Update()
     {
+        /*
+         * pointerclick으로도 됨. 일단 없애기.
         if (Input.touchCount > 0)
             if (Input.GetTouch(0).phase == TouchPhase.Ended)
                 ReadPage();
+        */
+        debugging.text = "Current Speed: " + typing_speed;
     }
 
     // text click
@@ -87,6 +94,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
 
     public void ReadPage()
     {
+        Debug.Log("activated");
         //m_TypingText.text = 
         // 읽는 것을 중단.
         if (stop_read) return;
@@ -139,7 +147,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
                 }
                 */
                 //내용물 변경 유무
-                contents = System.IO.File.ReadAllLines(Application.persistentDataPath + "/main.txt");
+                contents = System.IO.File.ReadAllLines(Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/main.txt");
                 //contents = System.IO.File.ReadAllLines(real_main);
                 //stop_read = true;
                 return true;
@@ -192,7 +200,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
             for (; robj_i > 0; robj_i--)
                 robj[robj_i - 1].GetComponent<Keyword>().DelKeyword();
         }
-        
+
         if (!reading)   //normal reading
         {
             //텍스트 오브젝트 이동 및 늘리기 (spacing은 전 text의 길이를 참조함)
@@ -218,8 +226,10 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
             //중복 클릭시 순간 출력으로 전환
             reading = true;
         }
-        else            // fast reading
+        else
+        {            // fast reading
             typing_speed = 0.0f;
+        }
 
     }
 
@@ -270,9 +280,22 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
             {
                 typingText.text += message[i];
             }
+
+            if(typing_speed <= 0)
+            {
+                ShowRest(typingText, message, i);
+                Debug.Log("skip show all : " + message);
+                yield break;
+            }
             yield return new WaitForSeconds(typing_speed);
         }
         //첫 출력
+        reading = false;
+    }
+
+    void ShowRest(TextMeshProUGUI typingText, string message, int i)
+    {
+        for(int j = i; j < message.Length; j++) typingText.text += message[j];
         reading = false;
     }
 

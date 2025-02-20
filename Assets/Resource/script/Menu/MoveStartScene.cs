@@ -13,18 +13,40 @@ using UnityEngine.UI;
 public class MoveStartScene : MonoBehaviour
 {
     public TextMeshProUGUI Char;
+    public TextMeshProUGUI label;
     private string route;
     private string cur_id;
+    private string decision_id = "";
     private ConvertJson convertJson = new ConvertJson();
 
     //캐릭터 생성을 통한 플레이 버튼과,
     //캐릭터 선택을 통한 플레이 분할이 나을듯..
     //해당 스크립트는 일단, 캐릭터 생성에 한함.
 
-    public void MoveToMain(TextMeshProUGUI label)
+    public void IdSelect(string id)
+    {
+        decision_id = id;
+    }
+
+    public void CharSelect()
+    {
+        if (decision_id == "") return;
+        route = UnityEngine.Application.persistentDataPath;
+        string world = convertJson.MakeJson(route + "/" + decision_id + "/Info/World.json");
+        JObject jworld = JObject.Parse(world);
+        if(jworld["Scenario"] == null) { Debug.LogError("scenario가 지정되지 않았습니다."); return; }
+        
+        PlayerPrefs.SetString("Cur_scenario", jworld["Scenario"].ToString());
+        PlayerPrefs.SetString("Char_route", decision_id);
+        SceneManager.LoadScene("MainScene");
+    }
+
+    //외부에서 생성 후 바로 플레이
+    public void MoveToMain()
     {
         string id = CreateNewCharacter();
 
+        //"Scenario" : "tutorial"
         PlayerPrefs.SetString("Cur_scenario", label.text);
         PlayerPrefs.SetString("Char_route", id);
         SceneManager.LoadScene("MainScene");
@@ -72,7 +94,14 @@ public class MoveStartScene : MonoBehaviour
         File.WriteAllText(route + "/Charlist.json", jcharlist.ToString());
         //캐릭터 폴더, 파일 생성
         LoadFreeset(route + "/" + cur_id, cur_id);
-        
+
+
+        //현재 시나리오 루트 작성.
+        string world = convertJson.MakeJson(route + "/" + cur_id + "/Info/World.json");
+        JObject jworld = JObject.Parse(world);
+        jworld["Scenario"] = label.text;
+        File.WriteAllText(route + "/" + cur_id + "/Info/World.json", jworld.ToString());
+
         Debug.Log("Creat Complete");
         return cur_id;
     }

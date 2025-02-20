@@ -50,7 +50,8 @@ public class BattleManager : MonoBehaviour
     }
 
     //배틀 필드 세팅을 위한 프리셋
-    public void BattlePreset(string fieldname, string root, int num, int situ) //"goblin", "forest_goblin", 1, 0]},
+    public void BattlePreset(string fieldname, string root, int num, int situ) //"
+                                                                               //", "forest_goblin", 1, 0]},
     {
         //Action 기능 활용 모색.
         battleStageSet.Setting(root);

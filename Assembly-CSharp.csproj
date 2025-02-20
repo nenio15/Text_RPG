@@ -67,6 +67,7 @@
     <Compile Include="Assets\Resource\Script\Text\texttest.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
+    <Compile Include="Assets\Resource\Script\UI\CharlistSlot.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
     <Compile Include="Assets\Resource\Script\Battle\DamagePopup.cs" />
     <Compile Include="Assets\Resource\Script\UI\NarrativeList.cs" />
@@ -75,7 +76,6 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark02.cs" />
     <Compile Include="Assets\Resource\Script\Text\Keyword.cs" />
     <Compile Include="Assets\Resource\Script\start_game.cs" />
-    <Compile Include="Assets\Resource\Script\Data\PlayerHealth.cs" />
     <Compile Include="Assets\Resource\Script\Data\BtnData.cs" />
     <Compile Include="Assets\Resource\Script\Battle\Monster\EnemyAction.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
@@ -103,6 +103,7 @@
     <Compile Include="Assets\Resource\Script\Town\townEntry.cs" />
     <Compile Include="Assets\Resource\Script\Data\Item\ItemData.cs" />
     <Compile Include="Assets\Resource\Script\Battle\Monster\EnemyHealth.cs" />
+    <Compile Include="Assets\Resource\Script\UI\CharlistManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
     <Compile Include="Assets\Resource\Script\Battle\LivingEntity.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Assets\Resource\Script\UI\ScrollButton.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark04.cs" />
     <Compile Include="Assets\Resource\Script\DiceManager.cs" />
+    <Compile Include="Assets\Resource\Script\Battle\PlayerHealth.cs" />
     <Compile Include="Assets\Resource\Script\UI\QuestManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark03.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ChatController.cs" />
@@ -133,6 +135,7 @@
     <Compile Include="Assets\Resource\Script\Battle\SkillManager.cs" />
     <Compile Include="Assets\Resource\Script\UI\tmpMove.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
+    <Compile Include="Assets\Resource\Script\System\CharacterSet.cs" />
     <Compile Include="Assets\Resource\Script\tmp.cs" />
     <Compile Include="Assets\Resource\Script\UI\ActionList.cs" />
     <Compile Include="Assets\Resource\Script\Text\TextManager.cs" />

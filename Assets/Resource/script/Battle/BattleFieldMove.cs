@@ -26,7 +26,7 @@ public class BattleFieldMove : MonoBehaviour, IBeginDragHandler, IEndDragHandler
         //Debug.Log(Input.GetTouch(0).position);
         //Debug.Log(Input.GetTouch(0).deltaPosition);
         //Debug.Log(Input.GetTouch(0).tapCount);
-
+        /*
         if (Input.touchCount > 0)
         {
             Debug.Log(Input.touchCount);
@@ -39,6 +39,7 @@ public class BattleFieldMove : MonoBehaviour, IBeginDragHandler, IEndDragHandler
                 Debug.Log("Moved - 손가락이 화면 위에서 터치한 상태로 이동하고 있는 상태: " + Input.GetTouch(0).position);
             }
         }
+        */
     }
 
 

@@ -44,7 +44,7 @@ public class SelectionManager : MonoBehaviour
     private void Start()
     {
         diceManager = new DiceManager();
-        mainroute = Application.persistentDataPath + "/main.txt";
+        mainroute = Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/main.txt";
         //actionList = GetComponent<ActionList>();
     }
 
@@ -57,7 +57,7 @@ public class SelectionManager : MonoBehaviour
             //시나리오인 경우
             case (int)State.Scenario:
                 state = State.Scenario;
-                jroute = Application.persistentDataPath + "/mainSet.json";
+                jroute = Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/mainSet.json";
                 str = convertJson.MakeJson(jroute);
                 jroot = JObject.Parse(str);
                 jcur = jroot[option][idx];
@@ -69,7 +69,7 @@ public class SelectionManager : MonoBehaviour
                 state = State.Battle;
                 player = GameObject.Find("Player");
 
-                jroute = Application.persistentDataPath + "/Info/Skill.json";
+                jroute = Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/Info/Skill.json";
                 str = convertJson.MakeJson(jroute);
                 jroot = JObject.Parse(str);
                 jcur = jroot[option];

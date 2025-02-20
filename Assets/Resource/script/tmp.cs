@@ -26,7 +26,7 @@ public class tmp : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandl
         //Debug.Log(Input.GetTouch(0).position);
         //Debug.Log(Input.GetTouch(0).deltaPosition);
         //Debug.Log(Input.GetTouch(0).tapCount);
-
+        /*
         if (Input.touchCount > 0)
         {
             Debug.Log(Input.touchCount);
@@ -47,6 +47,7 @@ public class tmp : MonoBehaviour, IBeginDragHandler, IEndDragHandler, IDragHandl
             }
 
         }
+        */
     }
 
 
