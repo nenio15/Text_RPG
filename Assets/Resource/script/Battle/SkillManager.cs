@@ -36,7 +36,7 @@ public class SkillManager : MonoBehaviour
         //all, 기본공격. 스킬. 아이템. 이 넷으로 구분? - 1.각 시트 누를때마다 불러오기 2.각 시트마다 skillslot미리 세팅해두기. 칸이 많지는 않아서 고민해봐야할듯
         foreach(JToken skill in jskill["Attack"])
         {
-            BattleAction tmp = JsonUtility.FromJson<BattleAction>(skill.ToString()); ;
+            BattleAction tmp = JsonUtility.FromJson<BattleAction>(skill.ToString());
             //tmp.index = i; //action의 index는 그게 아닐꺼야..
             tmp.index = 0;
             skillSlotUi[i].GetComponent<SkillSlotUi>().Set(tmp);

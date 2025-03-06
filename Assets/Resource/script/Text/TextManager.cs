@@ -94,7 +94,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
 
     public void ReadPage()
     {
-        Debug.Log("activated");
+        //Debug.Log("activated");
         //m_TypingText.text = 
         // 읽는 것을 중단.
         if (stop_read) return;

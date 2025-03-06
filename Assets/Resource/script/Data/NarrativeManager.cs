@@ -196,7 +196,7 @@ public class NarrativeManager : MonoBehaviour
     //서사 팝업 임시 생성 후 파괴
     private void PopupNarrative(GameObject target, NarrativeSlot narrative)
     {
-        Debug.Log("ldajfljrlk");
+        //Debug.Log("ldajfljrlk");
         //프리팹 지정
         GameObject prefab = Resources.Load<GameObject>("ribbon");
         Vector3 pos = new Vector3(1, 0.5f, 0); // z좌표를 넣어 말어..

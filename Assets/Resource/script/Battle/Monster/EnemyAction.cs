@@ -1,5 +1,7 @@
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEngine.EventSystems.EventTrigger;
@@ -25,21 +27,30 @@ public class EnemyAction : InterAction
     public ParticleSystem hitEffect;
 
 
-    //State state;
-    string[] skills = { "base_attack", "base_dodge", "strong_attack" };
+    //스킬 세팅 관련 변수
+    TextAsset skill_route;
+    JObject skill_jroot;
+    List<JToken> skillsets = new List<JToken>();
+    //string[] skills = { "base_attack", "base_dodge", "strong_attack" };
 
     void Start()
     {
+        //skill_route = Application.dataPath + "/" + PlayerPrefs.GetString("Char_route") + "/Info/Skill.json";
+        skill_route = Resources.Load<TextAsset>("Text/Battle/Monster/" + enemyHealth.nickname);
         player = GameObject.Find("Player").gameObject; // 수정 필요.
         
         enemyHealth = GetComponent<EnemyHealth>();
-
-
         tr = GetComponent<RectTransform>();
         target = player.GetComponent<RectTransform>(); // 변경 필.
         UiImage = skill.GetComponentsInChildren<Image>();
 
+        //Debug.Log(skill_route.text);
+        skill_jroot = JObject.Parse(skill_route.text);
 
+        foreach (JToken skill in skill_jroot["Attack"])
+            skillsets.Add(skill);
+
+        //for(int i = 0; i < skillsets.Count; i++) Debug.Log(skillsets[i]);
 
         //첫 세팅
         base.OnEnable();
@@ -80,13 +91,13 @@ public class EnemyAction : InterAction
     //다음 스킬 준비
     private void ReadyNewSkill()
     {
-        string skill = skills[UnityEngine.Random.Range(0, 3)];
+        //액션 세팅. skillsets중 랜덤 하나 (ai 적용 x).
+        string cur_skill = skillsets[UnityEngine.Random.Range(0, skillsets.Count)].ToString();
+        Debug.Log("ready cur_skill _ from enemy : " + cur_skill);
         //enemyHealth.enemy.Skill = skill;
-        
-        BattleAction tmp = new BattleAction(skill, 0, skill, skill, 1.0f, 1.0f);
+        BattleAction tmp = JsonUtility.FromJson<BattleAction>(cur_skill); //json양식을 클래스 형식으로 변형.
         OnSetAction(tmp);
-
-
+        skill.GetComponent<Image>().sprite = Resources.Load<Sprite>("Picture/Skill/" + tmp.img);
     }
 
 

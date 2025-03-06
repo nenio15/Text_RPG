@@ -30,6 +30,7 @@ public class MoveStartScene : MonoBehaviour
 
     public void CharSelect()
     {
+        //id와 scenario 확인 후 진입
         if (decision_id == "") return;
         route = UnityEngine.Application.persistentDataPath;
         string world = convertJson.MakeJson(route + "/" + decision_id + "/Info/World.json");
@@ -42,7 +43,7 @@ public class MoveStartScene : MonoBehaviour
     }
 
     //외부에서 생성 후 바로 플레이
-    public void MoveToMain()
+    public void CreateAndPlay()
     {
         string id = CreateNewCharacter();
 
@@ -92,9 +93,7 @@ public class MoveStartScene : MonoBehaviour
         JArray list = (JArray)jcharlist["List"];
         list.Add(character);
         File.WriteAllText(route + "/Charlist.json", jcharlist.ToString());
-        //캐릭터 폴더, 파일 생성
-        LoadFreeset(route + "/" + cur_id, cur_id);
-
+        CreateFreeset(route + "/" + cur_id, cur_id);
 
         //현재 시나리오 루트 작성.
         string world = convertJson.MakeJson(route + "/" + cur_id + "/Info/World.json");
@@ -102,11 +101,16 @@ public class MoveStartScene : MonoBehaviour
         jworld["Scenario"] = label.text;
         File.WriteAllText(route + "/" + cur_id + "/Info/World.json", jworld.ToString());
 
+        //스킬 세팅 생성.
+
+
+        //종료.
         Debug.Log("Creat Complete");
         return cur_id;
     }
 
-    private void LoadFreeset(string resources, string id)
+    //새 캐릭터 폴더 및 파일 생성
+    private void CreateFreeset(string resources, string id)
     {
         Directory.CreateDirectory(route + "/" + id);
         Directory.CreateDirectory(resources + "/Info");
@@ -124,6 +128,7 @@ public class MoveStartScene : MonoBehaviour
             else File.WriteAllText(resources + "/" + jsonFile.name + ".json", jsonFile.text);
         }
     }
+
 
     // 임의의 영문자 및 숫자를 포함한 16자리 문자열 생성
     static string GenerateRandomString(int length)

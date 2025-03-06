@@ -80,10 +80,10 @@ public class CombatCalculator : MonoBehaviour
         Vector3 move = new Vector3(3, 3, 0);
         executorDiceFrame.transform.position = executor.transform.position + move;
         targetDiceFrame.transform.position = target.transform.position + move;
-        Debug.Log(executor.transform.position + " " + target.transform.position);
+        //Debug.Log(executor.transform.position + " " + target.transform.position);
 
         //animator 시동. 결과값 송출. 그리고 다음.
-        Debug.Log("dice roll");
+        //Debug.Log("dice roll");
         executorDiceFrame.GetComponentInChildren<TextMeshProUGUI>().text = executorDice.ToString();
         targetDiceFrame.GetComponentInChildren<TextMeshProUGUI>().text = targetDice.ToString();
 
@@ -218,7 +218,7 @@ public class CombatCalculator : MonoBehaviour
                 break;
 
         }
-        Debug.Log("HITTYPE : " + type);
+        //Debug.Log("HITTYPE : " + type);
         
         Vector3 hitPos = target.GetComponent<Collider2D>().ClosestPoint(executor.transform.position);
         Vector3 hitSurface = executor.transform.position - target.transform.position;
@@ -250,7 +250,7 @@ public class CombatCalculator : MonoBehaviour
 
     private void DiceMove()
     {
-        Debug.Log("dice moved");
+        //Debug.Log("dice moved");
         executorDiceFrame.transform.position = new Vector3(-10, -10, -10);
         targetDiceFrame.transform.position = new Vector3(-10, -10, -10);
     }
