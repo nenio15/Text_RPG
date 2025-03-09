@@ -1,0 +1,53 @@
+{
+  "Attack" : [
+      {
+        "name" : "기본공격",
+        "img" : "base_attack",
+        "describe" : "일반적인 공격이다.",
+        "type" : "base_attack",
+        "category" : "base", 
+        
+        "damage" : 3,
+        "accurate" : 80,
+        "criticalProbability" : 10,
+        "criticalRate" : 1.2,
+        "buff" : [ { } ],
+        "debuff" : [ { } ],
+
+        "need" : [ {
+          "type" : "str",
+          "level" : 4,
+          "turn" : 0
+        }],
+        "more" : [ {
+          "type" : "str",
+          "level" : 2,
+          "turn" : 0
+        }]
+      },
+      {
+        "name" : "강공격",
+        "img" : "strong_attack",
+        "describe" : "전력으로 휘두르는 강한 공격이다.",
+        "type" : "strong_attack",
+
+        "damage" : 5,
+        "accurate" : 60,
+        "criticalProbability" : 10,
+        "criticalRate" : 1.5,
+        "buff" : [ { } ],
+        "debuff" : [ { } ],
+
+        "need" : [ {
+          "type" : "str",
+          "level" : 4,
+          "turn" : 0
+        }],
+        "more" : [ {
+          "type" : "str",
+          "level" : 2,
+          "turn" : 0
+        }]
+      }
+  ]
+}

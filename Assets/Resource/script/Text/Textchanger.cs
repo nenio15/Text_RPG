@@ -44,6 +44,7 @@ public class TextChanger : MonoBehaviour
 
     }
 
+    //시나리오 해석기.
     public int ReadScenarioParts(int move, string jmain)
     {
         // 시나리오 이름으로 추적. (폴더명(@Scenario))\파일명\시나리오명

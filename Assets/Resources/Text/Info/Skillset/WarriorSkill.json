@@ -1,0 +1,91 @@
+{
+  "Attack" : [
+      {
+        "name" : "스매쉬",
+        "img" : "smash",
+        "describe" : "상대의 방어를 일부 무시하고 있는힘껏 공격한다.",
+        "type" : "smash",
+
+        "damage" : 6,
+        "accurate" : 75,
+        "criticalProbability" : 15,
+        "criticalRate" : 1.5,
+        "buff" : [ { 
+          "type" : "defense resistance",
+          "level" : 15,
+          "turn" : 0
+          } ],
+        "debuff" : [ ],
+
+        "need" : [ {
+          "type" : "str",
+          "level" : 4,
+          "turn" : 0
+        },
+        {
+          "type" : "mana",
+          "level" : 2,
+          "turn" : 0
+        }],
+        "more" : [ {
+          "type" : "str",
+          "level" : 2,
+          "turn" : 0
+        }]
+      },
+      {
+        "name" : "투구깨기",
+        "img" : "spirithelmbreak",
+        "describe" : "근육을 순간적으로 폭발시켜 머리를 가격한다. 일정확률로 스턴을 건다.",
+        "type" : "strong_none",
+
+        "damage" : 6,
+        "accurate" : 75,
+        "criticalProbability" : 15,
+        "criticalRate" : 1.5,
+        "buff" : [ { 
+          "type" : "defense resistance",
+          "level" : 15,
+          "turn" : 0
+          } ],
+        "debuff" : [],
+
+        "need" : [ {
+          "type" : "str",
+          "level" : 4,
+          "turn" : 0
+        },
+        {
+          "type" : "mana",
+          "level" : 1,
+          "turn" : 0
+        }],
+        "more" : []
+      },
+      {
+        "name" : "흘려치기",
+        "img" : "slimshot",
+        "describe" : "상대의 기술을 흘리고 반격한다.",
+        "type" : "defense_reverse",
+
+        "damage" : 3,
+        "accurate" : 60,
+        "criticalProbability" : 5,
+        "criticalRate" : 1.2,
+        "buff" : [ ],
+        "debuff" : [ { } ],
+
+        "need" : [ {
+          "type" : "dex",
+          "level" : 3,
+          "turn" : 0
+        },
+        {
+          "type" : "mana",
+          "level" : 1,
+          "turn" : 0
+        }]
+      }
+
+  ]
+}

@@ -9,6 +9,8 @@ using Newtonsoft.Json.Linq;
 using Newtonsoft.Json;
 using System;
 using UnityEngine.UI;
+using UnityEditor;
+using UnityEngine.UIElements;
 
 public class CharacterScenePass : MonoBehaviour
 {
@@ -103,8 +105,8 @@ public class CharacterScenePass : MonoBehaviour
         jworld["Scenario"] = label.text;
         File.WriteAllText(route + "/" + cur_id + "/Info/World.json", jworld.ToString());
 
-        //스킬 세팅 생성.
-
+        //스킬 세팅 생성. 기본 클래스 방식.
+        SetSkillSets();
 
         //종료.
         Debug.Log("Creat Complete");
@@ -117,20 +119,52 @@ public class CharacterScenePass : MonoBehaviour
         Directory.CreateDirectory(route + "/" + id);
         Directory.CreateDirectory(resources + "/Info");
 
-        TextAsset[] jsonFiles = Resources.LoadAll<TextAsset>("Text/Info/backup/Info");
+        //Info내 파일 생성
+        TextAsset[] jsonFiles = Resources.LoadAll<TextAsset>("Text/Info/Backup/Info");
         foreach (TextAsset jsonFile in jsonFiles)
             File.WriteAllText(resources + "/Info/" + jsonFile.name + ".json", jsonFile.text);
 
+        //Freeset 파일 생성
         int j = jsonFiles.Length;
-        TextAsset[] backFiles = Resources.LoadAll<TextAsset>("Text/Info/backup");
+        TextAsset[] backFiles = Resources.LoadAll<TextAsset>("Text/Info/Backup");
         foreach (TextAsset jsonFile in backFiles)
         {
+            //info와 중첩되는 파일 생략
             if (j > 0 && jsonFiles[jsonFiles.Length - j--].name == jsonFile.name) continue;
             if(jsonFile.name == "main") File.WriteAllText(resources + "/main.txt", jsonFile.text);
             else File.WriteAllText(resources + "/" + jsonFile.name + ".json", jsonFile.text);
         }
     }
 
+
+    private void SetSkillSets()
+    {
+        //BaseDefense. BaseSkill. WarriorSkill. WizardSkill.
+        //TextAsset back = Resources.Load<TextAsset>("Text/Info/Backup/SkillSet/BaseSkill.json");
+        //base 세팅
+        string skillroute = route + "/" + cur_id + "/Info/Skill.json";
+        string charskill = convertJson.MakeJson(route + "/" + cur_id + "/Info/Skill.json");
+        JObject jcharskill = JObject.Parse(charskill);
+        JArray jskills = new JArray();
+
+        //baseskill 가져오기
+        string str = Resources.Load<TextAsset>("Text/Info/SkillSet/BaseSkill").ToString();
+        JObject jbaseskill = JObject.Parse(str);
+        foreach(JToken jskill in jbaseskill["Attack"]) jskills.Add(jskill.ToObject<JObject>());
+
+        //basedefense. 중에, 방어 가져오기. -> 추후 매개변수를 통해 하나 선택
+        str = Resources.Load<TextAsset>("Text/Info/SkillSet/BaseDefense").ToString();
+        jbaseskill = JObject.Parse(str);
+        foreach (JToken jskill in jbaseskill["Attack"])
+        {
+            if (jskill["name"].ToString() == "방어")
+                jskills.Add(jskill.ToObject<JObject>());
+        }
+
+
+        jcharskill["Attack"] = jskills;
+        File.WriteAllText(route + "/" + cur_id + "/Info/Skill.json", jcharskill.ToString());
+    }
 
     // 임의의 영문자 및 숫자를 포함한 16자리 문자열 생성
     static string GenerateRandomString(int length)
