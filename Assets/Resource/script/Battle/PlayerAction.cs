@@ -124,6 +124,8 @@ public class PlayerAction : InterAction
         agent.SetDestination(new Vector3(target.x, target.y, transform.position.z));
     }
 
+
+    float speed = 200.0f;
     //어그로 대상에게 접근하기.
     IEnumerator UpdateRun()
     {
@@ -132,8 +134,14 @@ public class PlayerAction : InterAction
 
         while (distance >= 20)
         {
-            transform.position = Vector3.MoveTowards(transform.position, targetPos.position, 0.5f);
-            yield return new WaitForSeconds(0.001f);
+            //transform.position = Vector3.MoveTowards(transform.position, targetPos.position, 0.5f);
+
+            //임시 이동. enemy한테서 가져옮.
+            Vector3 move = new Vector3(targetPos.position.x - transform.position.x, targetPos.position.y - transform.position.y, 0).normalized * speed * Time.deltaTime;
+            transform.position += move;
+
+            yield return null;
+            //yield return new WaitForSeconds(0.001f);
         }
     }
 

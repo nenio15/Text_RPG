@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using static System.Net.Mime.MediaTypeNames;
 
-public class CharacterSet : MonoBehaviour, IPointerClickHandler
+public class CharacterMake : MonoBehaviour, IPointerClickHandler
 {
 
     [SerializeField] private GameObject Setting;
@@ -74,4 +74,10 @@ public class CharacterSet : MonoBehaviour, IPointerClickHandler
         Stat_info.GetComponent<TextMeshProUGUI>().text = text;
     }
 
+
+    public void ClassSelect(string name)
+    {
+
+
+    }
 }

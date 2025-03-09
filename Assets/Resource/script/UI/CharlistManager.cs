@@ -32,7 +32,7 @@ public class CharlistManager : MonoBehaviour
     */
 
     public static CharlistManager Instance;
-    private MoveStartScene moveStartScene;
+    private CharacterScenePass moveStartScene;
     private int select_idx = -1;
     private string select_id;
 
@@ -42,7 +42,7 @@ public class CharlistManager : MonoBehaviour
         charlist_route = Application.persistentDataPath + "/Charlist.json";
         UpdateList();
 
-        moveStartScene = GetComponent<MoveStartScene>();
+        moveStartScene = GetComponent<CharacterScenePass>();
     }
 
     //list fixed but, flexible update needed
@@ -55,20 +55,17 @@ public class CharlistManager : MonoBehaviour
         string str = convertJson.MakeJson(charlist_route);
         jroot = JObject.Parse(str);
 
-        for (int i = 0; i < charlists.Length; i++)
+        int i = 0;
+        foreach (JToken character in jroot["List"])
         {
-            foreach (JToken character in jroot["List"])
-            {
-                //예외 날리기.
-                if (character["name"] == null) { Debug.LogError("List has non foramt one"); continue; }
-                charlists[i].GetComponent<CharlistSlot>().Set(character["name"].ToString(), character["id"].ToString(), i);
+            //예외 날리기.
+            if (character["name"] == null) { Debug.LogError("List has non foramt one"); continue; }
+            charlists[i].GetComponent<CharlistSlot>().Set(character["name"].ToString(), character["id"].ToString(), i);
 
-                i++;
-            }
-
-            //list의 가짓수가 최소치를 만족치 못한 경우
-            charlists[i].GetComponent<CharlistSlot>().Set("", "", i);
+            i++;
         }
+        //list의 가짓수가 최소치를 만족치 못한 경우
+        for (; i < charlists.Length; i++) charlists[i].GetComponent<CharlistSlot>().Set("", "", i);
 
     }
 
@@ -95,4 +92,6 @@ public class CharlistManager : MonoBehaviour
         select_id = id;
         moveStartScene.IdSelect(id);
     }
+
+    
 }

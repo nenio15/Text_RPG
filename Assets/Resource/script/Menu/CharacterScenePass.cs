@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 using System;
 using UnityEngine.UI;
 
-public class MoveStartScene : MonoBehaviour
+public class CharacterScenePass : MonoBehaviour
 {
     public TextMeshProUGUI Char;
     public TextMeshProUGUI label;
@@ -42,7 +42,7 @@ public class MoveStartScene : MonoBehaviour
         SceneManager.LoadScene("MainScene");
     }
 
-    //외부에서 생성 후 바로 플레이
+    //외부에서 생성 후 바로 플레이 - 변경필 
     public void CreateAndPlay()
     {
         string id = CreateNewCharacter();
@@ -54,8 +54,10 @@ public class MoveStartScene : MonoBehaviour
     }
 
     //기존 캐릭터가 없을시, 생성.
-    public string CreateNewCharacter()
+    public string CreateNewCharacter() // string name, ... else stats.
     {
+        //Char == name
+
         //...? 이거 왜 씨발 안 막힘?
         if (Char.text == "" || Char.text == null) { Debug.LogError("nonText"); return "0"; }
         Debug.Log(Char.text);
