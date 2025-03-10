@@ -26,11 +26,13 @@ public class TextChanger : MonoBehaviour
     //미리 갈 경로 설정
     public string next_main;
     public int next_move;
+    public string event_scenario;
 
     JArray key_jarray, sc_key_jarray;
     JObject key_jroot;
 
     [SerializeField] public JObject jbase;
+    (string name, float rate)[] data = { ("1", 1.0f) };
 
     private void Start()
     {
@@ -48,11 +50,10 @@ public class TextChanger : MonoBehaviour
     {
         // 시나리오 이름으로 추적. (폴더명(@Scenario))\파일명\시나리오명
         cur_main = jmain;
-
         string str = Resources.Load<TextAsset>("Text/Scenario/" + cur_main).ToString();
         string key_str = convertJson.MakeJson(key_route);
-
         int op_num = 0;
+        int eventcall = -1;
 
         // read 할 부분 초기화
         File.WriteAllText(key_route, "{ \"key\" : [{}], \"sc_key\" : [{}] }");    // 초기화
@@ -67,11 +68,23 @@ public class TextChanger : MonoBehaviour
 
         JToken jnow = jbase["scenario"][move];
 
+        //퀘스트의 강제 개방
+        if (QuestEncounter(jbase["condition"]["region"].ToString()) == 1)
+        {
+
+            return 0;
+        }
+
+        //이벤트 유무와 무브.
+        if (move == 0) eventcall = EventEncounter(jbase["condition"]["region"].ToString());
+        if (eventcall == 1) { Debug.Log("move to event" + event_scenario); return 0; }
+
         //script문 따라가기
         foreach (JToken jscript in jnow["script"])
         {
             GetOpcode(jscript["type"].ToString(), jscript, op_num);
         }
+        if( eventcall == 0) { Debug.Log("move to event after ch.1"); }
 
         return 0;
     }
@@ -181,6 +194,39 @@ public class TextChanger : MonoBehaviour
         return;
     }
 
+    private int QuestEncounter(string n)
+    {
+        //현재 받은 퀘스트에서 현재 지역 (조건)과 부합하는지 확인. 
+        //부합하다면 퀘스트 선 실행. 얘는 일부 묘사가 있냐 묻자면.. 글쎄다.? 나중에 퀘스트 만들면 판별나겠지.
+
+        return 0;
+    }
+
+    private int EventEncounter(string region)
+    {
+        /*
+        던전/마을 등의 특수 지역일 경우, 이벤트 종류를 제한한다.
+        특정 퀘스트 지역에 진입시, 무조건적으로 퀘스트를 우선한다.?
+         */
+
+        ProbabilityCalculator probabilityCalculator = new ProbabilityCalculator();
+        event_scenario = probabilityCalculator.Probability(region);
+
+        //이게 강제이벤트인지 신호 이벤트인지의 구분은 어디서?
+
+        Debug.Log("here is " + region + event_scenario);
+        
+        
+        return 0; //0.강제 이벤트(바로 시작)
+        return 1; //1.신호 이벤트(일부 묘사 + 갈지 선택지)
+
+
+
+
+
+        return -1;
+    }
+
     //폐기 예정.
     /*
     // key, sc_key -> main.json to use for keywords
@@ -283,6 +329,8 @@ public class TextChanger : MonoBehaviour
         return;
     }
     */
+
+
 
     private string Setstring(string raw_string)
     {

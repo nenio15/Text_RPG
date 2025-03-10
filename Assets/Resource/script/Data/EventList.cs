@@ -1,0 +1,30 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class EventList
+{
+    private static Dictionary<string, int> regionpairs = new Dictionary<string, int>()
+    {
+        {"forest", 0 },
+        {"plain", 1 },
+        {"mountain", 2 },
+        {"town", 3 }
+    };
+
+    private (string, double)[] forest = {("goblin", 10.0f)};
+    private (string, double)[] plain = { ("goblin", 10.0f) };
+
+    
+    public (string, double)[] RegionFind(string name)
+    {
+        //Debug.Log(regionpairs[name]);
+        switch (regionpairs[name])
+        {
+            case 0: return forest;
+            case 1: return plain;
+            default: return null;
+        }
+    }
+
+}
