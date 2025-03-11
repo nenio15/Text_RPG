@@ -12,8 +12,8 @@ public class EventList
         {"town", 3 }
     };
 
-    private (string, double)[] forest = {("goblin", 10.0f)};
-    private (string, double)[] plain = { ("goblin", 10.0f) };
+    private (string, double)[] forest = {("none", 1.0f), ("scenario", 0.8f), ("sunset", 0.4)};
+    private (string, double)[] plain = { ("none", 1.0f), ("scenario", 0.8f) };
 
     
     public (string, double)[] RegionFind(string name)

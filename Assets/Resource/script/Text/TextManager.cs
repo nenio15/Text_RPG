@@ -71,7 +71,8 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         cur_scenario = PlayerPrefs.GetString("Cur_scenario");
 
         //읽기 시작
-        textchanger.ReadScenarioParts(idx++, cur_scenario);//, cur_subscenario);    //json
+        //textchanger.ReadScenarioParts(idx++, cur_scenario);//, cur_subscenario);    //json
+        textchanger.NewScenarioEnter(idx++, cur_scenario);//, cur_subscenario);    //json
         contents = System.IO.File.ReadAllLines(real_main);
         
         ReadStory(false);
@@ -132,7 +133,8 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         {
             case "#move":
             case "#over":
-                textchanger.ReadScenarioParts(textchanger.next_move, textchanger.next_main);
+                //textchanger.ReadScenarioParts(textchanger.next_move, textchanger.next_main);
+                textchanger.NewScenarioEnter(textchanger.next_move, textchanger.next_main);
                 ClearText();
                 return true;
             case "#key":

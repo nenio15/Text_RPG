@@ -3,7 +3,7 @@
   "term" : 0,
   "level" : 1,
   "condition" : {
-    "region" : "숲",
+    "region" : "forest",
     "mood" : 2,
     "keyword" : "null",
     "monster" : "goblin",
