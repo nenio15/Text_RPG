@@ -4,18 +4,17 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class SkillSlotUi : MonoBehaviour
+public class SkillSlotUi : IconUi
 {
-    public Button button;
-    public Image icon;
-    public TextMeshProUGUI text;
+    //public Button button;
+    //public Image icon;
+    //public TextMeshProUGUI text;
     public BattleAction battleAction;
     //private Outline outline;
 
-    private void Awake()
+    protected override void OnEnable()
     {
-        
-
+        base.OnEnable();
     }
 
     //세팅
@@ -45,13 +44,11 @@ public class SkillSlotUi : MonoBehaviour
     }
 
     //마우스, 터치를 가져다 둘때도 설명을 표시.
-
-
-    public void Clicked()
+    public override void OnClick()
     {
-        //player.GetComponent<PlayerAction>().SetAction(btnData.displayText.text);
-        //Debug.Log(battleAction.img);
         PlayerAction.Instance.SetAction(battleAction);
+        base.OnClick();
     }
+
 
 }

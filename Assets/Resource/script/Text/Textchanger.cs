@@ -27,6 +27,7 @@ public class TextChanger : MonoBehaviour
     public string next_main;
     public int next_move;
     public string event_scenario;
+    public string quest_scenario;
 
     JArray key_jarray, sc_key_jarray;
     JObject key_jroot;
@@ -46,20 +47,64 @@ public class TextChanger : MonoBehaviour
 
     }
 
+    public int NewScenarioEnter(int move, string jmain)
+    {
+        /*
+         * 매니저가 새 시나리오(text)를 요구한다.
+         * 해당 지역(jmain)으로 진입전, 이곳에 먼저 발생하는 퀘스트나 이벤트가 있는지 서치한다.
+         * 만일 있다면, read 순서를 뒤바꾸어 실시한다.
+         * read는 긴급이벤트와 간접이벤트 두가지이다만, 그에대한 구현은 아직 고민중이므로 긴급이벤트만 취급한다.
+         */
+        Debug.Log("call enter");
+
+        cur_main = jmain;
+        string str = Resources.Load<TextAsset>("Text/Scenario/" + jmain).ToString();
+        //int op_num = 0;
+        int eventcall = -1;
+        //Native Object 방식
+        jbase = JObject.Parse(str);
+        JToken jnow = jbase["scenario"][move];
+
+        //모든 진입의 시작에서만 확인. 진행도중에 방해x
+        if (move == 0)
+        {
+            //퀘스트 유무 확인.
+            if (jbase["condition"]["region"].ToString() != null && QuestEncounter(jbase["condition"]["region"].ToString()) == 1)
+            {
+                Debug.Log("move to quest" + quest_scenario);
+                cur_main = quest_scenario;
+                ReadScenarioParts(0, quest_scenario);
+                //Movement((int)cur_typecode, cur_main, "move"); //해당 퀘스트가 끝나면 어디로 가게하죠? - 퀘스트는 마지막에 move.지역이 있는가?
+                return 0;
+            }
+
+            //이벤트 유무와 리딩
+            eventcall = EventEncounter(jbase["condition"]["region"].ToString());
+            if (eventcall >= 0)
+            {
+                ReadScenarioParts(0, event_scenario);
+                return 0;
+            } //일단 0,1 하나로 퉁치기.
+        }
+
+        //기존에 받은 시나리오 리딩
+        ReadScenarioParts(move, jmain);
+        return 0;
+    }
+
+    //시나리오 리더기 . 리딩만 하도록 모듈화
     public int ReadScenarioParts(int move, string jmain)
     {
-        // 시나리오 이름으로 추적. (폴더명(@Scenario))\파일명\시나리오명
-        cur_main = jmain;
-        string str = Resources.Load<TextAsset>("Text/Scenario/" + cur_main).ToString();
+        Debug.Log(jmain);
+        string str = Resources.Load<TextAsset>("Text/Scenario/" + jmain).ToString();
         string key_str = convertJson.MakeJson(key_route);
         int op_num = 0;
-        int eventcall = -1;
 
         // read 할 부분 초기화
         File.WriteAllText(key_route, "{ \"key\" : [{}], \"sc_key\" : [{}] }");    // 초기화
         File.WriteAllText(main_route, "");                                       // main reset
 
-        key_jarray = new JArray(); 
+        key_jarray = new JArray();
         sc_key_jarray = new JArray();
 
         //Native Object 방식
@@ -68,23 +113,12 @@ public class TextChanger : MonoBehaviour
 
         JToken jnow = jbase["scenario"][move];
 
-        //퀘스트의 강제 개방
-        if (QuestEncounter(jbase["condition"]["region"].ToString()) == 1)
-        {
 
-            return 0;
-        }
-
-        //이벤트 유무와 무브.
-        if (move == 0) eventcall = EventEncounter(jbase["condition"]["region"].ToString());
-        if (eventcall == 1) { Debug.Log("move to event" + event_scenario); return 0; }
-
-        //script문 따라가기
         foreach (JToken jscript in jnow["script"])
         {
             GetOpcode(jscript["type"].ToString(), jscript, op_num);
         }
-        if( eventcall == 0) { Debug.Log("move to event after ch.1"); }
+        //if( eventcall == 0) { Debug.Log("move to event after ch.1"); }
 
         return 0;
     }
@@ -116,10 +150,10 @@ public class TextChanger : MonoBehaviour
 
 
             //이동 관련
-            case "script move": 
+            case "script move":
                 //if ((int)code[idx] == -1) break; // 필요한지 ㅁ?ㄹ
                 cur_typecode = cur_blockcode["move"];
-                Movement((int)cur_typecode, cur_main, "move");                
+                Movement((int)cur_typecode, cur_main, "move");
                 break;
             case "scene over": //json 이동
                 cur_typecode = cur_blockcode["over"];
@@ -164,10 +198,11 @@ public class TextChanger : MonoBehaviour
             File.AppendAllText(main_route, Setstring(jdes.ToString()) + '\n');  //System.IO.
         return;
     }
-    
+
     //다음 스크립트 지정
     private void Movement(int move, string main, string sign)
     {
+        Debug.Log(next_main + main);
         next_move = move;
         next_main = main;
         File.AppendAllText(main_route, '#' + sign + '\n');
@@ -204,27 +239,18 @@ public class TextChanger : MonoBehaviour
 
     private int EventEncounter(string region)
     {
-        /*
-        던전/마을 등의 특수 지역일 경우, 이벤트 종류를 제한한다.
-        특정 퀘스트 지역에 진입시, 무조건적으로 퀘스트를 우선한다.?
-         */
-
+        //던전/마을 등의 특수 지역일 경우, 이벤트 종류를 제한한다.
+        //특정 퀘스트 지역에 진입시, 무조건적으로 퀘스트를 우선한다.?
         ProbabilityCalculator probabilityCalculator = new ProbabilityCalculator();
         event_scenario = probabilityCalculator.Probability(region);
 
-        //이게 강제이벤트인지 신호 이벤트인지의 구분은 어디서?
+        //아무 일도 일어나지 않았다.
+        if (event_scenario == "none") return -1;
 
         Debug.Log("here is " + region + event_scenario);
-        
-        
         return 0; //0.강제 이벤트(바로 시작)
-        return 1; //1.신호 이벤트(일부 묘사 + 갈지 선택지)
+        //return 1; //1.신호 이벤트(일부 묘사 + 갈지 선택지)
 
-
-
-
-
-        return -1;
     }
 
     //폐기 예정.
@@ -336,8 +362,8 @@ public class TextChanger : MonoBehaviour
     {
         string[] divied = raw_string.Split('"');
         string sentence = "";
-        
-        for(int i = 1; i < divied.GetLength(0) - 1; i++)
+
+        for (int i = 1; i < divied.GetLength(0) - 1; i++)
             sentence += divied[i].Replace('\\', '"'); // 대화문 살리기
 
         return ReplaceS(sentence);

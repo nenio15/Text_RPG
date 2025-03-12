@@ -68,6 +68,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark01.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TextMeshSpawner.cs" />
     <Compile Include="Assets\Resource\Script\UI\CharlistSlot.cs" />
+    <Compile Include="Assets\Resource\Script\Data\ProbabilityCalculator.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexZoom.cs" />
     <Compile Include="Assets\Resource\Script\Battle\DamagePopup.cs" />
     <Compile Include="Assets\Resource\Script\UI\NarrativeList.cs" />
@@ -80,6 +81,7 @@
     <Compile Include="Assets\Resource\Script\Battle\Monster\EnemyAction.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeA.cs" />
     <Compile Include="Assets\Resource\Script\Data\ClassSkillUi.cs" />
+    <Compile Include="Assets\Resource\Script\UI\Prefabs\QuestUi.cs" />
     <Compile Include="Assets\Resource\Script\Battle\IEntityEffect.cs" />
     <Compile Include="Assets\Resource\Script\Text\LoadCsv.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_ExampleScript_01.cs" />
@@ -89,7 +91,6 @@
     <Compile Include="Assets\Resource\Script\CombatCalculator.cs" />
     <Compile Include="Assets\Resource\Script\Text\SelectionManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexShakeB.cs" />
-    <Compile Include="Assets\Resource\Script\UI\QuestUi.cs" />
     <Compile Include="Assets\Resource\Script\Battle\Effect.cs" />
     <Compile Include="Assets\Resource\Script\UI\PlayerUiManager.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\DropdownSample.cs" />
@@ -109,6 +110,7 @@
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\ShaderPropAnimator.cs" />
     <Compile Include="Assets\Resource\Script\Battle\LivingEntity.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_TextSelector_A.cs" />
+    <Compile Include="Assets\Resource\Script\UI\Prefabs\ItemSlotUi.cs" />
     <Compile Include="Assets\Resource\Script\Menu\StartScene_Event.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\CameraController.cs" />
     <Compile Include="Assets\Resource\Script\Menu\CharacterScenePass.cs" />
@@ -121,6 +123,7 @@
     <Compile Include="Assets\Resource\Script\Scenario\main001.cs" />
     <Compile Include="Assets\Resource\Script\UI\ScrollButton.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\Benchmark04.cs" />
+    <Compile Include="Assets\Resource\Script\UI\Prefabs\IconUi.cs" />
     <Compile Include="Assets\Resource\Script\DiceManager.cs" />
     <Compile Include="Assets\Resource\Script\Battle\PlayerHealth.cs" />
     <Compile Include="Assets\Resource\Script\UI\QuestManager.cs" />
@@ -130,14 +133,13 @@
     <Compile Include="Assets\Resource\Script\UI\NarrativeSlotUi.cs" />
     <Compile Include="Assets\Resource\Script\Text\TouchEvent.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\TMP_PhoneNumberValidator.cs" />
-    <Compile Include="Assets\Resource\Script\UI\ButtonManager.cs" />
     <Compile Include="Assets\Resource\Script\UI\Inventory.cs" />
     <Compile Include="Assets\Resource\Script\Battle\PlayerAction.cs" />
     <Compile Include="Assets\Resource\Script\UI\DesicionButton.cs" />
-    <Compile Include="Assets\Resource\Script\UI\ItemSlotUi.cs" />
     <Compile Include="Assets\Resource\Script\Battle\SkillManager.cs" />
     <Compile Include="Assets\Resource\Script\UI\tmpMove.cs" />
     <Compile Include="Assets\TextMesh Pro\Examples &amp; Extras\Scripts\VertexJitter.cs" />
+    <Compile Include="Assets\Resource\Script\Data\EventList.cs" />
     <Compile Include="Assets\Resource\Script\tmp.cs" />
     <Compile Include="Assets\Resource\Script\UI\ActionList.cs" />
     <Compile Include="Assets\Resource\Script\Text\TextManager.cs" />

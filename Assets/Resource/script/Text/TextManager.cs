@@ -132,7 +132,9 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         {
             case "#move":
             case "#over":
-                textchanger.ReadScenarioParts(textchanger.next_move, textchanger.next_main);
+                Debug.Log(textchanger.next_main);
+                //textchanger.ReadScenarioParts(textchanger.next_move, textchanger.next_main);
+                textchanger.NewScenarioEnter(textchanger.next_move, textchanger.next_main);
                 ClearText();
                 return true;
             case "#key":
@@ -284,7 +286,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
             if(typing_speed <= 0)
             {
                 ShowRest(typingText, message, i);
-                Debug.Log("skip show all : " + message);
+                //Debug.Log("skip show all : " + message);
                 yield break;
             }
             yield return new WaitForSeconds(typing_speed);
