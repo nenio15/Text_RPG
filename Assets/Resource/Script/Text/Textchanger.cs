@@ -69,11 +69,7 @@ public class TextChanger : MonoBehaviour
         if (move == 0)
         {
             //퀘스트 유무 확인.
-<<<<<<< HEAD
-            if (QuestEncounter(jbase["condition"]["region"].ToString()) == 1)
-=======
             if (jbase["condition"]["region"].ToString() != null && QuestEncounter(jbase["condition"]["region"].ToString()) == 1)
->>>>>>> 1354bc0 (non pulled so merge backup)
             {
                 Debug.Log("move to quest" + quest_scenario);
                 cur_main = quest_scenario;
@@ -86,11 +82,7 @@ public class TextChanger : MonoBehaviour
             eventcall = EventEncounter(jbase["condition"]["region"].ToString());
             if (eventcall >= 0)
             {
-<<<<<<< HEAD
-                ReadScenarioParts(0, event_scenario); 
-=======
                 ReadScenarioParts(0, event_scenario);
->>>>>>> 1354bc0 (non pulled so merge backup)
                 return 0;
             } //일단 0,1 하나로 퉁치기.
         }
@@ -103,15 +95,8 @@ public class TextChanger : MonoBehaviour
     //시나리오 리더기 . 리딩만 하도록 모듈화
     public int ReadScenarioParts(int move, string jmain)
     {
-<<<<<<< HEAD
-        /*
-        // 시나리오 이름으로 추적. (폴더명(@Scenario))\파일명\시나리오명
-        cur_main = jmain;
-        string str = Resources.Load<TextAsset>("Text/Scenario/" + cur_main).ToString();
-=======
         Debug.Log(jmain);
         string str = Resources.Load<TextAsset>("Text/Scenario/" + jmain).ToString();
->>>>>>> 1354bc0 (non pulled so merge backup)
         string key_str = convertJson.MakeJson(key_route);
         int op_num = 0;
 
@@ -129,37 +114,6 @@ public class TextChanger : MonoBehaviour
         JToken jnow = jbase["scenario"][move];
 
 
-<<<<<<< HEAD
-            return 0;
-        }
-
-        //이벤트 유무와 무브.
-        if (move == 0) eventcall = EventEncounter(jbase["condition"]["region"].ToString());
-        if (eventcall == 1) { Debug.Log("move to event" + event_scenario); ReadScenarioParts(0, event_scenario); return 0; }
-
-        */
-        //script문 따라가기
-
-        string str = Resources.Load<TextAsset>("Text/Scenario/" + jmain).ToString();
-        string key_str = convertJson.MakeJson(key_route);
-        int op_num = 0;
-
-        // read 할 부분 초기화
-        File.WriteAllText(key_route, "{ \"key\" : [{}], \"sc_key\" : [{}] }");    // 초기화
-        File.WriteAllText(main_route, "");                                       // main reset
-
-        key_jarray = new JArray();
-        sc_key_jarray = new JArray();
-
-        //Native Object 방식
-        jbase = JObject.Parse(str);
-        key_jroot = JObject.Parse(key_str);
-
-        JToken jnow = jbase["scenario"][move];
-
-
-=======
->>>>>>> 1354bc0 (non pulled so merge backup)
         foreach (JToken jscript in jnow["script"])
         {
             GetOpcode(jscript["type"].ToString(), jscript, op_num);
@@ -290,15 +244,9 @@ public class TextChanger : MonoBehaviour
         ProbabilityCalculator probabilityCalculator = new ProbabilityCalculator();
         event_scenario = probabilityCalculator.Probability(region);
 
-<<<<<<< HEAD
-        //이게 강제이벤트인지 신호 이벤트인지의 구분은 어디서? .....
-        if (event_scenario == "none") return -1;
-        
-=======
         //아무 일도 일어나지 않았다.
         if (event_scenario == "none") return -1;
 
->>>>>>> 1354bc0 (non pulled so merge backup)
         Debug.Log("here is " + region + event_scenario);
         return 0; //0.강제 이벤트(바로 시작)
         //return 1; //1.신호 이벤트(일부 묘사 + 갈지 선택지)

@@ -133,10 +133,9 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         {
             case "#move":
             case "#over":
-<<<<<<< HEAD
-=======
                 Debug.Log(textchanger.next_main);
->>>>>>> 1354bc0 (non pulled so merge backup)
+                //textchanger.ReadScenarioParts(textchanger.next_move, textchanger.next_main);
+                textchanger.NewScenarioEnter(textchanger.next_move, textchanger.next_main);
                 //textchanger.ReadScenarioParts(textchanger.next_move, textchanger.next_main);
                 textchanger.NewScenarioEnter(textchanger.next_move, textchanger.next_main);
                 ClearText();
