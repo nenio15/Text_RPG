@@ -50,8 +50,14 @@ public class CharlistManager : MonoBehaviour
     {
         //각 리스트마다 참조해서 수정하기.
         //questlists[j].GetComponentInChildren<TextMeshProUGUI>();
-        
-        
+        if (!File.Exists(charlist_route)) 
+        { 
+            Debug.Log("don't exist charlist");
+            for (int j = 0; j < charlists.Length; j++) 
+                charlists[j].GetComponent<CharlistSlot>().Set("", "", j);
+            return; 
+        }
+
         string str = convertJson.MakeJson(charlist_route);
         jroot = JObject.Parse(str);
 

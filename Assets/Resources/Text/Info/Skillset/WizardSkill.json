@@ -1,0 +1,75 @@
+{
+  "Attack" : [
+      {
+      "name" : "매직미사일",
+      "img" : "magicmissile",
+      "describe" : "기초적인 마법이다.",
+      "type" : "attack_magic_missile",
+
+      "damage" : 3,
+      "accurate" : 90,
+      "criticalProbability" : 5,
+      "criticalRate" : 1.2,
+      "buff" : [],
+      "debuff" : [],
+
+      "need" : [ 
+      {
+        "type" : "mana",
+        "level" : 1,
+        "turn" : 0
+      }],
+      "more" : []
+      },
+      {
+        "name" : "파이어볼",
+        "img" : "fireball",
+        "describe" : "화염을 날린다. 일반적인 화상을 입을 수준의 화염이다.",
+        "type" : "attack_magic_fire",
+
+        "damage" : 5,
+        "accurate" : 80,
+        "criticalProbability" : 15,
+        "criticalRate" : 1.5,
+        "buff" : [],
+        "debuff" : [ {
+          "type" : "fire",
+          "level" : 1,
+          "turn" : 1
+        }],
+
+        "need" : [ 
+        {
+          "type" : "mana",
+          "level" : 1,
+          "turn" : 0
+        }],
+        "more" : []
+      },
+      {
+        "name" : "무빙캐스팅",
+        "img" : "movecast",
+        "describe" : "이동하면서 마법을 사용할 수 있다.",
+        "type" : "passive",
+
+        "damage" : 3,
+        "accurate" : 60,
+        "criticalProbability" : 5,
+        "criticalRate" : 1.2,
+        "buff" : [ ],
+        "debuff" : [ { } ],
+
+        "need" : [ {
+          "type" : "dex",
+          "level" : 3,
+          "turn" : 0
+        },
+        {
+          "type" : "mana",
+          "level" : 1,
+          "turn" : 0
+        }]
+      }
+
+  ]
+}

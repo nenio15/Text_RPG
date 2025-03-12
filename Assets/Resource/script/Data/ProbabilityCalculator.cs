@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ProbabilityCalculator
 {
-
+    public static double p;
 
     public string Probability(string region) {
         EventList eventList = new EventList();
@@ -21,7 +21,8 @@ public class ProbabilityCalculator
 
 
         //0.È®·ü °è»ê.
-        double pivot = UnityEngine.Random.Range(0, (int)totalweight);
+        System.Random random = new System.Random();
+        double pivot = random.NextDouble() * totalweight;
         double acc = 0;
         for(int i = 0; i < pair.Length; i++)
         {

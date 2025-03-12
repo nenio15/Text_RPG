@@ -1,6 +1,12 @@
 ﻿{
   "title" : "Plain",
   "name" : "평야",
+  "condition" : {
+  "region" : "plain",
+  "mood" : 0,
+  "keyword" : "",
+  "stat" : []
+},
   "nearby" :["plain_town", "Forest", "Hill"],
   "scenario" : [
     {

@@ -26,8 +26,8 @@ public class townEntry : MonoBehaviour
     void Entry(string jmain, string jsub)
     {
         //jmain jsub로 해당 마을을 찾아봅시다. 여기서 묘사가 되요.
-        tchanger.ReadScenarioParts(0, "town");
-
+        //tchanger.ReadScenarioParts(0, "town");
+        tchanger.NewScenarioEnter(0, "town");
         //다음 btn은 알아서 찾거든요? 내비두고요
     }
 }

@@ -1,6 +1,12 @@
 ﻿{
   "title" : "Forest",
   "name": "숲",
+  "condition" : {
+  "region" : "forest",
+  "mood" : 0,
+  "keyword" : "",
+  "stat" : []
+  },
   "nearby" : ["Plain"],
   "scenario" : [
     {

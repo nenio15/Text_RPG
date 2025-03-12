@@ -1,0 +1,43 @@
+{
+  "Attack" : [
+      {
+        "name" : "방어",
+        "img" : "base_defense",
+        "describe" : "일반적인 방어다.",
+        "type" : "base_defense",
+
+        "damage" : 0,
+        "accurate" : 100,
+        "criticalProbability" : 0,
+        "criticalRate" : 1,
+        "buff" : [ { } ],
+        "debuff" : [ { } ],
+
+        "need" : [ {} ],
+        "more" : [ {} ]
+      },
+      {
+        "name" : "회피",
+        "img" : "base_dodge",
+        "describe" : "공격을 회피한다.",
+        "type" : "base_dodge",
+
+        "damage" : 0,
+        "accurate" : 100,
+        "criticalProbability" : 0,
+        "criticalRate" : 1,
+        "buff" : [ { } ],
+        "debuff" : [ { } ],
+
+        "need" : [ {}],
+        "more" : [ {
+          "type" : "dex",
+          "level" : 5,
+          "turn" : 0
+        }]
+      }
+  ]
+
+
+
+}
