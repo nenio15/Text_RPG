@@ -69,7 +69,11 @@ public class TextChanger : MonoBehaviour
         if (move == 0)
         {
             //퀘스트 유무 확인.
+<<<<<<< HEAD
             if (QuestEncounter(jbase["condition"]["region"].ToString()) == 1)
+=======
+            if (jbase["condition"]["region"].ToString() != null && QuestEncounter(jbase["condition"]["region"].ToString()) == 1)
+>>>>>>> 1354bc0 (non pulled so merge backup)
             {
                 Debug.Log("move to quest" + quest_scenario);
                 cur_main = quest_scenario;
@@ -82,7 +86,11 @@ public class TextChanger : MonoBehaviour
             eventcall = EventEncounter(jbase["condition"]["region"].ToString());
             if (eventcall >= 0)
             {
+<<<<<<< HEAD
                 ReadScenarioParts(0, event_scenario); 
+=======
+                ReadScenarioParts(0, event_scenario);
+>>>>>>> 1354bc0 (non pulled so merge backup)
                 return 0;
             } //일단 0,1 하나로 퉁치기.
         }
@@ -95,19 +103,23 @@ public class TextChanger : MonoBehaviour
     //시나리오 리더기 . 리딩만 하도록 모듈화
     public int ReadScenarioParts(int move, string jmain)
     {
+<<<<<<< HEAD
         /*
         // 시나리오 이름으로 추적. (폴더명(@Scenario))\파일명\시나리오명
         cur_main = jmain;
         string str = Resources.Load<TextAsset>("Text/Scenario/" + cur_main).ToString();
+=======
+        Debug.Log(jmain);
+        string str = Resources.Load<TextAsset>("Text/Scenario/" + jmain).ToString();
+>>>>>>> 1354bc0 (non pulled so merge backup)
         string key_str = convertJson.MakeJson(key_route);
         int op_num = 0;
-        int eventcall = -1;
 
         // read 할 부분 초기화
         File.WriteAllText(key_route, "{ \"key\" : [{}], \"sc_key\" : [{}] }");    // 초기화
         File.WriteAllText(main_route, "");                                       // main reset
 
-        key_jarray = new JArray(); 
+        key_jarray = new JArray();
         sc_key_jarray = new JArray();
 
         //Native Object 방식
@@ -116,10 +128,8 @@ public class TextChanger : MonoBehaviour
 
         JToken jnow = jbase["scenario"][move];
 
-        //퀘스트의 강제 개방
-        if (QuestEncounter(jbase["condition"]["region"].ToString()) == 1)
-        {
 
+<<<<<<< HEAD
             return 0;
         }
 
@@ -148,6 +158,8 @@ public class TextChanger : MonoBehaviour
         JToken jnow = jbase["scenario"][move];
 
 
+=======
+>>>>>>> 1354bc0 (non pulled so merge backup)
         foreach (JToken jscript in jnow["script"])
         {
             GetOpcode(jscript["type"].ToString(), jscript, op_num);
@@ -184,10 +196,10 @@ public class TextChanger : MonoBehaviour
 
 
             //이동 관련
-            case "script move": 
+            case "script move":
                 //if ((int)code[idx] == -1) break; // 필요한지 ㅁ?ㄹ
                 cur_typecode = cur_blockcode["move"];
-                Movement((int)cur_typecode, cur_main, "move");                
+                Movement((int)cur_typecode, cur_main, "move");
                 break;
             case "scene over": //json 이동
                 cur_typecode = cur_blockcode["over"];
@@ -232,10 +244,11 @@ public class TextChanger : MonoBehaviour
             File.AppendAllText(main_route, Setstring(jdes.ToString()) + '\n');  //System.IO.
         return;
     }
-    
+
     //다음 스크립트 지정
     private void Movement(int move, string main, string sign)
     {
+        Debug.Log(next_main + main);
         next_move = move;
         next_main = main;
         File.AppendAllText(main_route, '#' + sign + '\n');
@@ -277,9 +290,15 @@ public class TextChanger : MonoBehaviour
         ProbabilityCalculator probabilityCalculator = new ProbabilityCalculator();
         event_scenario = probabilityCalculator.Probability(region);
 
+<<<<<<< HEAD
         //이게 강제이벤트인지 신호 이벤트인지의 구분은 어디서? .....
         if (event_scenario == "none") return -1;
         
+=======
+        //아무 일도 일어나지 않았다.
+        if (event_scenario == "none") return -1;
+
+>>>>>>> 1354bc0 (non pulled so merge backup)
         Debug.Log("here is " + region + event_scenario);
         return 0; //0.강제 이벤트(바로 시작)
         //return 1; //1.신호 이벤트(일부 묘사 + 갈지 선택지)
@@ -395,8 +414,8 @@ public class TextChanger : MonoBehaviour
     {
         string[] divied = raw_string.Split('"');
         string sentence = "";
-        
-        for(int i = 1; i < divied.GetLength(0) - 1; i++)
+
+        for (int i = 1; i < divied.GetLength(0) - 1; i++)
             sentence += divied[i].Replace('\\', '"'); // 대화문 살리기
 
         return ReplaceS(sentence);

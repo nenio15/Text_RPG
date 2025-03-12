@@ -125,7 +125,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1062588617433218106}
         m_TargetAssemblyTypeName: SkillSlotUi, Assembly-CSharp
-        m_MethodName: Clicked
+        m_MethodName: OnClick
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -150,6 +150,8 @@ MonoBehaviour:
   button: {fileID: 8638231011240560430}
   icon: {fileID: 6683050844494846399}
   text: {fileID: 191531663111968897}
+  outline: {fileID: 0}
+  start_index: 0
   battleAction:
     index: 0
     name: 

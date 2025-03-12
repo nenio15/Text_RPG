@@ -1,6 +1,12 @@
 {
   "title" : "plain_town",
   "name" : "평원 마을",
+  "condition" : {
+    "region" : "town",
+    "mood" : 0,
+    "keyword" : "null",
+    "stat" : ["luk", 1]
+  },
   "scenario" : [
     {
       "num" : 0,
