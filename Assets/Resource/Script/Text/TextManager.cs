@@ -29,7 +29,7 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
     private int keyi = 0;
     private int sc_keyi = 0;
     private int spacing = 1;
-
+    
     [Header("RAYCASYER")]
     public Canvas m_canvas;
     public GraphicRaycaster m_gr;
@@ -133,12 +133,11 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
         {
             case "#move":
             case "#over":
-                Debug.Log(textchanger.next_main);
-                //textchanger.ReadScenarioParts(textchanger.next_move, textchanger.next_main);
-                textchanger.NewScenarioEnter(textchanger.next_move, textchanger.next_main);
+                //Debug.Log(textchanger.next_main);
                 //textchanger.ReadScenarioParts(textchanger.next_move, textchanger.next_main);
                 textchanger.NewScenarioEnter(textchanger.next_move, textchanger.next_main);
                 ClearText();
+                ReadPage();
                 return true;
             case "#key":
                 //선택지를 보여줘 //Debug.Log("READING[key] : stop and call selection");
@@ -212,7 +211,12 @@ public class TextManager : MonoBehaviour, IPointerClickHandler
             ExtendContent(spacing);
 
             //배열 길이 오버 예외처리
-            if (current >= contents.Length) { Debug.LogError("[TEXT] Don't exist extra content"); return; }
+            if (current >= contents.Length) 
+            { 
+                Debug.Log("[TEXT] Don't exist extra content");
+                ClearText();
+                return; 
+            }
 
             //문단 기입
             string cur_text = "  ";

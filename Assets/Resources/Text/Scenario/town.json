@@ -101,13 +101,9 @@
       ]
       },
       {
-        "type" : "choice",
-        "choice" : {
-        "list" : ["떠나기"],
-        "떠나기" : [{ 
-          "type" : "script move",  
-          "move" : 0}]
-      }
+        "type" : "window open",
+        "open" : ["blacksmith","town"],
+        "close" : 0
     }
     ]
 
@@ -130,7 +126,8 @@
         "떠나기" : [{ 
           "type" : "script move",  
           "move" : 0}]
-      }
+      },
+      "c" : "blacksmith"
     }
     ]
       

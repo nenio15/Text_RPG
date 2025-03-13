@@ -14,7 +14,7 @@ public class EventList
 
     private (string, double)[] forest = {("none", 1.0f), ("scenario", 0.8f), ("sunset", 0.4)};
     private (string, double)[] plain = { ("none", 1.0f), ("scenario", 0.8f) };
-
+    private (string, double)[] none = { ("none", 1.0f) };
     
     public (string, double)[] RegionFind(string name)
     {
@@ -23,7 +23,8 @@ public class EventList
         {
             case 0: return forest;
             case 1: return plain;
-            default: return null;
+
+            default: return none;
         }
     }
 

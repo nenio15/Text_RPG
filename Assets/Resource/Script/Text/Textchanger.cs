@@ -12,6 +12,7 @@ public class TextChanger : MonoBehaviour
 {
     [SerializeField] private TextManager textManager;
     [SerializeField] private BattleManager battleManager;
+    [SerializeField] private GameObject window;
     ConvertJson convertJson = new ConvertJson();
 
     //ÀÓÀÇ ¼³Á¤. Ä³¸¯ÅÍ ½ºÅ©¸³Æ® ÇÊ¿ä
@@ -22,6 +23,7 @@ public class TextChanger : MonoBehaviour
     //private string path = @"/Resource/Text/";  //this position is moved so... where..?
     private string main_route, key_route;
     private string cur_main;
+    private int cur_move;
 
     //¹Ì¸® °¥ °æ·Î ¼³Á¤
     public string next_main;
@@ -58,6 +60,7 @@ public class TextChanger : MonoBehaviour
         Debug.Log("call enter");
 
         cur_main = jmain;
+        cur_move = move;
         string str = Resources.Load<TextAsset>("Text/Scenario/" + jmain).ToString();
         //int op_num = 0;
         int eventcall = -1;
@@ -82,6 +85,7 @@ public class TextChanger : MonoBehaviour
             eventcall = EventEncounter(jbase["condition"]["region"].ToString());
             if (eventcall >= 0)
             {
+                cur_main = event_scenario;
                 ReadScenarioParts(0, event_scenario);
                 return 0;
             } //ÀÏ´Ü 0,1 ÇÏ³ª·Î ÅüÄ¡±â.
@@ -95,7 +99,7 @@ public class TextChanger : MonoBehaviour
     //½Ã³ª¸®¿À ¸®´õ±â . ¸®µù¸¸ ÇÏµµ·Ï ¸ðµâÈ­
     public int ReadScenarioParts(int move, string jmain)
     {
-        Debug.Log(jmain);
+        Debug.Log(jmain + move);
         string str = Resources.Load<TextAsset>("Text/Scenario/" + jmain).ToString();
         string key_str = convertJson.MakeJson(key_route);
         int op_num = 0;
@@ -148,6 +152,12 @@ public class TextChanger : MonoBehaviour
                 breakpoint = "#key\n";
                 break;
 
+            //Ãß°¡Ã¢ ¶ç¿ì±â - ÁÖ·Î »óÁ¡¿ë
+            case "window open":
+                cur_typecode = cur_blockcode["open"];
+                Window(cur_typecode[0].ToString(), cur_typecode[1].ToString());
+                cur_move = (int)cur_blockcode["close"];
+                break;
 
             //ÀÌµ¿ °ü·Ã
             case "script move":
@@ -202,10 +212,24 @@ public class TextChanger : MonoBehaviour
     //´ÙÀ½ ½ºÅ©¸³Æ® ÁöÁ¤
     private void Movement(int move, string main, string sign)
     {
-        Debug.Log(next_main + main);
+        //Debug.Log(next_main + main);
         next_move = move;
         next_main = main;
         File.AppendAllText(main_route, '#' + sign + '\n');
+    }
+
+    private void Window(string type, string itemsheet)
+    {
+        window.SetActive(true);
+        //ÀÚµ¿ÀÐ±â. ±¦­v?
+        textManager.ReadPage();
+        Debug.Log(type + itemsheet);
+    }
+
+    public void CloseWindow()
+    {
+        window.SetActive(false);
+        ReadScenarioParts(cur_move, cur_main);
     }
 
     //key¸¦ mainSetÀ¸·Î ¼¼ÆÃ
