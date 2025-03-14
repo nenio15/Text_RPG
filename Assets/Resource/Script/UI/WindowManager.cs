@@ -10,6 +10,8 @@ public class WindowManager : MonoBehaviour
     //얘는 뭔 차이가 있느냐라...
 
     [SerializeField] private ItemSlotUi[] itemslots;
+    [SerializeField] private GameObject desPanel;
+    [SerializeField] private GameObject ShopPanel;
 
     //Json 관련 선언
     private string itemsheet;
@@ -24,6 +26,7 @@ public class WindowManager : MonoBehaviour
     
     private void Awake()
     {
+        itemslots = ShopPanel.GetComponentsInChildren<ItemSlotUi>();
         //inventory_route = Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/Info/Inventory.json";
         //UpdateList(itemslots);
     }
