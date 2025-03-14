@@ -1,0 +1,42 @@
+﻿{
+  "item" : [
+    {
+      "name" : "long sword",
+      "type" : "Sword",
+      "img" : "sword",
+      "effect" : [
+        {
+          "type" : "stat",
+          "name" : "str",
+          "value" : 1.0
+        }
+      ],
+      "limit" : [
+        {
+          "type" : "stat",
+          "name" : "str",
+          "value" : 3.0
+        }
+      ],
+      "sell" : 100,
+      "count" : 1,
+      "detail" : "보편적인 롱소드이다. 대개의 무기보다 긴 편이나, 무게중심이 의외로 잘 잡혀있다."
+    },
+    {
+      "name" : "old sword",
+      "type" : "Sword",
+      "img" : "old_sword",
+      "effect" : [
+        {
+          "type" : "stat",
+          "name" : "str",
+          "value" : -1.0
+        }
+      ],
+      "limit" : [ ],
+      "sell" : 10,
+      "count" : 1,
+      "detail" : "오랜 대장간에서 썩어버린 롱소드다. 이런걸 배치해둔건 검에 대한 실례가 아닐까.."
+    }
+  ]
+}

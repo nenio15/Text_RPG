@@ -1,40 +1,19 @@
-using JetBrains.Annotations;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
+using Newtonsoft.Json;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using UnityEngine;
+using System.IO;
 
-[Serializable]
-public class Itemlist
+public class WindowManager : MonoBehaviour
 {
-    public string name;
-    public string type;
-    public int count;
-}
+    //얘는 뭔 차이가 있느냐라...
 
-[Serializable]
-public class ItemTable
-{
-    public List<Itemlist> item;
-}
-
-public class Inventory : MonoBehaviour
-{
-    // <!-- items로 일부변경. itemslots로 지정되어있는 함수들이 남아있음 -->
-    //subwindow도 setactive 세팅말고. transform으로 해야할듯. 그래야 start가 첫 로딩때 먹히지.
-
-    //[SerializeField] private ItemSlot[] items; //이것이 왜 필요한 것인가. 흠좀무?
     [SerializeField] private ItemSlotUi[] itemslots;
-    [SerializeField] private GameObject desPanel;
-    [SerializeField] private GameObject ShopPanel;
-    //public itemData itemData;
 
     //Json 관련 선언
-    private string inventory_route;
+    private string itemsheet;
+    private string type;
     private string tableJson;
     //private static string k = "item";
     private Dictionary dictionary = new Dictionary();
@@ -42,27 +21,19 @@ public class Inventory : MonoBehaviour
     private JObject jroot;
     private ItemTable itemTable;
 
-    public static Inventory Instance;
-
+    
     private void Awake()
     {
-        Instance = this;
-        inventory_route = Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/Info/Inventory.json";
-        UpdateList(itemslots);
-        TargetSlots(ShopPanel);
+        //inventory_route = Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/Info/Inventory.json";
+        //UpdateList(itemslots);
     }
 
-    public void UpdateAll()
+    public void CallShop(string shoptype, string route)
     {
+        itemsheet = Resources.Load<TextAsset>("Text/Field/Building/Itemlist/" + route).ToString();
+        type = shoptype;
+        //jroot = JObject.Parse(itemsheet);
         UpdateList(itemslots);
-        TargetSlots(ShopPanel);
-    }
-
-    public void TargetSlots(GameObject parent)
-    {
-        ItemSlotUi[] tmp = parent.GetComponentsInChildren<ItemSlotUi>();
-        UpdateList(tmp);
-        //이걸로 가야할듯?
     }
 
     public void UpdateList(ItemSlotUi[] items)
@@ -78,13 +49,13 @@ public class Inventory : MonoBehaviour
          */
 
         //번호 붙이기
-        for(int j = 0; j < items.Length; j++)
+        for (int j = 0; j < items.Length; j++)
             items[j].index = j;
 
 
         int i = 0;
-        string str = convertJson.MakeJson(inventory_route);
-        jroot = JObject.Parse(str);
+        //string str = convertJson.MakeJson(itemsheet);
+        jroot = JObject.Parse(itemsheet);
         itemTable = JsonUtility.FromJson<ItemTable>(jroot.ToString());
 
         //인벤토리.json에서 아이템 읽어서 각 slot에 할당.
@@ -108,9 +79,9 @@ public class Inventory : MonoBehaviour
     private ItemSlot GetItemStack(ItemSlot item)
     {
         //스택이 쌓이는 동일한 종류가 아이템 창에 있을 경우.
-        for(int i = 0; i < itemslots.Length; i++)
-            if(itemslots[i].itemslot == item) //&& itemslots[i].itemslot.count) 갯수제한
-                 return itemslots[i].itemslot;
+        for (int i = 0; i < itemslots.Length; i++)
+            if (itemslots[i].itemslot == item) //&& itemslots[i].itemslot.count) 갯수제한
+                return itemslots[i].itemslot;
 
         return null;
     }
@@ -124,46 +95,42 @@ public class Inventory : MonoBehaviour
         return null;
     }
 
+    //Resources는 수정이 안됨. 그렇다고 다 넣을수는 없고... 재판매 안하는걸로 하지. 뭐. -> persistent로 빼면 되긴하는데 굳이? ㅇㅇ..
     //약식으로 아이템을 얻어 json에 갱신한다. 바로 json으로 가는게 맞는지는 잘 모르겠다..흠.
     public void AddItem(Itemlist dropItem)
     {
         //Itemlist dropItem = JsonUtility.FromJson<Itemlist>(drop.ToString());
         //쌓일 수 있는 아이템.
-        if(dropItem.type == "Consumption")
+        if (dropItem.type == "Consumption")
         {
-            foreach(Itemlist item in itemTable.item)
-                if(item.name == dropItem.name) item.count += dropItem.count;
+            foreach (Itemlist item in itemTable.item)
+                if (item.name == dropItem.name) item.count += dropItem.count;
 
             tableJson = JsonConvert.SerializeObject(itemTable);
-            File.WriteAllText(inventory_route, tableJson.ToString());
-            UpdateAll();
+            //File.WriteAllText(inventory_route, tableJson.ToString());
+            UpdateList(itemslots);
             return;
         }
 
         //아닐경우.
         itemTable.item.Add(dropItem);
-        tableJson = JsonConvert.SerializeObject(itemTable); 
-        File.WriteAllText(inventory_route, tableJson);
-        UpdateAll();
+        tableJson = JsonConvert.SerializeObject(itemTable);
+        //File.WriteAllText(inventory_route, tableJson);
+        UpdateList(itemslots);
         return;
 
         //인벤토리 빈칸이 없을 경우. 한번 묻기. 이거는 나중에 구현...
         //ThrowItem(item);
     }
 
+    //이거 안눌릴걸...
     public void Selected(int index)
     {
-        desPanel.GetComponent<DescribePanel>().Set(itemslots[index].itemslot);
-
-        //Debug.Log(itemslots[index].itemslot.itemData.name);
+        //desPanel.GetComponent<DescribePanel>().Set(itemslots[index].itemslot);
+//Debug.Log(itemslots[index].itemslot.itemData.name);
         if (itemslots[index] == null) return;
-
         ItemSlot cur_item = itemslots[index].itemslot;
-
-
-        //대충... panel한테서 이거저거를 주어야하는데. 각 요소를 내가 받아? 그냥?
-        //panel을 관리하는 놈이 따로 있는게 편하지 않을까... 고민 좀 해볼게
-
+        
         //Debug.Log(cur_item.itemData.effect[0].name);
 
     }

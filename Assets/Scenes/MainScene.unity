@@ -41073,6 +41073,7 @@ MonoBehaviour:
   - {fileID: 1991062115}
   - {fileID: 1235437223}
   desPanel: {fileID: 102861217}
+  ShopPanel: {fileID: 117392471}
 --- !u!1 &1861862691
 GameObject:
   m_ObjectHideFlags: 0

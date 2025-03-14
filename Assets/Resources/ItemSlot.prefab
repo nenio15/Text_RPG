@@ -222,9 +222,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1e49fcb9d6e489048a1007cb7805e748, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  button: {fileID: 0}
-  icon: {fileID: 0}
-  text: {fileID: 0}
+  button: {fileID: 5958738623906020559}
+  icon: {fileID: 6907111625881965900}
+  text: {fileID: 5265124787938337202}
   index: -1
 --- !u!1 &4004907286986030068
 GameObject:
