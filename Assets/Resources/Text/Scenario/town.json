@@ -102,7 +102,7 @@
       },
       {
         "type" : "window open",
-        "open" : ["blacksmith","town"],
+        "open" : ["blacksmith","townlist"],
         "close" : 0
     }
     ]

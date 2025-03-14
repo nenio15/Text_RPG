@@ -34,6 +34,8 @@ public class TextChanger : MonoBehaviour
     JArray key_jarray, sc_key_jarray;
     JObject key_jroot;
 
+    public Action<string, string> onWindowAction;
+
     [SerializeField] public JObject jbase;
     (string name, float rate)[] data = { ("1", 1.0f) };
 
@@ -221,6 +223,7 @@ public class TextChanger : MonoBehaviour
     private void Window(string type, string itemsheet)
     {
         window.SetActive(true);
+        onWindowAction(type, itemsheet);
         //ÀÚµ¿ÀÐ±â. ±¦­v?
         textManager.ReadPage();
         Debug.Log(type + itemsheet);

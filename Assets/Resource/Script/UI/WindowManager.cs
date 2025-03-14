@@ -4,15 +4,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using UnityEditor.Localization.Platform.Android;
 
 public class WindowManager : MonoBehaviour
 {
     //얘는 뭔 차이가 있느냐라...
-
+    [SerializeField] private TextChanger textChanger;
     [SerializeField] private ItemSlotUi[] itemslots;
     [SerializeField] private GameObject desPanel;
     [SerializeField] private GameObject ShopPanel;
-
+    
     //Json 관련 선언
     private string itemsheet;
     private string type;
@@ -27,12 +28,15 @@ public class WindowManager : MonoBehaviour
     private void Awake()
     {
         itemslots = ShopPanel.GetComponentsInChildren<ItemSlotUi>();
+        //onSystemAction(gameObject, player);
+        textChanger.onWindowAction += CallShop;
         //inventory_route = Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/Info/Inventory.json";
         //UpdateList(itemslots);
     }
 
     public void CallShop(string shoptype, string route)
     {
+        if (Resources.Load("Text/Field/Building/Itemlist/" + route) == null) Debug.LogError("that itemsheet don't exist");
         itemsheet = Resources.Load<TextAsset>("Text/Field/Building/Itemlist/" + route).ToString();
         type = shoptype;
         //jroot = JObject.Parse(itemsheet);

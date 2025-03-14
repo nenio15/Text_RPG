@@ -5109,6 +5109,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 252897056}
+  - component: {fileID: 252897057}
   m_Layer: 5
   m_Name: SupportWindow
   m_TagString: Untagged
@@ -5137,6 +5138,22 @@ RectTransform:
   m_AnchoredPosition: {x: 369.99994, y: 758.8888}
   m_SizeDelta: {x: -719, y: -1279}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &252897057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 252897055}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: de752d6565ed12049b2b5b35bfd62687, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textChanger: {fileID: 964707576}
+  itemslots: []
+  desPanel: {fileID: 0}
+  ShopPanel: {fileID: 382787944}
 --- !u!1 &255075873
 GameObject:
   m_ObjectHideFlags: 0
@@ -31871,7 +31888,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1452407103}
   m_Layer: 5
-  m_Name: Narrativelist
+  m_Name: ShopPanel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
