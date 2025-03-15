@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 [Serializable]
 public class Itemlist
@@ -31,6 +32,7 @@ public class Inventory : MonoBehaviour
     [SerializeField] private ItemSlotUi[] itemslots;
     [SerializeField] private GameObject desPanel;
     [SerializeField] private GameObject ShopPanel;
+    public GameObject selected_item;
     //public itemData itemData;
 
     //Json 관련 선언
@@ -90,19 +92,18 @@ public class Inventory : MonoBehaviour
         //인벤토리.json에서 아이템 읽어서 각 slot에 할당.
         foreach (Itemlist item in itemTable.item)
         {
-            /*
-            ItemSlot tmp = new ItemSlot();
-            tmp.itemData = dictionary.SetItem(item.name, item.type);
-            if (tmp.itemData == null) { Debug.LogError(i + " : 해당 ITEM의 Dictionary가 참조되지 않습니다."); continue; }
-            tmp.isEquipment = (tmp.itemData.type != "Consumption") ? true : false;
-            tmp.count = item.count;
-            
-            itemslots[i].itemslot = tmp;
-            */
-
             items[i].Set(item);
             i++;
         }
+
+        /*
+        //빈칸은 tmp로 채우기
+        for (; i < items.Length; i++)
+        {
+            Itemlist tmp = new Itemlist();
+            items[i].Set(tmp);
+        }
+        */
     }
 
     private ItemSlot GetItemStack(ItemSlot item)
@@ -154,18 +155,41 @@ public class Inventory : MonoBehaviour
     public void Selected(int index)
     {
         desPanel.GetComponent<DescribePanel>().Set(itemslots[index].itemslot);
+        OnItemClick(itemslots[index].gameObject);
 
-        //Debug.Log(itemslots[index].itemslot.itemData.name);
         if (itemslots[index] == null) return;
 
-        ItemSlot cur_item = itemslots[index].itemslot;
-
-
+        //ItemSlot cur_item = itemslots[index].itemslot;
         //대충... panel한테서 이거저거를 주어야하는데. 각 요소를 내가 받아? 그냥?
         //panel을 관리하는 놈이 따로 있는게 편하지 않을까... 고민 좀 해볼게
-
         //Debug.Log(cur_item.itemData.effect[0].name);
-
     }
 
+    //임시 이름. 변경 필요...
+    public void OnItemClick(GameObject item)
+    {
+        // 이전에 선택된 아이템의 강조 해제
+        if (selected_item != null)
+        {
+            DeselectItem(selected_item);
+        }
+
+        // 새로 선택된 아이템 강조
+        SelectItem(item);
+        selected_item = item;
+    }
+
+    private void SelectItem(GameObject item)
+    {
+        // 강조 효과 적용 (예: 배경색 변경, 테두리 추가 등)
+        item.GetComponent<Outline>().enabled = true;
+        //item.GetComponent<Image>().color = Color.yellow; // 예시로 배경색을 노란색으로 변경
+    }
+
+    private void DeselectItem(GameObject item)
+    {
+        // 강조 효과 해제
+        item.GetComponent<Outline>().enabled = false;
+        //item.GetComponent<Image>().color = Color.white; // 기본 배경색으로 변경
+    }
 }

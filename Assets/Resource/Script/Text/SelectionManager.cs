@@ -113,6 +113,8 @@ public class SelectionManager : MonoBehaviour
                 //다음 문장 출력
                 //textManager.ReadStory(true);
                 textManager.Reread();
+                //textManager.ClearText();
+                textManager.ReadPage();
 
                 BtnUnActive();
                 break;

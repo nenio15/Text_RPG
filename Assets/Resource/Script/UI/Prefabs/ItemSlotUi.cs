@@ -68,6 +68,7 @@ public class ItemSlotUi : MonoBehaviour
     {
         //Debug.Log(itemslot.itemData.name);
         //switch문으로 어느 상위 스크립트.instance한테 selected되어야할지 필요함. 장비창에서도 인벤창 index로 검색하잖ㅇ..
+        
         Inventory.Instance.Selected(index); //이렇게 하면 상위 모듈 참조가 되는구나...
     }
 

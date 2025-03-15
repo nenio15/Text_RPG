@@ -36,11 +36,18 @@ public class WindowManager : MonoBehaviour
 
     public void CallShop(string shoptype, string route)
     {
-        if (Resources.Load("Text/Field/Building/Itemlist/" + route) == null) Debug.LogError("that itemsheet don't exist");
-        itemsheet = Resources.Load<TextAsset>("Text/Field/Building/Itemlist/" + route).ToString();
+        string per_route = Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/Area/Town/" + route + ".json"; //여기 경로의 /Town을 고유명사로 해서 싹 확인을 하는가? 아니면 통일하는가?
+        //첫 방문.
+        if (!File.Exists(per_route)) CreateSheet(per_route, route);
+
+        itemsheet = new ConvertJson().MakeJson(per_route);
         type = shoptype;
-        //jroot = JObject.Parse(itemsheet);
         UpdateList(itemslots);
+        //해당 리스트에서 구매, 판매된 리스트를 기록한다.
+        //jroot = JObject.Parse(itemsheet);
+
+        //itemsheet = Resources.Load<TextAsset>("Text/Field/Building/Itemlist/" + route).ToString();
+        //string str = Application.persistentDataPath + \ PlayerPrefs.GetString("Char_route") + \Area\Town/Townlist.json;
     }
 
     public void UpdateList(ItemSlotUi[] items)
@@ -63,24 +70,24 @@ public class WindowManager : MonoBehaviour
         int i = 0;
         //string str = convertJson.MakeJson(itemsheet);
         jroot = JObject.Parse(itemsheet);
-        itemTable = JsonUtility.FromJson<ItemTable>(jroot.ToString());
+        itemTable = JsonUtility.FromJson<ItemTable>(jroot[type].ToString());
 
         //인벤토리.json에서 아이템 읽어서 각 slot에 할당.
         foreach (Itemlist item in itemTable.item)
         {
-            /*
-            ItemSlot tmp = new ItemSlot();
-            tmp.itemData = dictionary.SetItem(item.name, item.type);
-            if (tmp.itemData == null) { Debug.LogError(i + " : 해당 ITEM의 Dictionary가 참조되지 않습니다."); continue; }
-            tmp.isEquipment = (tmp.itemData.type != "Consumption") ? true : false;
-            tmp.count = item.count;
-            
-            itemslots[i].itemslot = tmp;
-            */
-
             items[i].Set(item);
             i++;
         }
+
+        /*
+        //빈칸은 tmp로 채우기
+        for(; i < items.Length; i++)
+        {
+            Itemlist tmp = new Itemlist();
+            items[i].Set(tmp);
+        }
+        */
+
     }
 
     private ItemSlot GetItemStack(ItemSlot item)
@@ -140,6 +147,18 @@ public class WindowManager : MonoBehaviour
         
         //Debug.Log(cur_item.itemData.effect[0].name);
 
+    }
+
+    //첫 방문 폴더&파일 만들기
+    private void CreateSheet(string route, string key)
+    {
+        string r = Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/Area/Town";
+        //string per_route = Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/Area/Town/" + route + ".json";
+        if(!Directory.Exists(r)) Directory.CreateDirectory(r);
+
+        if (Resources.Load("Text/Field/Building/Itemlist/" + key) == null) Debug.LogError("that itemsheet don't exist");
+        string str = Resources.Load<TextAsset>("Text/Field/Building/Itemlist/" + key).ToString();
+        File.WriteAllText(route, str);
     }
 
 }

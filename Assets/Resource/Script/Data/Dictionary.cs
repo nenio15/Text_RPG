@@ -8,6 +8,8 @@ public class Dictionary
     //이름과 카테고리를 받는다. 경로를 통해 참조한다. itemdata를 반환한다.
     public itemData SetItem(string name, string category)
     {
+        //tmp칸의 예외처리. - 변경필요
+        if(Resources.Load<TextAsset>("Text/Info/Dictionary/Item/" + category) == null) return null;
         string str = Resources.Load<TextAsset>("Text/Info/Dictionary/Item/" + category).ToString();
 
 

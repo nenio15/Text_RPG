@@ -59,7 +59,7 @@ public class TextChanger : MonoBehaviour
          * ¸¸ÀÏ ÀÖ´Ù¸é, read ¼ø¼­¸¦ µÚ¹Ù²Ù¾î ½Ç½ÃÇÑ´Ù.
          * read´Â ±ä±ÞÀÌº¥Æ®¿Í °£Á¢ÀÌº¥Æ® µÎ°¡ÁöÀÌ´Ù¸¸, ±×¿¡´ëÇÑ ±¸ÇöÀº ¾ÆÁ÷ °í¹ÎÁßÀÌ¹Ç·Î ±ä±ÞÀÌº¥Æ®¸¸ Ãë±ÞÇÑ´Ù.
          */
-        Debug.Log("call enter");
+        //Debug.Log("call enter");
 
         cur_main = jmain;
         cur_move = move;
@@ -224,8 +224,11 @@ public class TextChanger : MonoBehaviour
     {
         window.SetActive(true);
         onWindowAction(type, itemsheet);
+        //textManager.Reread();
         //ÀÚµ¿ÀÐ±â. ±¦­v?
+        //textManager.ClearText();
         textManager.ReadPage();
+        //textManager.Reread();
         Debug.Log(type + itemsheet);
     }
 
@@ -233,6 +236,9 @@ public class TextChanger : MonoBehaviour
     {
         window.SetActive(false);
         ReadScenarioParts(cur_move, cur_main);
+        textManager.ClearText();
+        textManager.ReadPage();
+        //textManager.Reread();
     }
 
     //key¸¦ mainSetÀ¸·Î ¼¼ÆÃ

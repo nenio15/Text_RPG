@@ -536,7 +536,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 56073840}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6789919866118a04f8aed1cad8d369ee, type: 3}
+  m_Script: {fileID: 11500000, guid: 153b22c326271294fbbbb0061fb6ccbd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Char: {fileID: 1649305035}
@@ -550,7 +550,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 56073840}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6063c9812d981bc48a19351348a126f4, type: 3}
+  m_Script: {fileID: 11500000, guid: de432f5286f019c42bfc74c8d20cb1cd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &80078658
@@ -4124,11 +4124,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 437950382}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23c12d67a55a40a4f9814a14b58a0aa4, type: 3}
+  m_Script: {fileID: 11500000, guid: b7862b32a03004040bc56f6e9c47a151, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Setting: {fileID: 0}
-  Name: {fileID: 571102405}
+  Name: {fileID: 1350674104}
   Sex: {fileID: 1686812571}
   Stat_info: {fileID: 471417248}
   Stat_leftbutton: []

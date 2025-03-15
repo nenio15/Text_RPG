@@ -34,13 +34,10 @@
       {
         "type" : "choice",
         "choice" : {
-          "list" : ["떠나기", "촌장집", "대장간", "잡화점", "여관"],
+          "list" : ["떠나기",  "대장간", "잡화점", "여관", "촌장집"],
           "떠나기" : [{ 
             "type" : "scene over",
             "over" : [ 0, "plain", "Plain"] }],
-          "촌장집" : [{ 
-            "type" : "script move",  
-            "move" : 1}],
           "대장간" : [{ 
             "type" : "script move",  
             "move" : 2}],
@@ -50,6 +47,9 @@
           "여관" : [{ 
             "type" : "script move",  
             "move" : 4}],
+          "촌장집" : [{ 
+            "type" : "script move",  
+            "move" : 1}],
           "비명소리" : [{
             "type" : "dice", 
             "dice" : [ [ "dice", "sen", 6, 1] ],
@@ -120,14 +120,9 @@
         ]
       },
       {
-        "type" : "choice",
-        "choice" : {
-        "list" : ["떠나기"],
-        "떠나기" : [{ 
-          "type" : "script move",  
-          "move" : 0}]
-      },
-      "c" : "blacksmith"
+        "type" : "window open",
+        "open" : ["store","townlist"],
+        "close" : 0
     }
     ]
       
