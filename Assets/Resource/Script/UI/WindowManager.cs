@@ -137,6 +137,11 @@ public class WindowManager : MonoBehaviour
         //ThrowItem(item);
     }
 
+    public void BuyFromShop()
+    {
+        Debug.Log("click buy");
+    }
+
     //이거 안눌릴걸...
     public void Selected(int index)
     {
