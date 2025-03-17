@@ -226,6 +226,7 @@ MonoBehaviour:
   button: {fileID: 5958738623906020559}
   icon: {fileID: 6907111625881965900}
   text: {fileID: 5265124787938337202}
+  type: 
   index: -1
 --- !u!114 &4330323373733054396
 MonoBehaviour:

@@ -1,6 +1,28 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
+[Serializable]
+public class Itemlist
+{
+    public string name;
+    public string type;
+    public int count;
+
+    public Itemlist(string name, string type, int count)
+    {
+        this.name = name;
+        this.type = type;
+        this.count = count;
+    }
+}
+
+[Serializable]
+public class ItemTable
+{
+    public List<Itemlist> item;
+}
 
 [Serializable]
 public class ItemAddition

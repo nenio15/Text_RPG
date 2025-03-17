@@ -12,6 +12,7 @@ public class ItemSlotUi : MonoBehaviour
     public TextMeshProUGUI text;
     public ItemSlot itemslot;
     private Outline outline;
+    public string type;
 
     public int index = -1;
     //public bool equipped = false; 장착하면 아이템창에 없어 짜샤.
@@ -67,9 +68,10 @@ public class ItemSlotUi : MonoBehaviour
     public void Clicked()
     {
         //Debug.Log(itemslot.itemData.name);
-        //switch문으로 어느 상위 스크립트.instance한테 selected되어야할지 필요함. 장비창에서도 인벤창 index로 검색하잖ㅇ..
-        
-        Inventory.Instance.Selected(index); //이렇게 하면 상위 모듈 참조가 되는구나...
+        if(index < 0) { Debug.Log("null index : itemslot"); return; }
+
+        if (type == "window") WindowManager.Instance.Selected(index);
+        else Inventory.Instance.Selected(index, type); 
     }
 
 

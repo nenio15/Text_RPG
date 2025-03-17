@@ -8,20 +8,9 @@ using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
-[Serializable]
-public class Itemlist
-{
-    public string name;
-    public string type;
-    public int count;
-}
 
-[Serializable]
-public class ItemTable
-{
-    public List<Itemlist> item;
-}
 
 public class Inventory : MonoBehaviour
 {
@@ -30,6 +19,7 @@ public class Inventory : MonoBehaviour
 
     //[SerializeField] private ItemSlot[] items; //이것이 왜 필요한 것인가. 흠좀무?
     [SerializeField] private ItemSlotUi[] itemslots;
+    [SerializeField] private ItemSlotUi[] shoplist;
     [SerializeField] private GameObject desPanel;
     [SerializeField] private GameObject ShopPanel;
     public GameObject selected_item;
@@ -50,21 +40,23 @@ public class Inventory : MonoBehaviour
     {
         Instance = this;
         inventory_route = Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/Info/Inventory.json";
+        
         UpdateList(itemslots);
-        TargetSlots(ShopPanel);
     }
 
     public void UpdateAll()
     {
         UpdateList(itemslots);
-        TargetSlots(ShopPanel);
+        UpdateShop();
     }
 
-    public void TargetSlots(GameObject parent)
+    public void UpdateShop()
     {
-        ItemSlotUi[] tmp = parent.GetComponentsInChildren<ItemSlotUi>();
-        UpdateList(tmp);
-        //이걸로 가야할듯?
+        Debug.Log("update shoppppp");
+        shoplist = ShopPanel.GetComponentsInChildren<ItemSlotUi>(true);
+        for (int j = 0; j < shoplist.Length; j++)
+            shoplist[j].type = "shopplayer";
+        UpdateList(shoplist);
     }
 
     public void UpdateList(ItemSlotUi[] items)
@@ -126,14 +118,14 @@ public class Inventory : MonoBehaviour
     }
 
     //약식으로 아이템을 얻어 json에 갱신한다. 바로 json으로 가는게 맞는지는 잘 모르겠다..흠.
-    public void AddItem(Itemlist dropItem)
+    public void AddItem(Itemlist getItem)
     {
         //Itemlist dropItem = JsonUtility.FromJson<Itemlist>(drop.ToString());
-        //쌓일 수 있는 아이템.
-        if(dropItem.type == "Consumption")
+        //중첩가능 아이템.
+        if(getItem.type == "Consumption")
         {
             foreach(Itemlist item in itemTable.item)
-                if(item.name == dropItem.name) item.count += dropItem.count;
+                if(item.name == getItem.name) item.count += getItem.count;
 
             tableJson = JsonConvert.SerializeObject(itemTable);
             File.WriteAllText(inventory_route, tableJson.ToString());
@@ -142,7 +134,7 @@ public class Inventory : MonoBehaviour
         }
 
         //아닐경우.
-        itemTable.item.Add(dropItem);
+        itemTable.item.Add(getItem);
         tableJson = JsonConvert.SerializeObject(itemTable); 
         File.WriteAllText(inventory_route, tableJson);
         UpdateAll();
@@ -152,8 +144,51 @@ public class Inventory : MonoBehaviour
         //ThrowItem(item);
     }
 
-    public void Selected(int index)
+    //아이템을 떨군다. 근데 이거 window도 쓴단말이지 참...
+    public void DropItem(Itemlist dropItem)
     {
+        //Itemlist dropItem = JsonUtility.FromJson<Itemlist>(drop.ToString());
+        //쌓일 수 있는 아이템.
+        if (dropItem.type == "Consumption")
+        {
+            foreach (Itemlist item in itemTable.item)
+                if (item.name == dropItem.name)
+                {
+                    item.count -= dropItem.count;
+                    if (item.count <= 0)
+                    {
+                        Debug.Log("delete");
+                        itemTable.item.Remove(dropItem);
+                        UpdateAll();
+                        return;
+                    }
+                }
+
+            tableJson = JsonConvert.SerializeObject(itemTable);
+            File.WriteAllText(inventory_route, tableJson.ToString());
+            UpdateAll();
+            return;
+        }
+
+        //아닐경우.
+        itemTable.item.Remove(dropItem);
+        tableJson = JsonConvert.SerializeObject(itemTable);
+        File.WriteAllText(inventory_route, tableJson);
+        UpdateAll();
+        return;
+
+        //인벤토리 빈칸이 없을 경우. 한번 묻기. 이거는 나중에 구현...
+        //ThrowItem(item);
+    }
+
+    public void Selected(int index, string type)
+    {
+        if(type == "shopplayer")
+        {
+            OnItemClick(shoplist[index].gameObject);
+            return;
+        }
+
         desPanel.GetComponent<DescribePanel>().Set(itemslots[index].itemslot);
         OnItemClick(itemslots[index].gameObject);
 
@@ -164,6 +199,7 @@ public class Inventory : MonoBehaviour
         //panel을 관리하는 놈이 따로 있는게 편하지 않을까... 고민 좀 해볼게
         //Debug.Log(cur_item.itemData.effect[0].name);
     }
+
 
     //임시 이름. 변경 필요...
     public void OnItemClick(GameObject item)
@@ -178,6 +214,7 @@ public class Inventory : MonoBehaviour
         SelectItem(item);
         selected_item = item;
     }
+
 
     private void SelectItem(GameObject item)
     {
