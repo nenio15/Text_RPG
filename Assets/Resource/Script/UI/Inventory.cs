@@ -52,7 +52,6 @@ public class Inventory : MonoBehaviour
 
     public void UpdateShop()
     {
-        Debug.Log("update shoppppp");
         shoplist = ShopPanel.GetComponentsInChildren<ItemSlotUi>(true);
         for (int j = 0; j < shoplist.Length; j++)
             shoplist[j].type = "shopplayer";
@@ -75,7 +74,6 @@ public class Inventory : MonoBehaviour
         for(int j = 0; j < items.Length; j++)
             items[j].index = j;
 
-
         int i = 0;
         string str = convertJson.MakeJson(inventory_route);
         jroot = JObject.Parse(str);
@@ -87,7 +85,6 @@ public class Inventory : MonoBehaviour
             items[i].Set(item);
             i++;
         }
-
 
         //ºóÄ­Àº ½ºÇÁ¶óÀÌÆ® null
         for (; i < items.Length; i++)
