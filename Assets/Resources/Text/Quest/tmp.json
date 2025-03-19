@@ -1,0 +1,64 @@
+{
+  "quest" : [
+    {
+      "name" : "퀘스트 이름",
+      "num" : 10110,
+      "des" : "장문의 설명. detail에 해당",
+      "hint" : "대충 힌트",
+      "level" : 1,
+      "state" : "accept",
+      "condition" : {
+        "region" : "forest",
+        "rare" : "common",
+        "entry" : "none or entry",
+        "type" : "kill or reach or get/drop item or give/talk npc ...",
+        "kill" : [
+          {
+            "monster" : "goblin",
+            "count" : 1
+          },
+          {
+            "monster" : "fish",
+            "count" : 2
+          }
+        ]
+      },
+      "fail_condition" : {
+        "region" : "town",
+        "rare" : "none",
+        "entry" : "none",
+        "type" : "move",
+        "move" : ["town", "나가기"]
+      },
+      "reward" : {
+        "gold" : 500,
+        "exp" : 500,
+        "get" : [
+          {
+            "name" : "Hp potion",
+            "type" : "Consumption",
+            "count" : 2
+          },
+          {
+            "name" : "quest2",
+            "type" : "Quest",
+            "route" : "none"
+          }
+        ]
+      },
+      "prerelation" : "quest0",
+      "nextrelation" : "quest2",
+      
+      "compeletecondition" : {},
+
+
+
+      "title" : "날지 못하는 새",
+      "entry" : ["산속숲", 200, 1],
+      "goal" : "새가 날 수 있게 하십시오.",
+      "content" : "노조는 오랜 세월 땅에서 살아왔습니다...",
+      //"reward" : ["exp|100", "hide|item|미오라의깃털"],
+      "clear" : ["oldbird", "수락하다", 2, "else, get effect|quest|clear|oldbird|날지 못하는 새"]
+    }
+  ]
+}
