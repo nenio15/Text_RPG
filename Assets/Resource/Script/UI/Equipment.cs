@@ -27,7 +27,7 @@ public class Equipment : MonoBehaviour
         for (int j = 0; j < equipments.Length; j++)
             equipments[j].index = j;
 
-        int i = -1;
+        int i = 0;
         string str = convertJson.MakeJson(equipment_route);
         jroot = JObject.Parse(str);
 
@@ -43,11 +43,11 @@ public class Equipment : MonoBehaviour
 
             equipments[i].itemslot = tmp;
             */
-            i++;
-            Itemlist tmp = JsonUtility.FromJson<Itemlist>(part.ToString());
-            if(tmp.name != null)
-                equipments[i].Set(tmp);
             
+            Itemlist tmp = JsonUtility.FromJson<Itemlist>(part.ToString());
+            if(tmp.name != null && tmp.name != "none") //임시 예외 조건.
+                equipments[i].Set(tmp);
+            i++;
         }
 
     }

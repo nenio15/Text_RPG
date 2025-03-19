@@ -17,7 +17,7 @@
         "rare" : "common",
         "entry" : "none or entry"
       },
-      "complete_condition" : { 
+      "complete_condition" : {
         "region" : "plain",
         "type" : "kill or reach or get/drop item or give/talk npc ...",
         "kill" : [

@@ -1,6 +1,8 @@
 using Newtonsoft.Json.Linq;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
 using UnityEngine;
 
 public class Dictionary
@@ -11,7 +13,6 @@ public class Dictionary
         //tmp칸의 예외처리. - 변경필요
         if(Resources.Load<TextAsset>("Text/Info/Dictionary/Item/" + category) == null) return null;
         string str = Resources.Load<TextAsset>("Text/Info/Dictionary/Item/" + category).ToString();
-
 
         JObject jitemdata = JObject.Parse(str);
         //Debug.Log("Finding : " + name + category);
@@ -31,6 +32,31 @@ public class Dictionary
         foreach (JToken narrative in jitemdata["narrative"])
             if (narrative["name"].ToString() == name)
                 return JsonUtility.FromJson<NarrativeSlot>(narrative.ToString());
+
+        return null;
+    }
+
+    public QuestForm SetQuest(Questlist q)
+    {
+        string str = Resources.Load<TextAsset>("Text/Quest/" + q.region + "/" + q.name).ToString();
+
+        JObject jitemdata = JObject.Parse(str);
+        foreach (JToken quest in jitemdata["quest"])
+            if ((int)quest["num"] == q.num)
+                return JsonUtility.FromJson<QuestForm>(quest.ToString());
+
+        return null;
+    }
+
+    //위에거랑 겹치긴하는데 구조상 못 합치려나...
+    public JToken GetCondition(string condition_type, Questlist q)
+    {
+        string str = Resources.Load<TextAsset>("Text/Quest/" + q.region + "/" + q.name).ToString();
+
+        JObject jitemdata = JObject.Parse(str);
+        foreach (JToken quest in jitemdata["quest"])
+            if ((int)quest["num"] == q.num)
+                return quest[condition_type];
 
         return null;
     }
