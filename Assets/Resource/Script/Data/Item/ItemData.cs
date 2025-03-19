@@ -16,6 +16,20 @@ public class Itemlist
         this.type = type;
         this.count = count;
     }
+
+    public override bool Equals(object obj)
+    {
+        if (obj is Itemlist other)
+        {
+            return name == other.name && type == other.type && count == other.count;
+        }
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return (name, type, count).GetHashCode();
+    }
 }
 
 [Serializable]

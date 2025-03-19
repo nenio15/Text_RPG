@@ -7,6 +7,7 @@ using System.IO;
 using UnityEditor.Localization.Platform.Android;
 using UnityEngine.UI;
 using UnityEditor.Tilemaps;
+using System.Security.Policy;
 
 public class WindowManager : MonoBehaviour
 {
@@ -83,14 +84,13 @@ public class WindowManager : MonoBehaviour
             i++;
         }
 
-        /*
-        //빈칸은 tmp로 채우기
-        for(; i < items.Length; i++)
+        
+        //빈칸은 스프라이트 null
+        for(; i < itemslots.Length; i++)
         {
-            Itemlist tmp = new Itemlist();
-            items[i].Set(tmp);
+            //itemslot의 icon을 null로 변경. 하드코딩을 이렇게 해도 될지 ㅁ?ㄹ
+            itemslots[i].gameObject.GetComponentsInChildren<Image>()[1].sprite = null;
         }
-        */
 
     }
 
@@ -125,9 +125,9 @@ public class WindowManager : MonoBehaviour
         {
             foreach (Itemlist item in itemTable.item)
                 if (item.name == getItem.name) item.count += getItem.count;
-
+            
             tableJson = JsonConvert.SerializeObject(itemTable);
-            jroot[type] = tableJson;
+            jroot[type] = JToken.Parse(tableJson);
             File.WriteAllText(sheet_route, jroot.ToString());
             UpdateList();
             return;
@@ -138,7 +138,7 @@ public class WindowManager : MonoBehaviour
         //아닐경우.
         itemTable.item.Add(getItem);
         tableJson = JsonConvert.SerializeObject(itemTable);
-        jroot[type] = tableJson;
+        jroot[type] = JToken.Parse(tableJson);
         File.WriteAllText(sheet_route, jroot.ToString());
         UpdateList();
         return;
@@ -160,27 +160,27 @@ public class WindowManager : MonoBehaviour
                     item.count -= dropItem.count;
                     if (item.count <= 0)
                     {
-                        Debug.Log("delete");
                         itemTable.item.Remove(dropItem);
+                        tableJson = JsonConvert.SerializeObject(itemTable);
+                        jroot[type] = JToken.Parse(tableJson);
+                        File.WriteAllText(sheet_route, jroot.ToString());
+
                         UpdateList();
                         return;
                     }
                 }
 
             tableJson = JsonConvert.SerializeObject(itemTable);
-            jroot[type] = tableJson;
+            jroot[type] = JToken.Parse(tableJson);
             File.WriteAllText(sheet_route, jroot.ToString());
             UpdateList();
             return;
         }
 
-        Debug.Log("delete");
         //아닐경우.
         itemTable.item.Remove(dropItem);
-        Debug.Log(itemTable.ToString());
         tableJson = JsonConvert.SerializeObject(itemTable);
-        Debug.Log(tableJson.ToString());
-        jroot[type] = tableJson;
+        jroot[type] = JToken.Parse(tableJson);
         File.WriteAllText(sheet_route, jroot.ToString());
         UpdateList();
         return;

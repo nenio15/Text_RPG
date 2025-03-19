@@ -88,14 +88,12 @@ public class Inventory : MonoBehaviour
             i++;
         }
 
-        /*
-        //ºóÄ­Àº tmp·Î Ã¤¿ì±â
+
+        //ºóÄ­Àº ½ºÇÁ¶óÀÌÆ® null
         for (; i < items.Length; i++)
         {
-            Itemlist tmp = new Itemlist();
-            items[i].Set(tmp);
+            items[i].gameObject.GetComponentsInChildren<Image>()[1].sprite = null;
         }
-        */
     }
 
     private ItemSlot GetItemStack(ItemSlot item)
@@ -159,6 +157,8 @@ public class Inventory : MonoBehaviour
                     {
                         Debug.Log("delete");
                         itemTable.item.Remove(dropItem);
+                        tableJson = JsonConvert.SerializeObject(itemTable);
+                        File.WriteAllText(inventory_route, tableJson);
                         UpdateAll();
                         return;
                     }
