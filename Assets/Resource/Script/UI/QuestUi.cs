@@ -7,6 +7,7 @@ using JetBrains.Annotations;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using static UnityEditor.Progress;
+using UnityEditor.Localization.Plugins.XLIFF.V12;
 
 
 [Serializable]
@@ -21,6 +22,20 @@ public class Questlist
     public string name;
     public string region;
     public int num;
+
+    public override bool Equals(object obj)
+    {
+        if (obj is Questlist other)
+        {
+            return name == other.name && region == other.region && num == other.num;
+        }
+        return false;
+    }
+
+    public override int GetHashCode()
+    {
+        return (name, region, num).GetHashCode();
+    }
 }
 
 [Serializable]

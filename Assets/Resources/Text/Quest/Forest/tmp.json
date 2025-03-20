@@ -15,7 +15,8 @@
       "condition" : {
         "region" : "forest",
         "rare" : "common",
-        "entry" : "none or entry"
+        "entry" : "auto or manual or request . request is only accept",
+        "type" : ["scenario over", "for to where"]
       },
       "complete_condition" : {
         "region" : "plain",

@@ -1,9 +1,13 @@
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.CompilerServices;
 using TMPro;
+using UnityEditor.Localization.Plugins.XLIFF.V12;
 using UnityEditor.PackageManager.Requests;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 using UnityEngine.UI;
 using static UnityEditor.Progress;
@@ -20,6 +24,7 @@ public class QuestManager : MonoBehaviour
 
     [SerializeField] private GameObject[] questlists;
     [SerializeField] private QuestUi questUi;
+    public Questlist cur_quest;
 
     //Json 관련 선언
     private string questlist_route;
@@ -33,14 +38,19 @@ public class QuestManager : MonoBehaviour
     {
         Instance = this;
         questlist_route = Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/Info/Questlist.json";
+
+        //임시 정의. 테스팅용. 원래 여기 안씀.
+        string str = convertJson.MakeJson(questlist_route);
+        jroot = JObject.Parse(str);
+        questTable = JsonUtility.FromJson<QuestTable>(jroot.ToString());
+        cur_quest = questTable.quest[0];
+        Debug.Log(cur_quest.name + cur_quest.region);
+        questUi.Set(questTable.quest[0]); //, "Forest/tmp");
+
         UpdateList();
 
-        //string str = Resources.Load<TextAsset>("Text/QuestForm/" + route).ToString();
-        //jquest = JObject.Parse(str);
-        //JToken jcomcon = jquest["complete_condition"]; -> 해당 type과 그 case에 따른 확인
         //현재 리스트와 현재 region. 둘을 체킹한다.
         //1.condition, 2.complete 3.fail 모든 가짓수의 checkout이다. state가 ..?
-
     }
 
     //퀘스트 리스트에 대한 업뎃
@@ -50,32 +60,64 @@ public class QuestManager : MonoBehaviour
         string str = convertJson.MakeJson(questlist_route);
         jroot = JObject.Parse(str);
         questTable = JsonUtility.FromJson<QuestTable>(jroot.ToString());
-        
-        
 
         //번호 붙이기
         //for (int j = 0; j < items.Length; j++)
         //    items[j].index = j;
         
-        //인벤토리.json에서 아이템 읽어서 각 slot에 할당.
         foreach (JToken quest in jroot["quest"])
         {
             TextMeshProUGUI title = questlists[i].GetComponentInChildren<TextMeshProUGUI>();
             Image image = questlists[i].GetComponentInChildren<Image>();
-
             title.text = quest["name"].ToString();
             //image.sprite = questlists[i].
-            //그리고 어디 반영..? 아니야 그건 아니지.
             i++;
         }
 
-        //임시 정의. 테스팅용. 원래 여기 안씀.
-        questUi.Set(questTable.quest[0]); //, "Forest/tmp");
+        //빈칸은 null // 원래는 리스트 생성을 제거.
+        for (; i < questlists.Length; i++)
+        {
+            questlists[i].GetComponentInChildren<TextMeshProUGUI>().text = " ";
+        }
+
+    }
+
+    //Accept, complete, drop
+    //state : available, progress, complete, fail
+    //state변경과 함께 다른 json으로 가야하는데. 그에 대한 수정 추가 필요.
+    public void CompleteQuest()
+    {
+        //reward.
+        Debug.Log(cur_quest.name);
+        JToken reward = new Dictionary().GetCondition("reward", cur_quest);
+        Debug.Log("대충 reward" + reward["gold"]);
+        DropQuest();
+    }
+
+    //받을 수 있는 퀘스트의 한계 필요..?
+    public void AcceptQuest()
+    {
+        //오류 발생시, windowManger의 Add를 참조
+        questTable.quest.Add(cur_quest); //종류가 겹치면 죽나?
+        Debug.Log("111");
+        string tableJson = JsonConvert.SerializeObject(questTable);
+        File.WriteAllText(questlist_route, tableJson);
+        UpdateList();
+    }
+
+    public void DropQuest()
+    {
+        questTable.quest.Remove(cur_quest);
+        string tableJson = JsonConvert.SerializeObject(questTable);
+        File.WriteAllText(questlist_route, tableJson);        
+        UpdateList();
+        //view도 변경 필.
     }
 
     public void OnClick(int index)
     {
-        questUi.Set(questTable.quest[index]); //, "Forest/tmp");
+        cur_quest = questTable.quest[index];
+        questUi.Set(cur_quest); //, "Forest/tmp");
     }
 
 }

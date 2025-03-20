@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
 public class Dictionary
@@ -26,6 +27,7 @@ public class Dictionary
     //반환값 변경할 것.
     public NarrativeSlot SetNarrative(string name, string category)
     {
+        if (Resources.Load<TextAsset>("Text/Info/Dictionary/Memory/" + category) == null) { Debug.Log("narrative format does not match"); return null; }
         string str = Resources.Load<TextAsset>("Text/Info/Dictionary/Memory/" + category).ToString();
 
         JObject jitemdata = JObject.Parse(str);
@@ -38,6 +40,7 @@ public class Dictionary
 
     public QuestForm SetQuest(Questlist q)
     {
+        if (Resources.Load<TextAsset>("Text/Quest/" + q.region + "/" + q.name) == null) { Debug.Log("quest format does not match"); return null; }
         string str = Resources.Load<TextAsset>("Text/Quest/" + q.region + "/" + q.name).ToString();
 
         JObject jitemdata = JObject.Parse(str);
@@ -51,6 +54,7 @@ public class Dictionary
     //위에거랑 겹치긴하는데 구조상 못 합치려나...
     public JToken GetCondition(string condition_type, Questlist q)
     {
+        if (Resources.Load<TextAsset>("Text/Quest/" + q.region + "/" + q.name) == null) { Debug.Log("quest format does not match"); return null; }
         string str = Resources.Load<TextAsset>("Text/Quest/" + q.region + "/" + q.name).ToString();
 
         JObject jitemdata = JObject.Parse(str);
