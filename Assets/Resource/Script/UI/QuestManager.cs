@@ -37,7 +37,10 @@ public class QuestManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
+        string route = Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/Quest";
         questlist_route = Application.persistentDataPath + "/" + PlayerPrefs.GetString("Char_route") + "/Info/Questlist.json";
+
+        //if (!Directory.Exists(route)) CreateFreeset(route);
 
         //임시 정의. 테스팅용. 원래 여기 안씀.
         string str = convertJson.MakeJson(questlist_route);
@@ -64,7 +67,7 @@ public class QuestManager : MonoBehaviour
         //번호 붙이기
         //for (int j = 0; j < items.Length; j++)
         //    items[j].index = j;
-        
+
         foreach (JToken quest in jroot["quest"])
         {
             TextMeshProUGUI title = questlists[i].GetComponentInChildren<TextMeshProUGUI>();
@@ -81,6 +84,7 @@ public class QuestManager : MonoBehaviour
         }
 
     }
+
 
     //Accept, complete, drop
     //state : available, progress, complete, fail
@@ -109,7 +113,7 @@ public class QuestManager : MonoBehaviour
     {
         questTable.quest.Remove(cur_quest);
         string tableJson = JsonConvert.SerializeObject(questTable);
-        File.WriteAllText(questlist_route, tableJson);        
+        File.WriteAllText(questlist_route, tableJson);
         UpdateList();
         //view도 변경 필.
     }

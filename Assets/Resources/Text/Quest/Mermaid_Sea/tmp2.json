@@ -1,6 +1,12 @@
 {
   "quest" : [
     {
+      "name" : "바닥에 가장 가까운 새",
+      "num" : 1,
+      "condition" : {
+        "region" : "mountain"
+      },
+
       "title" : "날지 못하는 새",
       "entry" : ["산속숲", 200, 1],
       "goal" : "새가 날 수 있게 하십시오.",

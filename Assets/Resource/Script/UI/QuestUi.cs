@@ -23,6 +23,13 @@ public class Questlist
     public string region;
     public int num;
 
+    public Questlist(string name, string region, int num)
+    {
+        this.name = name;
+        this.region = region;
+        this.num = num;
+    }
+
     public override bool Equals(object obj)
     {
         if (obj is Questlist other)

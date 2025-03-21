@@ -11,6 +11,7 @@ using System;
 using UnityEngine.UI;
 using UnityEditor;
 using UnityEngine.UIElements;
+using System.Drawing;
 
 public class CharacterScenePass : MonoBehaviour
 {
@@ -134,8 +135,60 @@ public class CharacterScenePass : MonoBehaviour
             if(jsonFile.name == "main") File.WriteAllText(resources + "/main.txt", jsonFile.text);
             else File.WriteAllText(resources + "/" + jsonFile.name + ".json", jsonFile.text);
         }
+
+        //퀘스트 리스트인데, 위치가 꼭 여기여야하나?
+        CreateQuestline(resources + "/Quest");
     }
 
+
+    string region = "none";
+    //퀘스트 리스트 세팅(초기용) - 업뎃용은 어떻게...
+    private void CreateQuestline(string resources)
+    {
+        Directory.CreateDirectory(resources);
+        TextAsset[] jsonFiles = Resources.LoadAll<TextAsset>("Text/Quest");
+
+        string str = Resources.Load<TextAsset>("Text/Info/Backup/Info/Questlist").ToString();
+        JObject jroot = JObject.Parse(str);
+        QuestTable tmp = JsonUtility.FromJson<QuestTable>(jroot.ToString());
+        string cur_region = "none"; //초기값이 Forest != forest라서 발생한 오류 같음.. 그래서 table만 넣어지고 이후의 tmp가 안들어간 느낌. 그러면 초기값을 어케 써야좋을까..
+        //각 지역별 quest.json 파일 읽어내기 
+        foreach (TextAsset jsonFile in jsonFiles)
+        {
+            JToken jquest = JObject.Parse(jsonFile.text);
+            //quest.json안 num마다 region확인 후 분류 - 같은 파일은 거의 동일하겠지만. 혹시 모르니.
+            foreach (JToken quest in jquest["quest"])
+            {
+                //region의 변경시, 여럿 초기화
+                if (cur_region == "none")
+                {
+                    cur_region = quest["condition"]["region"].ToString();
+                    region = resources + "/" + quest["condition"]["region"].ToString();
+                    if (!Directory.Exists(region)) Directory.CreateDirectory(region);
+                }
+                if (cur_region != quest["condition"]["region"].ToString())
+                {
+                    region = resources + "/" + quest["condition"]["region"].ToString();
+                    //기존까지 모은 table로 작성.
+                    if (!Directory.Exists(region)) Directory.CreateDirectory(region);
+                    string questlist = JsonConvert.SerializeObject(tmp);
+                    Debug.Log(questlist);
+                    File.WriteAllText(resources + "/" + cur_region + "/available.json", questlist);
+
+                    //변수 초기화
+                    tmp = JsonUtility.FromJson<QuestTable>(jroot.ToString());
+                    cur_region = quest["condition"]["region"].ToString();
+                }
+                tmp.quest.Add(new Questlist(quest["name"].ToString(), quest["condition"]["region"].ToString(), (int)quest["num"]));
+            }
+            //tmp.quest[i++] = JsonUtility.FromJson<Questlist>(jsonFile.text); //i랑 json이랑 index가 안 맞을것임.
+        }
+        File.WriteAllText(region + "/available.json", tmp.ToString()); //마지막 region처리
+
+        //quest frame양식만 만들기.
+        File.WriteAllText(resources + "/fail.json", str);
+        File.WriteAllText(resources + "/complete.json", str);
+    }
 
     private void SetSkillSets()
     {
